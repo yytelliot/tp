@@ -66,4 +66,4 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 [[portfolio](http://github.com/seansukamto)]
 
 * Role: Developer
-* Responsibilities: UI, Model
+* Responsibilities: UI
