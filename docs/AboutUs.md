@@ -9,6 +9,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ## Project team
 
+<<<<<<< HEAD
 ### Henry Tse
 
 <img src="images/iota113.png" width="200px">
@@ -67,3 +68,15 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 * Role: Developer
 * Responsibilities: UI
+=======
+### Elliot Yong
+
+<img src="images/yytelliot.png" width="200px">
+
+[[homepage](https://www.linkedin.com/in/elliot-yong-b69526348)]
+[[github](https://github.com/yytelliot)]
+[[portfolio](https://github.com/yytelliot)]
+
+* Role: Code quality, Git expert
+* Responsibilities: In charge of model
+>>>>>>> 5d337caa (Add Elliot's description to AboutUs.md)
