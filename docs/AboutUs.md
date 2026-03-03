@@ -19,15 +19,15 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 * Role: Project Advisor
 
-### Jane Doe
+### Shana Nadia Sjariffudin
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/shana-nadia.png" width="200px">
 
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[github](http://github.com/shana-nadia)]
+[[portfolio](https://www.linkedin.com/in/shana-sjariffudin-3a52453a9/)]
 
-* Role: Team Lead
-* Responsibilities: UI
+* Role: Team Member
+* Responsibilities: In charge of Storage
 
 ### Johnny Doe
 
