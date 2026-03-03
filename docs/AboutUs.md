@@ -47,5 +47,5 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 [[github](https://github.com/yytelliot)]
 [[portfolio](https://github.com/yytelliot)]
 
-* Role: Code quality, Git expert
+* Role: Code quality, git expert
 * Responsibilities: In charge of model
