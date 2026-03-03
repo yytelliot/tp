@@ -30,6 +30,16 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 * Role: Developer
 * Responsibilities: UI
 
+### Shana Nadia Sjariffudin
+
+<img src="images/shana-nadia.png" width="200px">
+
+[[github](http://github.com/shana-nadia)]
+[[portfolio](https://www.linkedin.com/in/shana-sjariffudin-3a52453a9/)]
+
+* Role: Team Member
+* Responsibilities: In charge of Storage
+* 
 ### Johnny Doe
 
 <img src="images/johndoe.png" width="200px">
