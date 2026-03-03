@@ -9,15 +9,26 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ## Project team
 
-### John Doe
+### Henry Tse
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/iota113.png" width="200px">
 
-[[homepage](http://www.comp.nus.edu.sg/~damithch)]
-[[github](https://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[homepage](http://iota113.github.io)]
+[[github](https://github.com/iota113)]
+[[portfolio](http://iota113.github.io))]
 
-* Role: Project Advisor
+* Role: Deliverables and deadlines, Scheduling and tracking
+* Responsibilities: Model, Logic
+
+### Kim Yungju
+
+<img src="images/kimyungju.png" width="200px">
+
+[[github](https://github.com/kimyungju)]
+[[portfolio](team/kimyungju.md)]
+
+* Role: Developer
+* Responsibilities: UI
 
 ### Shana Nadia Sjariffudin
 
@@ -28,7 +39,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 * Role: Team Member
 * Responsibilities: In charge of Storage
-
+* 
 ### Johnny Doe
 
 <img src="images/johndoe.png" width="200px">
@@ -54,6 +65,15 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 [[github](http://github.com/johndoe)]
 [[portfolio](team/johndoe.md)]
+
+* Role: Developer
+* Responsibilities: UI
+
+### Sean Sukamto
+
+<img src="images/seansukamto.png" width="200px">
+
+[[github](http://github.com/seansukamto)]
 
 * Role: Developer
 * Responsibilities: UI
