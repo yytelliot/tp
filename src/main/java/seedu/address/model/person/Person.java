@@ -23,17 +23,26 @@ public class Person {
 
     // Data fields
     private final Address address;
+    private final Day day;
+    private final Time startTime;
+    private final Time endTime;
+    private final TuitionRate tuitionRate;
     private final Set<Tag> tags = new HashSet<>();
 
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
-        requireAllNonNull(name, phone, email, address, tags);
+    public Person(Name name, Phone phone, Email email, Address address, Day day,
+                  Time startTime, Time endTime, TuitionRate tuitionRate, Set<Tag> tags) {
+        requireAllNonNull(name, phone, email, address, day, startTime, endTime, tuitionRate, tags);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
+        this.day = day;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.tuitionRate = tuitionRate;
         this.tags.addAll(tags);
     }
 
@@ -51,6 +60,22 @@ public class Person {
 
     public Address getAddress() {
         return address;
+    }
+
+    public Day getDay() {
+        return day;
+    }
+
+    public Time getStartTime() {
+        return startTime;
+    }
+
+    public Time getEndTime() {
+        return endTime;
+    }
+
+    public TuitionRate getTuitionRate() {
+        return tuitionRate;
     }
 
     /**
@@ -110,6 +135,10 @@ public class Person {
                 .add("phone", phone)
                 .add("email", email)
                 .add("address", address)
+                .add("day", day)
+                .add("startTime", startTime)
+                .add("endTime", endTime)
+                .add("tuitionRate", tuitionRate)
                 .add("tags", tags)
                 .toString();
     }
