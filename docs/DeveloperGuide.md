@@ -399,6 +399,7 @@ Use case ends.
 
 * 2a. OnlyTutors detects that one or more tags already exist on the student
   * 2a1. OnlyTutors ignores the duplicate tag(s) and adds only new tag(s).
+  * 2a2. OnlyTutors informs the tutor that the duplicate tags already exist on the student
 
     Use case ends.
     
