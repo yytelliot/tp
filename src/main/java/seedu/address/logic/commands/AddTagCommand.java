@@ -19,7 +19,7 @@ import seedu.address.model.tag.Tag;
 public class AddTagCommand extends TagCommand {
     public static final String SUBCOMMAND_WORD = "add";
     public static final String COMMAND_PHRASE = TagCommand.COMMAND_WORD + " " + SUBCOMMAND_WORD;
-    
+
     public static final String MESSAGE_USAGE = COMMAND_PHRASE + ": Adds a tag to a person in the address book. "
             + "Parameters: "
             + "INDEX (must be a positive integer) "
@@ -73,3 +73,4 @@ public class AddTagCommand extends TagCommand {
     }
 
 }
+

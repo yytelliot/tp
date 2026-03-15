@@ -70,7 +70,7 @@ public interface Model {
      * {@code person} must not already exist in the address book.
      */
     void addPerson(Person person);
-    
+
     /**
     * Adds the given tags to the person.
     * {@code target} must exist in the address book.
