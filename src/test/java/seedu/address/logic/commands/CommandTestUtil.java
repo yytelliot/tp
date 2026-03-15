@@ -3,9 +3,13 @@ package seedu.address.logic.commands;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DAY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_END;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_RATE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_START;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.testutil.Assert.assertThrows;
 
@@ -53,6 +57,14 @@ public class CommandTestUtil {
     public static final String EMAIL_DESC_BOB = " " + PREFIX_EMAIL + VALID_EMAIL_BOB;
     public static final String ADDRESS_DESC_AMY = " " + PREFIX_ADDRESS + VALID_ADDRESS_AMY;
     public static final String ADDRESS_DESC_BOB = " " + PREFIX_ADDRESS + VALID_ADDRESS_BOB;
+    public static final String DAY_DESC_AMY = " " + PREFIX_DAY + VALID_DAY_AMY;
+    public static final String DAY_DESC_BOB = " " + PREFIX_DAY + VALID_DAY_BOB;
+    public static final String START_TIME_DESC_AMY = " " + PREFIX_START + VALID_START_TIME_AMY;
+    public static final String START_TIME_DESC_BOB = " " + PREFIX_START + VALID_START_TIME_BOB;
+    public static final String END_TIME_DESC_AMY = " " + PREFIX_END + VALID_END_TIME_AMY;
+    public static final String END_TIME_DESC_BOB = " " + PREFIX_END + VALID_END_TIME_BOB;
+    public static final String RATE_DESC_AMY = " " + PREFIX_RATE + VALID_RATE_AMY;
+    public static final String RATE_DESC_BOB = " " + PREFIX_RATE + VALID_RATE_BOB;
     public static final String TAG_DESC_FRIEND = " " + PREFIX_TAG + VALID_TAG_FRIEND;
     public static final String TAG_DESC_HUSBAND = " " + PREFIX_TAG + VALID_TAG_HUSBAND;
 

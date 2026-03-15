@@ -15,9 +15,12 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Day;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Rate;
+import seedu.address.model.person.Time;
 import seedu.address.model.tag.Tag;
 
 public class ParserUtilTest {
@@ -26,6 +29,9 @@ public class ParserUtilTest {
     private static final String INVALID_ADDRESS = " ";
     private static final String INVALID_EMAIL = "example.com";
     private static final String INVALID_TAG = "#friend";
+    private static final String INVALID_DAY = "Funday";
+    private static final String INVALID_TIME = "3 pm";
+    private static final String INVALID_RATE = "-10";
 
     private static final String VALID_NAME = "Rachel Walker";
     private static final String VALID_PHONE = "123456";
@@ -33,6 +39,9 @@ public class ParserUtilTest {
     private static final String VALID_EMAIL = "rachel@example.com";
     private static final String VALID_TAG_1 = "friend";
     private static final String VALID_TAG_2 = "neighbour";
+    private static final String VALID_DAY = "Monday";
+    private static final String VALID_TIME = "12:24";
+    private static final String VALID_RATE = "100";
 
     private static final String WHITESPACE = " \t\r\n";
 
@@ -146,6 +155,65 @@ public class ParserUtilTest {
         String emailWithWhitespace = WHITESPACE + VALID_EMAIL + WHITESPACE;
         Email expectedEmail = new Email(VALID_EMAIL);
         assertEquals(expectedEmail, ParserUtil.parseEmail(emailWithWhitespace));
+    }
+
+    @Test
+    public void parseDay_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseDay((String) null));
+    }
+
+    @Test
+    public void parseDay_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseDay(INVALID_DAY));
+    }
+
+    @Test
+    public void parseDay_validValueWithoutWhitespace_returnsDay() throws Exception {
+        Day expectedDay = new Day(VALID_DAY);
+        assertEquals(expectedDay, ParserUtil.parseDay(VALID_DAY));
+    }
+
+    @Test
+    public void parseDay_validValueWithWhitespace_returnsTrimmedDay() throws Exception {
+        String dayWithWhitespace = WHITESPACE + VALID_DAY + WHITESPACE;
+        Day expectedDay = new Day(VALID_DAY);
+        assertEquals(expectedDay, ParserUtil.parseDay(dayWithWhitespace));
+    }
+
+    @Test
+    public void parseTime_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseTime(INVALID_TIME));
+    }
+
+    @Test
+    public void parseTime_validValueWithoutWhitespace_returnsTime() throws Exception {
+        Time expectedTime = new Time(VALID_TIME);
+        assertEquals(expectedTime, ParserUtil.parseTime(VALID_TIME));
+    }
+
+    @Test
+    public void parseTime_validValueWithWhitespace_returnsTrimmedTime() throws Exception {
+        String timeWithWhitespace = WHITESPACE + VALID_TIME + WHITESPACE;
+        Time expectedTime = new Time(VALID_TIME);
+        assertEquals(expectedTime, ParserUtil.parseTime(timeWithWhitespace));
+    }
+
+    @Test
+    public void parseRate_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseRate(INVALID_RATE));
+    }
+
+    @Test
+    public void parseRate_validValueWithoutWhitespace_returnsRate() throws Exception {
+        Rate expectedRate = new Rate(VALID_RATE);
+        assertEquals(expectedRate, ParserUtil.parseRate(VALID_RATE));
+    }
+
+    @Test
+    public void parseRate_validValueWithWhitespace_returnsTrimmedRate() throws Exception {
+        String rateWithWhitespace = WHITESPACE + VALID_RATE + WHITESPACE;
+        Rate expectedRate = new Rate(VALID_RATE);
+        assertEquals(expectedRate, ParserUtil.parseRate(rateWithWhitespace));
     }
 
     @Test
