@@ -12,11 +12,13 @@ import static seedu.address.testutil.TypicalPersons.BOB;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
+import seedu.address.model.tag.Tag;
 import seedu.address.testutil.PersonBuilder;
 
 public class UniquePersonListTest {
@@ -107,6 +109,58 @@ public class UniquePersonListTest {
         uniquePersonList.add(ALICE);
         uniquePersonList.add(BOB);
         assertThrows(DuplicatePersonException.class, () -> uniquePersonList.setPerson(ALICE, BOB));
+    }
+
+    @Test
+    public void addTagsToPerson_nullTarget_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> uniquePersonList.addTagsToPerson(null,
+            Set.of(new Tag("friends"))));
+    }
+
+    @Test
+    public void addTagsToPerson_nullTags_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> uniquePersonList.addTagsToPerson(ALICE, null));
+    }
+
+    @Test
+    public void addTagsToPerson_targetNotInList_throwsPersonNotFoundException() {
+        assertThrows(PersonNotFoundException.class, () -> uniquePersonList.addTagsToPerson(ALICE,
+            Set.of(new Tag("friends"))));
+    }
+
+    @Test
+    public void addTagsToPerson_targetInList_success() {
+        uniquePersonList.add(ALICE);
+        uniquePersonList.addTagsToPerson(ALICE, Set.of(new Tag("classmate")));
+
+        Person expectedPerson = new PersonBuilder(ALICE).withTags("friends", "classmate").build();
+        assertTrue(uniquePersonList.contains(expectedPerson));
+    }
+
+    @Test
+    public void deleteTagsFromPerson_nullTarget_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> uniquePersonList.deleteTagsFromPerson(null,
+            Set.of(new Tag("friends"))));
+    }
+
+    @Test
+    public void deleteTagsFromPerson_nullTags_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> uniquePersonList.deleteTagsFromPerson(ALICE, null));
+    }
+
+    @Test
+    public void deleteTagsFromPerson_targetNotInList_throwsPersonNotFoundException() {
+        assertThrows(PersonNotFoundException.class, () -> uniquePersonList.deleteTagsFromPerson(ALICE,
+            Set.of(new Tag("friends"))));
+    }
+
+    @Test
+    public void deleteTagsFromPerson_targetInList_success() {
+        uniquePersonList.add(ALICE);
+        uniquePersonList.deleteTagsFromPerson(ALICE, Set.of(new Tag("friends")));
+
+        Person expectedPerson = new PersonBuilder(ALICE).withTags().build();
+        assertTrue(uniquePersonList.contains(expectedPerson));
     }
 
     @Test

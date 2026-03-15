@@ -11,11 +11,14 @@ import static seedu.address.testutil.TypicalPersons.BENSON;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.person.Person;
+import seedu.address.model.tag.Tag;
 import seedu.address.testutil.AddressBookBuilder;
 
 public class ModelManagerTest {
@@ -86,6 +89,24 @@ public class ModelManagerTest {
     public void hasPerson_personInAddressBook_returnsTrue() {
         modelManager.addPerson(ALICE);
         assertTrue(modelManager.hasPerson(ALICE));
+    }
+
+    @Test
+    public void addTagsToPerson_validTarget_success() {
+        modelManager.addPerson(ALICE);
+        modelManager.addTagsToPerson(ALICE, Set.of(new Tag("classmate")));
+
+        Person updatedPerson = modelManager.getFilteredPersonList().get(0);
+        assertTrue(updatedPerson.getTags().contains(new Tag("classmate")));
+    }
+
+    @Test
+    public void deleteTagsFromPerson_validTarget_success() {
+        modelManager.addPerson(ALICE);
+        modelManager.deleteTagsFromPerson(ALICE, Set.of(new Tag("friends")));
+
+        Person updatedPerson = modelManager.getFilteredPersonList().get(0);
+        assertFalse(updatedPerson.getTags().contains(new Tag("friends")));
     }
 
     @Test
