@@ -92,6 +92,26 @@ public class UniquePersonList implements Iterable<Person> {
     }
 
     /**
+     * Deletes {@code tagsToDelete} from the person identified by {@code target}.
+     * {@code target} must exist in the list.
+     */
+    public void deleteTagsFromPerson(Person target, Set<Tag> tagsToDelete) {
+        requireAllNonNull(target, tagsToDelete);
+
+        Set<Tag> updatedTags = new HashSet<>(target.getTags());
+        updatedTags.removeAll(tagsToDelete);
+
+        Person editedPerson = new Person(
+                target.getName(),
+                target.getPhone(),
+                target.getEmail(),
+                target.getAddress(),
+                updatedTags);
+
+        setPerson(target, editedPerson);
+    }
+
+    /**
      * Removes the equivalent person from the list.
      * The person must exist in the list.
      */

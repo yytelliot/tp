@@ -112,6 +112,11 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public void deleteTagsFromPerson(Person target, Set<Tag> tagsToDelete) {
+        addressBook.deleteTagsFromPerson(target, tagsToDelete);
+    }
+
+    @Override
     public void setPerson(Person target, Person editedPerson) {
         requireAllNonNull(target, editedPerson);
 

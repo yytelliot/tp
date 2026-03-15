@@ -107,6 +107,17 @@ public class AddressBook implements ReadOnlyAddressBook {
         persons.addTagsToPerson(target, tagsToAdd);
     }
 
+    /**
+     * Deletes the given tags from the person.
+     * {@code target} must exist in the address book.
+     */
+    public void deleteTagsFromPerson(Person target, Set<Tag> tagsToDelete) {
+        requireNonNull(target);
+        requireNonNull(tagsToDelete);
+
+        persons.deleteTagsFromPerson(target, tagsToDelete);
+    }
+
     //// util methods
 
     @Override
