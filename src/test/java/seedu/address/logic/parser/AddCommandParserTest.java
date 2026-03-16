@@ -223,6 +223,7 @@ public class AddCommandParserTest {
                 .withStartTime(VALID_START_TIME_AMY)
                 .withEndTime(VALID_END_TIME_AMY)
                 .withRate(VALID_RATE_AMY)
+                .withTags()
                 .build();
         assertParseSuccess(parser, NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY
                 + DAY_DESC_AMY + START_TIME_DESC_AMY + END_TIME_DESC_AMY + RATE_DESC_AMY,
