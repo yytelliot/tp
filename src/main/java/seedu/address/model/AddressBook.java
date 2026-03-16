@@ -3,11 +3,13 @@ package seedu.address.model;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
+import java.util.Set;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.UniquePersonList;
+import seedu.address.model.tag.Tag;
 
 /**
  * Wraps all data at the address-book level
@@ -92,6 +94,28 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void removePerson(Person key) {
         persons.remove(key);
+    }
+
+    /**
+     * Adds the given tags to the person.
+     * {@code target} must exist in the address book.
+     */
+    public void addTagsToPerson(Person target, Set<Tag> tagsToAdd) {
+        requireNonNull(target);
+        requireNonNull(tagsToAdd);
+
+        persons.addTagsToPerson(target, tagsToAdd);
+    }
+
+    /**
+     * Deletes the given tags from the person.
+     * {@code target} must exist in the address book.
+     */
+    public void deleteTagsFromPerson(Person target, Set<Tag> tagsToDelete) {
+        requireNonNull(target);
+        requireNonNull(tagsToDelete);
+
+        persons.deleteTagsFromPerson(target, tagsToDelete);
     }
 
     //// util methods

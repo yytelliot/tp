@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -12,6 +13,7 @@ import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.person.Person;
+import seedu.address.model.tag.Tag;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -105,6 +107,16 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public void addTagsToPerson(Person target, Set<Tag> tagsToAdd) {
+        addressBook.addTagsToPerson(target, tagsToAdd);
+    }
+
+    @Override
+    public void deleteTagsFromPerson(Person target, Set<Tag> tagsToDelete) {
+        addressBook.deleteTagsFromPerson(target, tagsToDelete);
+    }
+
+    @Override
     public void setPerson(Person target, Person editedPerson) {
         requireAllNonNull(target, editedPerson);
 
@@ -141,8 +153,7 @@ public class ModelManager implements Model {
 
         ModelManager otherModelManager = (ModelManager) other;
         return addressBook.equals(otherModelManager.addressBook)
-                && userPrefs.equals(otherModelManager.userPrefs)
-                && filteredPersons.equals(otherModelManager.filteredPersons);
+            && userPrefs.equals(otherModelManager.userPrefs)
+            && filteredPersons.equals(otherModelManager.filteredPersons);
     }
-
 }

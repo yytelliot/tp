@@ -3,13 +3,16 @@ package seedu.address.model.person;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
+import seedu.address.model.tag.Tag;
 
 /**
  * A list of persons that enforces uniqueness between its elements and does not allow nulls.
@@ -66,6 +69,46 @@ public class UniquePersonList implements Iterable<Person> {
         }
 
         internalList.set(index, editedPerson);
+    }
+
+    /**
+     * Adds {@code tagsToAdd} to the person identified by {@code target}.
+     * {@code target} must exist in the list.
+     */
+    public void addTagsToPerson(Person target, Set<Tag> tagsToAdd) {
+        requireAllNonNull(target, tagsToAdd);
+
+        Set<Tag> updatedTags = new HashSet<>(target.getTags());
+        updatedTags.addAll(tagsToAdd);
+
+        Person editedPerson = new Person(
+                target.getName(),
+                target.getPhone(),
+                target.getEmail(),
+                target.getAddress(),
+                updatedTags);
+
+        setPerson(target, editedPerson);
+    }
+
+    /**
+     * Deletes {@code tagsToDelete} from the person identified by {@code target}.
+     * {@code target} must exist in the list.
+     */
+    public void deleteTagsFromPerson(Person target, Set<Tag> tagsToDelete) {
+        requireAllNonNull(target, tagsToDelete);
+
+        Set<Tag> updatedTags = new HashSet<>(target.getTags());
+        updatedTags.removeAll(tagsToDelete);
+
+        Person editedPerson = new Person(
+                target.getName(),
+                target.getPhone(),
+                target.getEmail(),
+                target.getAddress(),
+                updatedTags);
+
+        setPerson(target, editedPerson);
     }
 
     /**

@@ -14,8 +14,10 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.AddTagCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.DeleteCommand;
+import seedu.address.logic.commands.DeleteTagCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.commands.ExitCommand;
@@ -25,6 +27,7 @@ import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
+import seedu.address.model.tag.Tag;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
 import seedu.address.testutil.PersonUtil;
@@ -86,6 +89,16 @@ public class AddressBookParserTest {
     public void parseCommand_list() throws Exception {
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD) instanceof ListCommand);
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD + " 3") instanceof ListCommand);
+    }
+
+    @Test
+    public void parseCommand_tag() throws Exception {
+        AddTagCommand addTagCommand = (AddTagCommand) parser.parseCommand("tag add 1 t/friends");
+        assertEquals(new AddTagCommand(INDEX_FIRST_PERSON, java.util.Set.of(new Tag("friends"))), addTagCommand);
+
+        DeleteTagCommand deleteTagCommand = (DeleteTagCommand) parser.parseCommand("tag delete 1 t/friends");
+        assertEquals(new DeleteTagCommand(INDEX_FIRST_PERSON, java.util.Set.of(new Tag("friends"))),
+                deleteTagCommand);
     }
 
     @Test

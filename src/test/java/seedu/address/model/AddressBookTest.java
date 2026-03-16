@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
@@ -20,6 +21,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
+import seedu.address.model.tag.Tag;
 import seedu.address.testutil.PersonBuilder;
 
 public class AddressBookTest {
@@ -76,6 +78,45 @@ public class AddressBookTest {
         Person editedAlice = new PersonBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).withTags(VALID_TAG_HUSBAND)
                 .build();
         assertTrue(addressBook.hasPerson(editedAlice));
+    }
+
+    @Test
+    public void addTagsToPerson_nullTarget_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> addressBook.addTagsToPerson(null, Set.of(new Tag("friends"))));
+    }
+
+    @Test
+    public void addTagsToPerson_nullTags_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> addressBook.addTagsToPerson(ALICE, null));
+    }
+
+    @Test
+    public void addTagsToPerson_targetInAddressBook_success() {
+        addressBook.addPerson(ALICE);
+        addressBook.addTagsToPerson(ALICE, Set.of(new Tag("classmate")));
+
+        Person expectedPerson = new PersonBuilder(ALICE).withTags("friends", "classmate").build();
+        assertTrue(addressBook.hasPerson(expectedPerson));
+    }
+
+    @Test
+    public void deleteTagsFromPerson_nullTarget_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> addressBook.deleteTagsFromPerson(null,
+            Set.of(new Tag("friends"))));
+    }
+
+    @Test
+    public void deleteTagsFromPerson_nullTags_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> addressBook.deleteTagsFromPerson(ALICE, null));
+    }
+
+    @Test
+    public void deleteTagsFromPerson_targetInAddressBook_success() {
+        addressBook.addPerson(ALICE);
+        addressBook.deleteTagsFromPerson(ALICE, Set.of(new Tag("friends")));
+
+        Person expectedPerson = new PersonBuilder(ALICE).withTags().build();
+        assertTrue(addressBook.hasPerson(expectedPerson));
     }
 
     @Test
