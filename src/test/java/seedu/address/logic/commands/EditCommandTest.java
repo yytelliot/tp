@@ -5,8 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_DAY_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_END_TIME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_RATE_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_START_TIME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
@@ -169,6 +173,30 @@ public class EditCommandTest {
 
         // different descriptor -> returns false
         assertFalse(standardCommand.equals(new EditCommand(INDEX_FIRST_PERSON, DESC_BOB)));
+
+        // different day -> returns false
+        EditPersonDescriptor differentDay = new EditPersonDescriptorBuilder(DESC_AMY)
+                .withDay(VALID_DAY_BOB)
+                .build();
+        assertFalse(standardCommand.equals(new EditCommand(INDEX_FIRST_PERSON, differentDay)));
+
+        // different start time -> returns false
+        EditPersonDescriptor differentStart = new EditPersonDescriptorBuilder(DESC_AMY)
+                .withStartTime(VALID_START_TIME_BOB)
+                .build();
+        assertFalse(standardCommand.equals(new EditCommand(INDEX_FIRST_PERSON, differentStart)));
+
+        // different end time -> returns false
+        EditPersonDescriptor differentEnd = new EditPersonDescriptorBuilder(DESC_AMY)
+                .withEndTime(VALID_END_TIME_BOB)
+                .build();
+        assertFalse(standardCommand.equals(new EditCommand(INDEX_FIRST_PERSON, differentEnd)));
+
+        // different rate -> returns false
+        EditPersonDescriptor differentRate = new EditPersonDescriptorBuilder(DESC_AMY)
+                .withRate(VALID_RATE_BOB)
+                .build();
+        assertFalse(standardCommand.equals(new EditCommand(INDEX_FIRST_PERSON, differentRate)));
     }
 
     @Test
