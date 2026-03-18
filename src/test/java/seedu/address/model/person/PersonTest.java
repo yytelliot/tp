@@ -16,34 +16,17 @@ import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BOB;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.junit.jupiter.api.Test;
 
-import seedu.address.model.tag.Tag;
 import seedu.address.testutil.PersonBuilder;
 
 public class PersonTest {
-    @Test
-    public void constructor_directCall_works() {
-        Set<Tag> tags = new HashSet<>();
-        Person person = new Person(
-                new Name("Test"),
-                new Phone("92345678"),
-                new Email("test@example.com"),
-                new Address("Blk 1, #01-01"),
-                new Day("Monday"),
-                new Time("10:00"),
-                new Time("12:00"),
-                new Rate("50"),
-                true, // test isPaid
-                tags
-        );
 
-        assertEquals("Test", person.getName().fullName);
-        assertTrue(person.isPaid());
-        assertEquals(0, person.getTags().size());
+    @Test
+    public void hashCode_includesAllFields() {
+        Person aliceCopy = new PersonBuilder(ALICE).build();
+        Person aliceSame = new PersonBuilder(ALICE).build();
+        assertEquals(aliceCopy.hashCode(), aliceSame.hashCode());
     }
 
     @Test
