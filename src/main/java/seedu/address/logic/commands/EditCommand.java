@@ -283,6 +283,11 @@ public class EditCommand extends Command {
                     && Objects.equals(phone, otherEditPersonDescriptor.phone)
                     && Objects.equals(email, otherEditPersonDescriptor.email)
                     && Objects.equals(address, otherEditPersonDescriptor.address)
+                    && Objects.equals(day, otherEditPersonDescriptor.day)
+                    && Objects.equals(startTime, otherEditPersonDescriptor.startTime)
+                    && Objects.equals(endTime, otherEditPersonDescriptor.endTime)
+                    && Objects.equals(rate, otherEditPersonDescriptor.rate)
+                    && Objects.equals(isPaid, otherEditPersonDescriptor.isPaid)
                     && Objects.equals(tags, otherEditPersonDescriptor.tags);
         }
 
