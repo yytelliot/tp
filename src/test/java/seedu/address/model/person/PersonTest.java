@@ -1,5 +1,7 @@
 package seedu.address.model.person;
 
+import seedu.address.model.tag.Tag;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -16,11 +18,34 @@ import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BOB;
 
+import java.util.Set;
+import java.util.HashSet;
+
 import org.junit.jupiter.api.Test;
 
 import seedu.address.testutil.PersonBuilder;
 
 public class PersonTest {
+    @Test
+    public void constructor_directCall_works() {
+        Set<Tag> tags = new HashSet<>();
+        Person person = new Person(
+                new Name("Test"),
+                new Phone("92345678"),
+                new Email("test@example.com"),
+                new Address("Blk 1, #01-01"),
+                new Day("Monday"),
+                new Time("10:00"),
+                new Time("12:00"),
+                new Rate("50"),
+                true, // test isPaid
+                tags
+        );
+
+        assertEquals("Test", person.getName().fullName);
+        assertTrue(person.isPaid());
+        assertEquals(0, person.getTags().size());
+    }
 
     @Test
     public void asObservableList_modifyList_throwsUnsupportedOperationException() {
