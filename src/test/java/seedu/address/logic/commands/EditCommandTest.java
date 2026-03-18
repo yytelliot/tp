@@ -7,6 +7,7 @@ import static seedu.address.logic.commands.CommandTestUtil.DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_DAY_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_END_TIME_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_IS_PAID_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_RATE_BOB;
@@ -195,6 +196,13 @@ public class EditCommandTest {
         // different rate -> returns false
         EditPersonDescriptor differentRate = new EditPersonDescriptorBuilder(DESC_AMY)
                 .withRate(VALID_RATE_BOB)
+                .build();
+        assertFalse(standardCommand.equals(new EditCommand(INDEX_FIRST_PERSON, differentRate)));
+
+
+        // different isPaid -> returns false
+        EditPersonDescriptor differentIsPaid = new EditPersonDescriptorBuilder(DESC_AMY)
+                .withIsPaid(VALID_IS_PAID_BOB)
                 .build();
         assertFalse(standardCommand.equals(new EditCommand(INDEX_FIRST_PERSON, differentRate)));
     }
