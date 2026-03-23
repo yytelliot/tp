@@ -12,13 +12,14 @@ public class Name {
     public static final String MESSAGE_CONSTRAINTS =
             "Names should contain only alphanumeric characters, with words separated by a single space or '/', "
                     + "e.g. 'Tan Ah Kow' or 'Raj S/O Kumar'. "
-                    + "Names must not start or end with a space or '/', and must not contain consecutive spaces or '/' characters";
+                    + "Names must not start or end with a space or '/', "
+                    + "and must not contain consecutive spaces or '/' characters";
 
     /*
      * The first character of the address must not be a whitespace,
      * otherwise " " (a blank string) becomes a valid input.
      */
-    public static final String VALIDATION_REGEX = "[\\p{Alnum}]+([ /][\\p{Alnum}]+)*";
+    public static final String VALIDATION_REGEX = "[\\p{Alnum}][\\p{Alnum} /]*";
 
     public final String fullName;
 
