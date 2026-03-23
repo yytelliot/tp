@@ -3,40 +3,78 @@ layout: page
 title: User Guide
 ---
 
-AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized for use via a Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
+**OnlyTutors** is a desktop app for **private tutors in Singapore** to manage students, lessons, and payments. It is optimised for use via a **Command Line Interface (CLI)** with the benefits of a Graphical User Interface (GUI). If you can type fast, OnlyTutors helps you manage your tutoring business faster than traditional apps.
+
+**Who is this guide for?** Private tutors who are comfortable typing commands and want a fast, no-frills way to keep track of their students.
+
+**What does OnlyTutors assume?** You have basic familiarity with using a computer and typing commands. No programming knowledge is required.
 
 * Table of Contents
 {:toc}
 
 --------------------------------------------------------------------------------------------------------------------
 
-## Quick start
+## Command Summary
 
-1. Ensure you have Java `17` or above installed in your Computer.<br>
+A quick reference of all available commands. Click any command name to jump to its detailed section.
+
+| Action | Format | Example |
+|--------|--------|---------|
+| [**Add**](#adding-a-student-add) | `add n/NAME p/PHONE e/EMAIL a/ADDRESS d/DAY st/START et/END r/RATE` | `add n/John Doe p/98765432 e/johnd@example.com a/Clementi Ave 2 d/Monday st/15:00 et/17:00 r/50` |
+| [**List**](#listing-all-students-list) | `list` | `list` |
+| [**Edit**](#editing-a-student-edit) | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [d/DAY] [st/START] [et/END] [r/RATE] [t/TAG]…​` | `edit 1 p/91234567 d/Friday` |
+| [**Find**](#finding-students-by-name-find) | `find KEYWORD [MORE_KEYWORDS]…​` | `find John Alice` |
+| [**Delete**](#deleting-a-student-delete) | `delete INDEX` | `delete 3` |
+| [**Tag Add**](#adding-tags-to-a-student-tag-add) | `tag add INDEX t/TAG [t/TAG]…​` | `tag add 1 t/math t/primary3` |
+| [**Tag Delete**](#deleting-tags-from-a-student-tag-delete) | `tag delete INDEX t/TAG [t/TAG]…​` | `tag delete 1 t/math` |
+| [**Mark**](#marking-a-student-as-paid-mark) | `mark INDEX` | `mark 1` |
+| [**Unmark**](#marking-a-student-as-unpaid-unmark) | `unmark INDEX` | `unmark 1` |
+| [**Clear**](#clearing-all-entries-clear) | `clear` | `clear` |
+| [**Help**](#viewing-help-help) | `help` | `help` |
+| [**Exit**](#exiting-the-program-exit) | `exit` | `exit` |
+
+--------------------------------------------------------------------------------------------------------------------
+
+## Quick Start
+
+1. Ensure you have Java `17` or above installed on your computer.<br>
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
-1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
+1. Download the latest `.jar` file from [here](https://github.com/AY2526S2-CS2103T-T17-3/tp/releases).
 
-1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
+1. Copy the file to the folder you want to use as the _home folder_ for OnlyTutors.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
-   A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
+1. Open a command terminal, `cd` into the folder, and run: `java -jar addressbook.jar`<br>
+   A GUI similar to the screenshot below should appear in a few seconds. The app contains some sample data to help you get started.<br>
    ![Ui](images/Ui.png)
 
-1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
-   Some example commands you can try:
+### Understanding the Interface
 
-   * `list` : Lists all contacts.
+The screenshot below shows the OnlyTutors interface with sample data. Each student card displays their name, phone, email, address, lesson schedule (day and time), tuition rate, payment status, and tags.
 
-   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+| Area | Location | Purpose |
+|------|----------|---------|
+| **Menu Bar** | Top | Access `File` (exit) and `Help` (open help window) |
+| **Student List** | Centre | Displays your students as cards with all their details. Paid students are labelled in <span style="color:green">**green**</span>, unpaid in <span style="color:red">**red**</span> |
+| **Result Display** | Below student list | Shows feedback after each command (success messages or error details) |
+| **Command Box** | Near bottom | Type your commands here and press Enter to execute them |
+| **Status Bar** | Bottom | Shows the file path where your data is saved |
 
-   * `delete 3` : Deletes the 3rd contact shown in the current list.
+### Try These Commands
 
-   * `clear` : Deletes all contacts.
+Try entering these commands one at a time to get a feel for OnlyTutors:
 
-   * `exit` : Exits the app.
+| Step | Command | What it does |
+|------|---------|-------------|
+| 1 | `list` | Lists all students |
+| 2 | `add n/John Doe p/98765432 e/johnd@example.com a/311, Clementi Ave 2, #02-25 d/Monday st/15:00 et/17:00 r/50` | Adds a student named John Doe with a Monday lesson |
+| 3 | `tag add 1 t/math` | Adds the tag `math` to the 1st student |
+| 4 | `mark 1` | Marks the 1st student as paid |
+| 5 | `find John` | Searches for students with "John" in their name |
+| 6 | `list` | Returns to the full student list |
+| 7 | `delete 3` | Deletes the 3rd student shown in the list |
 
-1. Refer to the [Features](#features) below for details of each command.
+Refer to the [Features](#features) section below for the full details of each command.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -46,17 +84,17 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 
 **:information_source: Notes about the command format:**<br>
 
-* Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
+* Words in `UPPER_CASE` are parameters to be supplied by you.<br>
   e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
 
 * Items in square brackets are optional.<br>
-  e.g `n/NAME [t/TAG]` can be used as `n/John Doe t/friend` or as `n/John Doe`.
+  e.g. `[n/NAME]` means the `n/NAME` parameter can be omitted.
 
 * Items with `…`​ after them can be used multiple times including zero times.<br>
-  e.g. `[t/TAG]…​` can be used as ` ` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.
+  e.g. `[t/TAG]…​` can be used as ` ` (i.e. 0 times), `t/math`, `t/math t/primary3` etc.
 
 * Parameters can be in any order.<br>
-  e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
+  e.g. if the command specifies `n/NAME p/PHONE`, `p/PHONE n/NAME` is also acceptable.
 
 * Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
@@ -64,137 +102,354 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
 
-### Viewing help : `help`
+### Parameter Summary
 
-Shows a message explaining how to access the help page.
+| Parameter | Prefix | Constraints | Example |
+|-----------|--------|------------|---------|
+| **Name** | `n/` | Alphanumeric characters and spaces only; cannot be blank | `n/John Doe` |
+| **Phone** | `p/` | Exactly 8 digits, starting with 6, 8, or 9 (Singapore format) | `p/91234567` |
+| **Email** | `e/` | Standard email format (`local@domain`) | `e/john@example.com` |
+| **Address** | `a/` | Any non-blank text | `a/Blk 30, Geylang St 29` |
+| **Day** | `d/` | A day of the week (case-insensitive): Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday | `d/Monday` |
+| **Start Time** | `st/` | 24-hour format `HH:mm` (e.g., `09:00`, `14:30`) | `st/14:00` |
+| **End Time** | `et/` | 24-hour format `HH:mm`; **must be strictly after** start time | `et/16:00` |
+| **Rate** | `r/` | A non-negative whole number representing dollars per lesson | `r/50` |
+| **Tag** | `t/` | Alphanumeric characters only (no spaces); stored in lowercase | `t/math` |
+
+--------------------------------------------------------------------------------------------------------------------
+
+### Adding a student: `add`
+
+Adds a new student to OnlyTutors.
+
+<div markdown="span" class="alert alert-success">
+**Format:** `add n/NAME p/PHONE e/EMAIL a/ADDRESS d/DAY st/START_TIME et/END_TIME r/RATE`
+</div>
+
+* All fields are required.
+* Tags cannot be added during the `add` command. Use [`tag add`](#adding-tags-to-a-student-tag-add) after adding the student.
+* New students are marked as **Unpaid** by default.
+
+<div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
+OnlyTutors does not allow duplicate students. Two students are considered duplicates if they have the **same name** (case-insensitive) **and** the **same phone number**.
+</div>
+
+**Examples:**
+
+| Command | What it does |
+|---------|-------------|
+| `add n/John Doe p/98765432 e/johnd@example.com a/311, Clementi Ave 2, #02-25 d/Monday st/15:00 et/17:00 r/50` | Adds student John Doe with a Monday 3–5pm lesson at $50/lesson |
+| `add n/Alice Tan p/81234567 e/alice@example.com a/Blk 30 Geylang St 29, #06-40 d/Wednesday st/10:00 et/12:00 r/60` | Adds student Alice Tan with a Wednesday 10am–12pm lesson at $60/lesson |
+
+**Expected output** (on success):
+> `New contact added: John Doe; Phone: 98765432; Email: johnd@example.com; Address: 311, Clementi Ave 2, #02-25; Day: MONDAY; Start Time: 15:00; End Time: 17:00; Rate: 50; Tags:`
+
+--------------------------------------------------------------------------------------------------------------------
+
+### Listing all students: `list`
+
+Shows a list of all students in OnlyTutors.
+
+<div markdown="span" class="alert alert-success">
+**Format:** `list`
+</div>
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+Use `list` after a [`find`](#finding-students-by-name-find) command to return to the full student list.
+</div>
+
+**Expected output:**
+> `Listed all persons`
+
+--------------------------------------------------------------------------------------------------------------------
+
+### Editing a student: `edit`
+
+Edits the details of an existing student in OnlyTutors.
+
+<div markdown="span" class="alert alert-success">
+**Format:** `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [d/DAY] [st/START_TIME] [et/END_TIME] [r/RATE] [t/TAG]…​`
+</div>
+
+* Edits the student at the specified `INDEX` (a positive integer: 1, 2, 3, …).
+* At least one of the optional fields must be provided.
+* Existing values will be updated to the input values.
+* When editing tags with `t/`, existing tags are **replaced entirely**. To add tags without replacing, use [`tag add`](#adding-tags-to-a-student-tag-add) instead.
+* Remove all tags by typing `t/` without specifying any tags after it.
+
+<div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
+Editing tags with the `edit` command **replaces all existing tags**. If a student has tags `math` and `primary3`, running `edit 1 t/science` will result in only the `science` tag remaining.
+</div>
+
+**Examples:**
+
+| Command | What it does |
+|---------|-------------|
+| `edit 1 p/91234567 e/johndoe@example.com` | Changes the phone and email of the 1st student |
+| `edit 2 n/Betsy Crowe t/` | Changes the name of the 2nd student and clears all tags |
+| `edit 3 d/Friday st/14:00 et/16:00` | Changes the lesson day and time for the 3rd student |
+
+**Expected output** (on success):
+> `Edited Person: Betsy Crowe; Phone: ...`
+
+--------------------------------------------------------------------------------------------------------------------
+
+### Finding students by name: `find`
+
+Finds students whose names contain any of the given keywords.
+
+<div markdown="span" class="alert alert-success">
+**Format:** `find KEYWORD [MORE_KEYWORDS]…​`
+</div>
+
+* The search is **case-insensitive**. e.g. `hans` will match `Hans`.
+* The order of keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`.
+* Only the **name** is searched.
+* Only **full words** are matched. e.g. `Han` will **not** match `Hans`.
+* Students matching **at least one** keyword will be returned (i.e. `OR` search).
+
+**Examples:**
+
+| Command | What it does |
+|---------|-------------|
+| `find John` | Returns `john` and `John Doe` |
+| `find alex david` | Returns `Alex Yeoh` and `David Li` |
+
+**Expected output:**
+> `2 persons listed!`
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+After using `find`, use [`list`](#listing-all-students-list) to return to the full student list.
+</div>
+
+--------------------------------------------------------------------------------------------------------------------
+
+### Deleting a student: `delete`
+
+Deletes the specified student from OnlyTutors.
+
+<div markdown="span" class="alert alert-success">
+**Format:** `delete INDEX`
+</div>
+
+* Deletes the student at the specified `INDEX`.
+* The index refers to the index number shown in the displayed student list.
+* The index **must be a positive integer** (1, 2, 3, …).
+
+<div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
+This action cannot be undone. Make sure you have selected the correct student before deleting.
+</div>
+
+**Examples:**
+
+| Command | What it does |
+|---------|-------------|
+| `list` then `delete 2` | Deletes the 2nd student in the full list |
+| `find Betsy` then `delete 1` | Deletes the 1st student in the `find` results |
+
+**Expected output** (on success):
+> `Deleted Person: Betsy Crowe; Phone: ...`
+
+--------------------------------------------------------------------------------------------------------------------
+
+### Adding tags to a student: `tag add`
+
+Adds one or more tags to a student **without replacing** existing tags.
+
+<div markdown="span" class="alert alert-success">
+**Format:** `tag add INDEX t/TAG [t/TAG]…​`
+</div>
+
+* Adds the specified tag(s) to the student at the specified `INDEX`.
+* The index **must be a positive integer** (1, 2, 3, …).
+* At least one tag must be provided.
+* Tags are alphanumeric only (no spaces) and are stored in lowercase.
+* If any of the specified tags already exist on the student, the command will fail.
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+Tags are useful for categorising students by subject (e.g., `math`, `english`), level (e.g., `primary3`, `secondary2`), or any custom label you need.
+</div>
+
+**Examples:**
+
+| Command | What it does |
+|---------|-------------|
+| `tag add 1 t/math` | Adds the tag `math` to the 1st student |
+| `tag add 2 t/primary3 t/science` | Adds tags `primary3` and `science` to the 2nd student |
+
+**Expected output** (on success):
+> `Tag(s) added to person: John Doe; Phone: ...`
+
+--------------------------------------------------------------------------------------------------------------------
+
+### Deleting tags from a student: `tag delete`
+
+Removes one or more tags from a student.
+
+<div markdown="span" class="alert alert-success">
+**Format:** `tag delete INDEX t/TAG [t/TAG]…​`
+</div>
+
+* Removes the specified tag(s) from the student at the specified `INDEX`.
+* The index **must be a positive integer** (1, 2, 3, …).
+* At least one tag must be provided.
+* If any of the specified tags do not exist on the student, the command will fail.
+
+**Examples:**
+
+| Command | What it does |
+|---------|-------------|
+| `tag delete 1 t/math` | Removes the tag `math` from the 1st student |
+| `tag delete 2 t/primary3 t/science` | Removes tags `primary3` and `science` from the 2nd student |
+
+**Expected output** (on success):
+> `Tag(s) removed from person: John Doe; Phone: ...`
+
+--------------------------------------------------------------------------------------------------------------------
+
+### Marking a student as paid: `mark`
+
+Marks a student's payment status as **Paid**.
+
+<div markdown="span" class="alert alert-success">
+**Format:** `mark INDEX`
+</div>
+
+* Marks the student at the specified `INDEX` as paid.
+* The index **must be a positive integer** (1, 2, 3, …).
+* If the student is already marked as paid, the command will fail with: `This student has already been marked as paid.`
+
+The payment status is displayed on each student's card as a colour-coded label:
+* <span style="color:green">**Green**</span> — Paid
+* <span style="color:red">**Red**</span> — Unpaid
+
+**Examples:**
+
+| Command | What it does |
+|---------|-------------|
+| `mark 1` | Marks the 1st student as paid |
+| `find John` then `mark 1` | Marks the 1st student in the `find` results as paid |
+
+**Expected output** (on success):
+> `Marked student as paid: John Doe; Phone: ...`
+
+--------------------------------------------------------------------------------------------------------------------
+
+### Marking a student as unpaid: `unmark`
+
+Marks a student's payment status as **Unpaid**.
+
+<div markdown="span" class="alert alert-success">
+**Format:** `unmark INDEX`
+</div>
+
+* Marks the student at the specified `INDEX` as unpaid.
+* The index **must be a positive integer** (1, 2, 3, …).
+* If the student is already marked as unpaid, the command will fail with: `This student has already been marked as unpaid.`
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+Use `unmark` at the start of a new payment cycle to reset a student's payment status. See also: [`mark`](#marking-a-student-as-paid-mark).
+</div>
+
+**Examples:**
+
+| Command | What it does |
+|---------|-------------|
+| `unmark 1` | Marks the 1st student as unpaid |
+
+**Expected output** (on success):
+> `Marked student as unpaid: John Doe; Phone: ...`
+
+--------------------------------------------------------------------------------------------------------------------
+
+### Clearing all entries: `clear`
+
+Clears all students from OnlyTutors.
+
+<div markdown="span" class="alert alert-success">
+**Format:** `clear`
+</div>
+
+<div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
+This deletes **all** student data and cannot be undone. Use with caution.
+</div>
+
+**Expected output:**
+> `Address book has been cleared!`
+
+--------------------------------------------------------------------------------------------------------------------
+
+### Viewing help: `help`
+
+Shows a message with a link to this User Guide.
+
+<div markdown="span" class="alert alert-success">
+**Format:** `help`
+</div>
 
 ![help message](images/helpMessage.png)
 
-Format: `help`
+--------------------------------------------------------------------------------------------------------------------
 
-
-### Adding a person: `add`
-
-Adds a person to the address book.
-
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
-
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-A person can have any number of tags (including 0)
-</div>
-
-Examples:
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
-* `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
-
-### Listing all persons : `list`
-
-Shows a list of all persons in the address book.
-
-Format: `list`
-
-### Editing a person : `edit`
-
-Edits an existing person in the address book.
-
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
-
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
-* At least one of the optional fields must be provided.
-* Existing values will be updated to the input values.
-* When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
-* You can remove all the person’s tags by typing `t/` without
-    specifying any tags after it.
-
-Examples:
-*  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
-*  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
-
-### Locating persons by name: `find`
-
-Finds persons whose names contain any of the given keywords.
-
-Format: `find KEYWORD [MORE_KEYWORDS]`
-
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Persons matching at least one keyword will be returned (i.e. `OR` search).
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
-
-Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
-
-### Deleting a person : `delete`
-
-Deletes the specified person from the address book.
-
-Format: `delete INDEX`
-
-* Deletes the person at the specified `INDEX`.
-* The index refers to the index number shown in the displayed person list.
-* The index **must be a positive integer** 1, 2, 3, …​
-
-Examples:
-* `list` followed by `delete 2` deletes the 2nd person in the address book.
-* `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
-
-### Clearing all entries : `clear`
-
-Clears all entries from the address book.
-
-Format: `clear`
-
-### Exiting the program : `exit`
+### Exiting the program: `exit`
 
 Exits the program.
 
-Format: `exit`
+<div markdown="span" class="alert alert-success">
+**Format:** `exit`
+</div>
+
+--------------------------------------------------------------------------------------------------------------------
 
 ### Saving the data
 
-AddressBook data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
+OnlyTutors data is saved to the hard disk automatically after any command that changes the data. There is no need to save manually.
+
+--------------------------------------------------------------------------------------------------------------------
 
 ### Editing the data file
 
-AddressBook data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
+OnlyTutors data is saved automatically as a JSON file at `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that file.
 
-<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
-If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
-Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
+<div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
+If your changes to the data file make its format invalid, OnlyTutors will discard all data and start with an empty data file at the next run. It is recommended to take a backup of the file before editing it. Furthermore, certain edits can cause OnlyTutors to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Edit the data file only if you are confident that you can update it correctly.
 </div>
-
-### Archiving data files `[coming in v2.0]`
-
-_Details coming soon ..._
 
 --------------------------------------------------------------------------------------------------------------------
 
 ## FAQ
 
-**Q**: How do I transfer my data to another Computer?<br>
-**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous AddressBook home folder.
+**Q**: How do I transfer my data to another computer?<br>
+**A**: Install OnlyTutors on the other computer and overwrite the empty data file it creates with the file that contains the data from your previous OnlyTutors home folder.
+
+**Q**: Can I add tags when adding a new student?<br>
+**A**: No. Tags must be added after the student is created using the [`tag add`](#adding-tags-to-a-student-tag-add) command.
+
+**Q**: How do I change a student's lesson day or time?<br>
+**A**: Use the [`edit`](#editing-a-student-edit) command. For example, `edit 1 d/Tuesday st/10:00 et/12:00` changes the 1st student's lesson to Tuesday, 10:00–12:00.
+
+**Q**: What happens if I add a student with the same name and phone number as an existing student?<br>
+**A**: OnlyTutors will reject the duplicate and display an error message. Two students are considered duplicates if they share the same name (case-insensitive) and the same phone number.
+
+**Q**: Can I track multiple lessons for the same student?<br>
+**A**: Currently, each student can only have one lesson day and time. Support for multiple lessons is planned for a future version.
 
 --------------------------------------------------------------------------------------------------------------------
 
-## Known issues
+## Known Issues
 
-1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
-2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
+1. **When using multiple screens**: If you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
+2. **If you minimise the Help Window** and then run the `help` command again, the original Help Window will remain minimised, and no new Help Window will appear. The remedy is to manually restore the minimised Help Window.
 
 --------------------------------------------------------------------------------------------------------------------
 
-## Command summary
+## Glossary
 
-Action | Format, Examples
---------|------------------
-**Add** | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
-**Clear** | `clear`
-**Delete** | `delete INDEX`<br> e.g., `delete 3`
-**Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
-**Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
-**List** | `list`
-**Help** | `help`
+| Term | Meaning |
+|------|---------|
+| **CLI** | Command Line Interface — a text-based way to interact with the app by typing commands |
+| **GUI** | Graphical User Interface — the visual window you see when running the app |
+| **Index** | The number shown beside each student in the displayed list (e.g., 1, 2, 3) |
+| **Tag** | A label you can attach to a student for categorisation (e.g., `math`, `primary3`) |
+| **JSON** | A data file format used by OnlyTutors to store your student data |
+| **Home folder** | The folder where you placed the OnlyTutors `.jar` file; data is saved here |
