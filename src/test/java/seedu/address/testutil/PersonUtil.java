@@ -53,10 +53,22 @@ public class PersonUtil {
      */
     public static String getEditPersonDescriptorDetails(EditPersonDescriptor descriptor) {
         StringBuilder sb = new StringBuilder();
-        descriptor.getName().ifPresent(name -> sb.append(PREFIX_NAME).append(name.fullName).append(" "));
-        descriptor.getPhone().ifPresent(phone -> sb.append(PREFIX_PHONE).append(phone.value).append(" "));
-        descriptor.getEmail().ifPresent(email -> sb.append(PREFIX_EMAIL).append(email.value).append(" "));
-        descriptor.getAddress().ifPresent(address -> sb.append(PREFIX_ADDRESS).append(address.value).append(" "));
+        descriptor.getName().ifPresent(name ->
+                sb.append(PREFIX_NAME).append(name.fullName).append(" "));
+        descriptor.getPhone().ifPresent(phone ->
+                sb.append(PREFIX_PHONE).append(phone.value).append(" "));
+        descriptor.getEmail().ifPresent(email ->
+                sb.append(PREFIX_EMAIL).append(email.value).append(" "));
+        descriptor.getAddress().ifPresent(address ->
+                sb.append(PREFIX_ADDRESS).append(address.value).append(" "));
+        descriptor.getDay().ifPresent(day ->
+                sb.append(PREFIX_DAY).append(day.value).append(" "));
+        descriptor.getStartTime().ifPresent(startTime ->
+                sb.append(PREFIX_START).append(startTime.value).append(" "));
+        descriptor.getEndTime().ifPresent(endTime ->
+                sb.append(PREFIX_END).append(endTime.value).append(" "));
+        descriptor.getRate().ifPresent(rate ->
+                sb.append(PREFIX_RATE).append(rate.value).append(" "));
         if (descriptor.getTags().isPresent()) {
             Set<Tag> tags = descriptor.getTags().get();
             if (tags.isEmpty()) {

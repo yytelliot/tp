@@ -39,9 +39,13 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label address;
     @FXML
+    private Label email;
+    @FXML
     private Label lesson;
     @FXML
     private Label rate;
+    @FXML
+    private Label paymentStatus;
     @FXML
     private FlowPane tags;
 
@@ -55,6 +59,7 @@ public class PersonCard extends UiPart<Region> {
         id.setText(String.valueOf(displayedIndex));
         name.setText(person.getName().fullName);
         phone.setText(person.getPhone().value);
+        email.setText(person.getEmail().value);
         address.setText(person.getAddress().value);
 
         if (person.getDay() != null && person.getStartTime() != null && person.getEndTime() != null) {
@@ -65,9 +70,17 @@ public class PersonCard extends UiPart<Region> {
         }
 
         if (person.getRate() != null) {
-            rate.setText(person.getRate().value);
+            rate.setText("$" + person.getRate().value);
         } else {
             rate.setText("");
+        }
+
+        if (person.isPaid()) {
+            paymentStatus.setText("Paid");
+            paymentStatus.getStyleClass().add("payment-paid");
+        } else {
+            paymentStatus.setText("Unpaid");
+            paymentStatus.getStyleClass().add("payment-unpaid");
         }
 
         person.getTags().stream()

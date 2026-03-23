@@ -27,30 +27,21 @@ public class Person {
     private final Time startTime;
     private final Time endTime;
     private final Rate rate;
+    private final boolean isPaid;
     private final Set<Tag> tags = new HashSet<>();
 
     /**
-     * Old method: here as an overloaded because of dependencies with other parts.
-     */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
-        requireAllNonNull(name, phone, email, address, tags);
-        this.name = name;
-        this.phone = phone;
-        this.email = email;
-        this.address = address;
-        this.tags.addAll(tags);
-        this.day = null;
-        this.startTime = null;
-        this.endTime = null;
-        this.rate = null;
-    }
-
-    /**
-     * Every field must be present and not null.
+     * Every field must be present and not null. Accepts an explicit {@code isPaid} status.
+     * Used when constructing a Person with a known payment state (e.g. Mark/Unmark commands).
      */
     public Person(Name name, Phone phone, Email email, Address address, Day day,
-                  Time startTime, Time endTime, Rate rate, Set<Tag> tags) {
+                  Time startTime, Time endTime, Rate rate, boolean isPaid, Set<Tag> tags) {
         requireAllNonNull(name, phone, email, address, day, startTime, endTime, rate, tags);
+
+        if (!endTime.isAfter(startTime)) {
+            throw new IllegalArgumentException(Time.MESSAGE_CONSTRAINTS);
+        }
+
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -59,6 +50,7 @@ public class Person {
         this.startTime = startTime;
         this.endTime = endTime;
         this.rate = rate;
+        this.isPaid = isPaid;
         this.tags.addAll(tags);
     }
 
@@ -92,6 +84,10 @@ public class Person {
 
     public Rate getRate() {
         return rate;
+    }
+
+    public boolean isPaid() {
+        return isPaid;
     }
 
     /**
@@ -136,13 +132,19 @@ public class Person {
                 && phone.equals(otherPerson.phone)
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
+                && day.equals(otherPerson.day)
+                && startTime.equals(otherPerson.startTime)
+                && endTime.equals(otherPerson.endTime)
+                && rate.equals(otherPerson.rate)
+                && isPaid == otherPerson.isPaid
                 && tags.equals(otherPerson.tags);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags);
+        return Objects.hash(name, phone, email, address,
+                day, startTime, endTime, rate, isPaid, tags);
     }
 
     @Override
@@ -152,6 +154,11 @@ public class Person {
                 .add("phone", phone)
                 .add("email", email)
                 .add("address", address)
+                .add("day", day)
+                .add("startTime", startTime)
+                .add("endTime", endTime)
+                .add("rate", rate)
+                .add("isPaid", isPaid)
                 .add("tags", tags)
                 .toString();
     }
