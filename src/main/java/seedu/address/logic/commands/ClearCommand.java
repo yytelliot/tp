@@ -10,8 +10,8 @@ import seedu.address.model.Model;
 public class ClearCommand extends Command {
 
     public static final String COMMAND_WORD = "clear";
-    public static final String MESSAGE_CONFIRM = "This will delete all contacts. " +
-            "Type 'confirm clear' if you would still like to proceed.";
+    public static final String MESSAGE_CONFIRM = "This will delete all contacts. "
+            + "Type 'confirm clear' if you would still like to proceed.";
 
 
     @Override
