@@ -1,12 +1,13 @@
 package seedu.address.logic.parser;
 
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.List;
+
 import seedu.address.logic.commands.FindTagCommand;
-import seedu.address.model.person.TagsContainKeywordsPredicate;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.person.TagsContainKeywordsPredicate;
 
 /**
  * Parses input arguments and creates a new FindTagCommand object.
@@ -20,12 +21,8 @@ public class FindTagCommandParser implements Parser<FindTagCommand> {
      */
     @Override
     public FindTagCommand parse(String args) throws ParseException {
-        // Debug: print the raw args received
-        System.out.println("[DEBUG] FindTagCommandParser args: '" + args + "'");
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
 
-        // Debug: print the preamble
-        System.out.println("[DEBUG] FindTagCommandParser preamble: '" + argMultimap.getPreamble() + "'");
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
 
         List<String> tagKeywords = argMultimap.getAllValues(PREFIX_TAG);
         System.out.println("[DEBUG] FindTagCommandParser tag keywords: " + tagKeywords);

@@ -2,15 +2,12 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
-import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.person.Person;
 import seedu.address.model.person.TagsContainKeywordsPredicate;
-import seedu.address.model.tag.Tag;
 
 /**
  * Finds and lists all tags in address book that match the argument keyword.
@@ -51,7 +48,6 @@ public class FindTagCommand extends Command {
         if (other == this) {
             return true;
         }
-
         if (!(other instanceof FindTagCommand)) {
             return false;
         }
@@ -60,11 +56,14 @@ public class FindTagCommand extends Command {
     }
 
     @Override
+    public int hashCode() {
+        return predicate.hashCode();
+    }
+
+    @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .add("predicate", predicate)
                 .toString();
     }
-
-    
 }

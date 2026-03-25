@@ -1,8 +1,8 @@
 package seedu.address.logic.parser;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
+import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,37 +17,36 @@ public class FindTagCommandParserTest {
     private final FindTagCommandParser parser = new FindTagCommandParser();
 
     @Test
-    public void parse_tagPrefixAtStart_success() throws Exception {
+    public void parse_tagPrefixAtStart_success() {
         FindTagCommand expected = new FindTagCommand(new TagsContainKeywordsPredicate(Collections.singletonList("friends")));
-        assertEquals(expected, parser.parse("t/friends"));
+        assertParseSuccess(parser, "t/friends", expected);
     }
 
     @Test
-    public void parse_multipleTags_success() throws Exception {
+    public void parse_multipleTags_success() {
         FindTagCommand expected = new FindTagCommand(new TagsContainKeywordsPredicate(Arrays.asList("friends", "colleagues")));
-        assertEquals(expected, parser.parse("t/friends t/colleagues"));
+        assertParseSuccess(parser, "t/friends t/colleagues", expected);
     }
 
     @Test
     public void parse_emptyInput_failure() {
-        assertThrows(ParseException.class, () -> parser.parse(" "));
+        assertParseFailure(parser, " ", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindTagCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_noTagPrefix_failure() {
-        assertThrows(ParseException.class, () -> parser.parse("friends"));
+        assertParseFailure(parser, "friends", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindTagCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_preamblePresent_failure() {
         String input = "random t/friends";
-        ParseException ex = assertThrows(ParseException.class, () -> parser.parse(input));
-        assertEquals(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindTagCommand.MESSAGE_USAGE), ex.getMessage());
+        assertParseFailure(parser, input, String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindTagCommand.MESSAGE_USAGE));
     }
 
     @Test
-    public void parse_repeatedTags_success() throws Exception {
+    public void parse_repeatedTags_success() {
         FindTagCommand expected = new FindTagCommand(new TagsContainKeywordsPredicate(Arrays.asList("friends", "friends")));
-        assertEquals(expected, parser.parse("t/friends t/friends"));
+        assertParseSuccess(parser, "t/friends t/friends", expected);
     }
 }

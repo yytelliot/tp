@@ -1,6 +1,6 @@
 package seedu.address.model.person;
 
-import java.util.Set;
+
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -40,6 +40,11 @@ public class TagsContainKeywordsPredicate implements Predicate<Person> {
 
         TagsContainKeywordsPredicate otherTagsContainKeywordsPredicate = (TagsContainKeywordsPredicate) other;
         return keywords.equals(otherTagsContainKeywordsPredicate.keywords);
+    }
+    
+    @Override
+    public int hashCode() {
+        return keywords.hashCode();
     }
 
     @Override
