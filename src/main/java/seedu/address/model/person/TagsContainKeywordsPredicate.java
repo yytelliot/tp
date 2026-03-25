@@ -41,6 +41,7 @@ public class TagsContainKeywordsPredicate implements Predicate<Person> {
         TagsContainKeywordsPredicate otherTagsContainKeywordsPredicate = (TagsContainKeywordsPredicate) other;
         return keywords.equals(otherTagsContainKeywordsPredicate.keywords);
     }
+
     @Override
     public int hashCode() {
         return keywords.hashCode();
