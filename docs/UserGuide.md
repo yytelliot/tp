@@ -56,7 +56,7 @@ The screenshot below shows the OnlyTutors interface with sample data. Each stude
 | Area | Location | Purpose |
 |------|----------|---------|
 | **Menu Bar** | Top | Access `File` (exit) and `Help` (open help window) |
-| **Student List** | Centre | Displays your students as cards with all their details. Paid students are labelled in <span style="color:green">**green**</span>, unpaid in <span style="color:red">**red**</span> |
+| **Student List** | Centre | Displays your students as cards with all their details. Each card shows a **Paid** or **Unpaid** label next to the rate |
 | **Result Display** | Below student list | Shows feedback after each command (success messages or error details) |
 | **Command Box** | Near bottom | Type your commands here and press Enter to execute them |
 | **Status Bar** | Bottom | Shows the file path where your data is saved |
@@ -398,9 +398,7 @@ Marks a student's payment status as **Paid**.
 * The index **must be a positive integer** (1, 2, 3, …).
 * If the student is already marked as paid, the command will fail with: `This student has already been marked as paid.`
 
-The payment status is displayed on each student's card as a colour-coded label:
-* <span style="color:green">**Green**</span> — Paid
-* <span style="color:red">**Red**</span> — Unpaid
+The payment status is displayed on each student's card as a **Paid** or **Unpaid** label next to the rate.
 
 **Examples:**
 
