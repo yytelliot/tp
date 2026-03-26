@@ -68,7 +68,7 @@ public class AddressBookParserTest {
     public void parseCommand_delete() throws Exception {
         DeleteCommand command = (DeleteCommand) parser.parseCommand(
                 DeleteCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
-        assertEquals(new DeleteCommand(INDEX_FIRST_PERSON), command);
+        assertEquals(new DeleteCommand(List.of(INDEX_FIRST_PERSON)), command);
     }
 
     @Test
@@ -110,14 +110,14 @@ public class AddressBookParserTest {
     public void parseCommand_mark() throws Exception {
         MarkCommand command = (MarkCommand) parser.parseCommand(
                 MarkCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
-        assertEquals(new MarkCommand(INDEX_FIRST_PERSON), command);
+        assertEquals(new MarkCommand(List.of(INDEX_FIRST_PERSON)), command);
     }
 
     @Test
     public void parseCommand_unmark() throws Exception {
         UnmarkCommand command = (UnmarkCommand) parser.parseCommand(
                 UnmarkCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
-        assertEquals(new UnmarkCommand(INDEX_FIRST_PERSON), command);
+        assertEquals(new UnmarkCommand(List.of(INDEX_FIRST_PERSON)), command);
     }
 
     @Test
