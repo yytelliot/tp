@@ -104,17 +104,17 @@ Refer to the [Features](#features) section below for the full details of each co
 
 ### Parameter Summary
 
-| Parameter | Prefix | Constraints | Example |
-|-----------|--------|------------|---------|
-| **Name** | `n/` | Alphanumeric characters and spaces only; cannot be blank | `n/John Doe` |
-| **Phone** | `p/` | Exactly 8 digits, starting with 6, 8, or 9 (Singapore format) | `p/91234567` |
-| **Email** | `e/` | Standard email format (`local@domain`) | `e/john@example.com` |
-| **Address** | `a/` | Any non-blank text | `a/Blk 30, Geylang St 29` |
+| Parameter | Prefix | Constraints                                                                                          | Example |
+|-----------|--------|------------------------------------------------------------------------------------------------------|---------|
+| **Name** | `n/` | Letters and spaces only; cannot be blank                                                             | `n/John Doe` |
+| **Phone** | `p/` | Exactly 8 digits, starting with 6, 8, or 9 (Singapore format)                                        | `p/91234567` |
+| **Email** | `e/` | Standard email format (`local@domain`)                                                               | `e/john@example.com` |
+| **Address** | `a/` | Any non-blank text                                                                                   | `a/Blk 30, Geylang St 29` |
 | **Day** | `d/` | A day of the week (case-insensitive): Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday | `d/Monday` |
-| **Start Time** | `st/` | 24-hour format `HH:mm` (e.g., `09:00`, `14:30`) | `st/14:00` |
-| **End Time** | `et/` | 24-hour format `HH:mm`; **must be strictly after** start time | `et/16:00` |
-| **Rate** | `r/` | A non-negative whole number representing dollars per lesson | `r/50` |
-| **Tag** | `t/` | Alphanumeric characters only (no spaces); stored in lowercase | `t/math` |
+| **Start Time** | `st/` | 24-hour format `HH:mm` (e.g., `09:00`, `14:30`)                                                      | `st/14:00` |
+| **End Time** | `et/` | 24-hour format `HH:mm`; **must be strictly after** start time                                        | `et/16:00` |
+| **Rate** | `r/` | A non-negative whole number representing dollars per lesson                                          | `r/50` |
+| **Tag** | `t/` | Alphanumeric characters only (no spaces); stored in lowercase                                        | `t/math` |
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -131,7 +131,26 @@ Adds a new student to OnlyTutors.
 * New students are marked as **Unpaid** by default.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-OnlyTutors does not allow duplicate students. Two students are considered duplicates if they have the **same name** (case-insensitive) **and** the **same phone number**.
+OnlyTutors does not allow duplicate students. Two students are considered duplicates if they have the **same name** 
+(case-insensitive) **and** the **same phone number**.
+</div>
+
+<div markdown="span" class="alert alert-info">:information_source: **Rationale for duplicate detection:**
+OnlyTutors considers two contacts duplicates if they have the <strong>same name (case-insensitive)</strong> 
+and <strong>same phone number</strong>.
+
+This design is chosen because:
+<ul>
+<li>Names alone are not unique (e.g. many students may share the same name)</li>
+<li>Phone numbers alone are not reliable (e.g. siblings may share a parent’s number)</li>
+<li>Combining both provides a practical and reliable identifier for tutors</li>
+</ul>
+
+Additionally:
+<ul>
+<li>Duplicate detection is case-insensitive (e.g. <code>john doe</code> = <code>John Doe</code>)</li>
+<li>Names are displayed exactly as entered to preserve user formatting</li>
+</ul>
 </div>
 
 **Examples:**
@@ -146,6 +165,23 @@ OnlyTutors does not allow duplicate students. Two students are considered duplic
 
 **Expected output** (on fail):
 > `Names should contain only alphanumeric characters, with words separated by a single space or '/', e.g. 'Tan Ah Kow' or 'Raj S/O Kumar'. Names must not start or end with a space or '/', and must not contain consecutive spaces or '/' characters`
+
+### ⚠️ Common mistakes when adding a student
+
+| Mistake | Why it fails |
+|--------|-------------|
+| `r/$40` | Symbols are not allowed — rate must be a number |
+| `r/40.0` | Decimals are not allowed — must be an integer |
+| `n/John123` | Name cannot contain numbers |
+| `n/` | Name cannot be empty |
+| `p/12345678` | Must start with 6, 8, or 9 |
+| `d/Mon` | Must use full day name (e.g. Monday) |
+| `st/3pm` | Must use 24-hour format (e.g. 15:00) |
+| `et/14:00 st/15:00` | End time must be after start time |
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+Always follow the exact formats shown in the examples to avoid errors.
+</div>
 
 --------------------------------------------------------------------------------------------------------------------
 
