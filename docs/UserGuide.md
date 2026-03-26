@@ -24,7 +24,7 @@ A quick reference of all available commands. Click any command name to jump to i
 | [**List**](#listing-all-students-list) | `list` | `list` |
 | [**Edit**](#editing-a-student-edit) | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [d/DAY] [st/START] [et/END] [r/RATE] [t/TAG]…​` | `edit 1 p/91234567 d/Friday` |
 | [**Find**](#finding-students-by-name-find) | `find KEYWORD [MORE_KEYWORDS]…​` | `find John Alice` |
-| [**Tag Find**](#finding-students-by-tag-findtag) | `findtag TAG [MORE_TAGS]…​` | `findtag math primary3` |
+| [**Tag Find**](#finding-students-by-tag-tag-find) | `tag find TAG [MORE_TAGS]…​` | `tag find math primary3` |
 | [**Delete**](#deleting-a-student-delete) | `delete INDEX` | `delete 3` |
 | [**Tag Add**](#adding-tags-to-a-student-tag-add) | `tag add INDEX t/TAG [t/TAG]…​` | `tag add 1 t/math t/primary3` |
 | [**Tag Delete**](#deleting-tags-from-a-student-tag-delete) | `tag delete INDEX t/TAG [t/TAG]…​` | `tag delete 1 t/math` |
@@ -260,31 +260,30 @@ After using `find`, use [`list`](#listing-all-students-list) to return to the fu
 
 --------------------------------------------------------------------------------------------------------------------
 
-### Finding students by tag: `findtag`
+### Finding students by tag: `tag find`
 
-Finds students who have at least one of the given tags.
+Finds students who match all of the given tags.
 
 <div markdown="span" class="alert alert-success">
-**Format:** `findtag TAG [MORE_TAGS]…​`
+**Format:** `tag find t/TAG [t/TAGS]…​`
 </div>
 
 * The search is **case-insensitive**. e.g. `Math` will match `math`.
-* Students matching **at least one** tag will be returned (i.e. `OR` search).
-* Tag values should be provided **without** the `t/` prefix.
+* Only students matching **all** tags will be returned (i.e. `AND` search).
 * Tags are alphanumeric only (no spaces).
 
 **Examples:**
 
 | Command | What it does |
 |---------|-------------|
-| `findtag math` | Returns students tagged with `math` |
-| `findtag primary3 science` | Returns students tagged with either `primary3` or `science` |
+| `tag find t/math` | Returns students tagged with `math` |
+| `tag find primary3 science` | Returns students tagged with both `primary3` and `science` |
 
 **Expected output:**
 > `2 persons listed!`
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-After using `findtag`, use [`list`](#listing-all-students-list) to return to the full student list.
+After using `tag find`, use [`list`](#listing-all-students-list) to return to the full student list.
 </div>
 
 --------------------------------------------------------------------------------------------------------------------
