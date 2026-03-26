@@ -25,11 +25,11 @@ A quick reference of all available commands. Click any command name to jump to i
 | [**Edit**](#editing-a-student-edit) | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [d/DAY] [st/START] [et/END] [r/RATE] [t/TAG]…​` | `edit 1 p/91234567 d/Friday` |
 | [**Find**](#finding-students-by-name-find) | `find KEYWORD [MORE_KEYWORDS]…​` | `find John Alice` |
 | [**Tag Find**](#finding-students-by-tag-tag-find) | `tag find TAG [MORE_TAGS]…​` | `tag find math primary3` |
-| [**Delete**](#deleting-a-student-delete) | `delete INDEX` | `delete 3` |
-| [**Tag Add**](#adding-tags-to-a-student-tag-add) | `tag add INDEX t/TAG [t/TAG]…​` | `tag add 1 t/math t/primary3` |
-| [**Tag Delete**](#deleting-tags-from-a-student-tag-delete) | `tag delete INDEX t/TAG [t/TAG]…​` | `tag delete 1 t/math` |
-| [**Mark**](#marking-a-student-as-paid-mark) | `mark INDEX` | `mark 1` |
-| [**Unmark**](#marking-a-student-as-unpaid-unmark) | `unmark INDEX` | `unmark 1` |
+| [**Delete**](#deleting-a-student-delete) | `delete INDEX [INDEX]…​` | `delete 1 3 7` |
+| [**Tag Add**](#adding-tags-to-a-student-tag-add) | `tag add INDEX [INDEX]…​ t/TAG [t/TAG]…​` | `tag add 1 2 3 t/math` |
+| [**Tag Delete**](#deleting-tags-from-a-student-tag-delete) | `tag delete INDEX [INDEX]…​ t/TAG [t/TAG]…​` | `tag delete 1 2 t/math` |
+| [**Mark**](#marking-a-student-as-paid-mark) | `mark INDEX [INDEX]…​` | `mark 1 2 3` |
+| [**Unmark**](#marking-a-student-as-unpaid-unmark) | `unmark INDEX [INDEX]…​` | `unmark 1 2 3` |
 | [**Clear**](#clearing-all-entries-clear) | `clear` | `clear` |
 | [**Help**](#viewing-help-help) | `help` | `help` |
 | [**Exit**](#exiting-the-program-exit) | `exit` | `exit` |
@@ -308,15 +308,19 @@ After using `tag find`, use [`list`](#listing-all-students-list) to return to th
 Deletes the specified student from OnlyTutors.
 
 <div markdown="span" class="alert alert-success">
-**Format:** `delete INDEX`
+**Format:** `delete INDEX [INDEX]…​`
 </div>
 
-* Deletes the student at the specified `INDEX`.
+* Deletes the student(s) at the specified `INDEX`(es).
 * The index refers to the index number shown in the displayed student list.
 * The index **must be a positive integer** (1, 2, 3, …).
 
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+You can delete multiple students at once by specifying multiple indices. e.g. `delete 1 3 7` deletes the 1st, 3rd, and 7th students.
+</div>
+
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-This action cannot be undone. Make sure you have selected the correct student before deleting.
+This action cannot be undone. Make sure you have selected the correct student(s) before deleting.
 </div>
 
 **Examples:**
@@ -324,6 +328,7 @@ This action cannot be undone. Make sure you have selected the correct student be
 | Command | What it does |
 |---------|-------------|
 | `list` then `delete 2` | Deletes the 2nd student in the full list |
+| `delete 1 3 7` | Deletes the 1st, 3rd, and 7th students |
 | `find Betsy` then `delete 1` | Deletes the 1st student in the `find` results |
 
 **Expected output** (on success):
@@ -336,17 +341,17 @@ This action cannot be undone. Make sure you have selected the correct student be
 Adds one or more tags to a student **without replacing** existing tags.
 
 <div markdown="span" class="alert alert-success">
-**Format:** `tag add INDEX t/TAG [t/TAG]…​`
+**Format:** `tag add INDEX [INDEX]…​ t/TAG [t/TAG]…​`
 </div>
 
-* Adds the specified tag(s) to the student at the specified `INDEX`.
+* Adds the specified tag(s) to the student(s) at the specified `INDEX`(es).
 * The index **must be a positive integer** (1, 2, 3, …).
 * At least one tag must be provided.
 * Tags are alphanumeric only (no spaces) and are stored in lowercase.
-* If any of the specified tags already exist on the student, the command will fail.
+* If any of the specified tags already exist on a student, the command will fail.
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-Tags are useful for categorising students by subject (e.g., `math`, `english`), level (e.g., `primary3`, `secondary2`), or any custom label you need.
+You can tag multiple students at once by specifying multiple indices. e.g. `tag add 1 2 3 t/math` adds the `math` tag to the 1st, 2nd, and 3rd students.
 </div>
 
 **Examples:**
@@ -355,6 +360,7 @@ Tags are useful for categorising students by subject (e.g., `math`, `english`), 
 |---------|-------------|
 | `tag add 1 t/math` | Adds the tag `math` to the 1st student |
 | `tag add 2 t/primary3 t/science` | Adds tags `primary3` and `science` to the 2nd student |
+| `tag add 1 2 3 t/math` | Adds the tag `math` to the 1st, 2nd, and 3rd students |
 
 **Expected output** (on success):
 > `Tag(s) added to person: John Doe; Phone: ...`
@@ -366,13 +372,17 @@ Tags are useful for categorising students by subject (e.g., `math`, `english`), 
 Removes one or more tags from a student.
 
 <div markdown="span" class="alert alert-success">
-**Format:** `tag delete INDEX t/TAG [t/TAG]…​`
+**Format:** `tag delete INDEX [INDEX]…​ t/TAG [t/TAG]…​`
 </div>
 
-* Removes the specified tag(s) from the student at the specified `INDEX`.
+* Removes the specified tag(s) from the student(s) at the specified `INDEX`(es).
 * The index **must be a positive integer** (1, 2, 3, …).
 * At least one tag must be provided.
-* If any of the specified tags do not exist on the student, the command will fail.
+* If any of the specified tags do not exist on a student, the command will fail.
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+You can remove tags from multiple students at once by specifying multiple indices. e.g. `tag delete 1 2 3 t/math` removes the `math` tag from the 1st, 2nd, and 3rd students.
+</div>
 
 **Examples:**
 
@@ -380,6 +390,7 @@ Removes one or more tags from a student.
 |---------|-------------|
 | `tag delete 1 t/math` | Removes the tag `math` from the 1st student |
 | `tag delete 2 t/primary3 t/science` | Removes tags `primary3` and `science` from the 2nd student |
+| `tag delete 1 2 3 t/math` | Removes the `math` tag from the 1st, 2nd, and 3rd students |
 
 **Expected output** (on success):
 > `Tag(s) removed from person: John Doe; Phone: ...`
@@ -391,20 +402,25 @@ Removes one or more tags from a student.
 Marks a student's payment status as **Paid**.
 
 <div markdown="span" class="alert alert-success">
-**Format:** `mark INDEX`
+**Format:** `mark INDEX [INDEX]…​`
 </div>
 
-* Marks the student at the specified `INDEX` as paid.
+* Marks the student(s) at the specified `INDEX`(es) as paid.
 * The index **must be a positive integer** (1, 2, 3, …).
-* If the student is already marked as paid, the command will fail with: `This student has already been marked as paid.`
+* If any student is already marked as paid, the command will fail with: `This student has already been marked as paid.`
 
 The payment status is displayed on each student's card as a **Paid** or **Unpaid** label next to the rate.
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+You can mark multiple students as paid at once by specifying multiple indices. e.g. `mark 1 2 3` marks the 1st, 2nd, and 3rd students as paid.
+</div>
 
 **Examples:**
 
 | Command | What it does |
 |---------|-------------|
 | `mark 1` | Marks the 1st student as paid |
+| `mark 1 2 3` | Marks the 1st, 2nd, and 3rd students as paid |
 | `find John` then `mark 1` | Marks the 1st student in the `find` results as paid |
 
 **Expected output** (on success):
@@ -417,15 +433,15 @@ The payment status is displayed on each student's card as a **Paid** or **Unpaid
 Marks a student's payment status as **Unpaid**.
 
 <div markdown="span" class="alert alert-success">
-**Format:** `unmark INDEX`
+**Format:** `unmark INDEX [INDEX]…​`
 </div>
 
-* Marks the student at the specified `INDEX` as unpaid.
+* Marks the student(s) at the specified `INDEX`(es) as unpaid.
 * The index **must be a positive integer** (1, 2, 3, …).
-* If the student is already marked as unpaid, the command will fail with: `This student has already been marked as unpaid.`
+* If any student is already marked as unpaid, the command will fail with: `This student has already been marked as unpaid.`
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-Use `unmark` at the start of a new payment cycle to reset a student's payment status. See also: [`mark`](#marking-a-student-as-paid-mark).
+You can unmark multiple students at once by specifying multiple indices. e.g. `unmark 1 2 3` marks the 1st, 2nd, and 3rd students as unpaid. Use this at the start of a new payment cycle to reset payment statuses. See also: [`mark`](#marking-a-student-as-paid-mark).
 </div>
 
 **Examples:**
@@ -433,6 +449,7 @@ Use `unmark` at the start of a new payment cycle to reset a student's payment st
 | Command | What it does |
 |---------|-------------|
 | `unmark 1` | Marks the 1st student as unpaid |
+| `unmark 1 2 3` | Marks the 1st, 2nd, and 3rd students as unpaid |
 
 **Expected output** (on success):
 > `Marked student as unpaid: John Doe; Phone: ...`
