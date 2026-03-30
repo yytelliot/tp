@@ -38,16 +38,107 @@ A quick reference of all available commands. Click any command name to jump to i
 
 ## Quick Start
 
-1. Ensure you have Java `17` or above installed on your computer.<br>
-   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+### Step 1: Install Java 17
 
-1. Download the latest `.jar` file from [here](https://github.com/AY2526S2-CS2103T-T17-3/tp/releases).
+OnlyTutors requires **Java 17** (or above). Follow the instructions for your operating system:
 
-1. Copy the file to the folder you want to use as the _home folder_ for OnlyTutors.
+<div markdown="block" class="alert alert-info">
 
-1. Open a command terminal, `cd` into the folder, and run: `java -jar addressbook.jar`<br>
-   A GUI similar to the screenshot below should appear in a few seconds. The app contains some sample data to help you get started.<br>
-   ![Ui](images/Ui.png)
+**:information_source: How to check if Java is already installed:**
+
+Open a terminal (or Command Prompt on Windows) and run:
+```
+java -version
+```
+If the output shows `java version "17"` or higher, skip to [Step 2](#step-2-download-onlytutors). Otherwise, install Java below.
+
+</div>
+
+**Windows:**
+1. Go to [https://www.oracle.com/java/technologies/downloads/#java17](https://www.oracle.com/java/technologies/downloads/#java17).
+2. Under the **Windows** tab, download the **x64 Installer** (`.exe` file).
+3. Run the installer and follow the on-screen instructions.
+4. After installation, open Command Prompt and run `java -version` to verify.
+
+**macOS:**
+> Follow the precise JDK 17 installation guide for Mac [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+> Using the wrong JDK version on macOS can cause display issues with the GUI — use the exact version prescribed.
+
+**Linux (Ubuntu/Debian):**
+1. Open a terminal and run:
+   ```
+   sudo apt update
+   sudo apt install openjdk-17-jdk
+   ```
+2. Verify with `java -version`.
+
+---
+
+### Step 2: Download OnlyTutors
+
+1. Go to the [OnlyTutors Releases page](https://github.com/AY2526S2-CS2103T-T17-3/tp/releases).
+2. Find the **latest release** at the top of the list.
+3. Under **Assets**, click `addressbook.jar` to download it.
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+Do not rename the `.jar` file. Keep it as `addressbook.jar` to match the run command.
+</div>
+
+---
+
+### Step 3: Set Up a Home Folder
+
+Create a dedicated folder for OnlyTutors (e.g., `OnlyTutors` on your Desktop). Move the downloaded `addressbook.jar` into that folder.
+
+This folder will become the **home folder** — OnlyTutors will store all your data here in a `data/` subfolder automatically.
+
+---
+
+### Step 4: Launch OnlyTutors
+
+Open a terminal and navigate to your home folder, then run the app:
+
+**Windows (Command Prompt):**
+```
+cd C:\Users\YourName\Desktop\OnlyTutors
+java -jar addressbook.jar
+```
+
+**Windows (PowerShell):**
+```
+cd C:\Users\YourName\Desktop\OnlyTutors
+java -jar addressbook.jar
+```
+
+**macOS / Linux:**
+```
+cd ~/Desktop/OnlyTutors
+java -jar addressbook.jar
+```
+
+<div markdown="block" class="alert alert-info">
+
+**:information_source: Alternative: Double-click to launch**
+
+On most systems you can double-click `addressbook.jar` to launch OnlyTutors directly. However, using the terminal is recommended so you can see error messages if something goes wrong.
+
+</div>
+
+A GUI similar to the screenshot below should appear within a few seconds. The app starts with sample data to help you explore its features.
+
+![Ui](images/Ui.png)
+
+---
+
+### Troubleshooting Installation
+
+| Problem | Likely cause | Fix |
+|---------|-------------|-----|
+| `java: command not found` | Java is not installed or not on PATH | Install Java 17 (see Step 1) |
+| `Error: Unable to access jarfile addressbook.jar` | Terminal is not in the correct folder | Run `cd` to navigate to the folder containing `addressbook.jar` |
+| App launches but GUI looks broken (macOS) | Wrong JDK version | Follow the [macOS-specific guide](https://se-education.org/guides/tutorials/javaInstallationMac.html) |
+| Blank/white screen on launch | JavaFX rendering issue | Try adding `--add-opens java.base/java.lang=ALL-UNNAMED` to the run command |
+| App opens off-screen | Previously used a second monitor | Delete `preferences.json` in the home folder and relaunch |
 
 ### Understanding the Interface
 
