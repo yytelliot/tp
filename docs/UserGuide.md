@@ -272,10 +272,6 @@ This design is chosen because:
 | `st/3pm` | Must use 24-hour format (e.g. 15:00)           |
 | `et/14:00 st/15:00` | End time must be after start time              |
 
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-Always follow the exact formats shown in the examples to avoid errors.
-</div>
-
 --------------------------------------------------------------------------------------------------------------------
 
 ### Listing all students: `list`
