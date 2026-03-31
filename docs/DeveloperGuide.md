@@ -174,7 +174,7 @@ The following activity diagram summarizes the workflow when a user executes the 
     * Pros: Simple to implement within the existing command execution flow.
     * Cons: Increases complexity of the `Logic` component state.
 
-* **Alternative 2:** Use a specialized `ConfirmationCommand`.
+* **Alternative 2:** Use a specialized `ConfirmCommand`.
     * Pros: Keeps commands atomic and follows the Command Pattern more strictly.
     * Cons: Requires more boilerplate code to pass the intended action to the confirmation handler.
 
