@@ -202,7 +202,7 @@ Refer to the [Features](#features) section below for the full details of each co
 
 | Parameter | Prefix | Constraints                                                                                          | Example |
 |-----------|--------|------------------------------------------------------------------------------------------------------|---------|
-| **Name** | `n/` | Letters and spaces only; cannot be blank                                                             | `n/John Doe` |
+| **Name** | `n/` | Letters, spaces and "/" only; cannot be blank                                                         | `n/John Doe` |
 | **Phone** | `p/` | Exactly 8 digits, starting with 6, 8, or 9 (Singapore format)                                        | `p/91234567` |
 | **Email** | `e/` | Standard email format (`local@domain`)                                                               | `e/john@example.com` |
 | **Address** | `a/` | Any non-blank text                                                                                   | `a/Blk 30, Geylang St 29` |
