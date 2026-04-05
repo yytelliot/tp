@@ -14,10 +14,10 @@ UniqueLessonList -right-> Lesson
 
 Lesson -up-> "*" Tag
 
-Lesson *--> Name
-Lesson *--> Phone
-Lesson *--> Email
-Lesson *--> Address
+Lesson *--> "1" Name
+Lesson *--> "1" Phone
+Lesson *--> "1" Email
+Lesson *--> "1" Address
 Lesson *--> "1" Day
 Lesson *--> "1" Time : startTime
 Lesson *--> "1" Time : endTime
