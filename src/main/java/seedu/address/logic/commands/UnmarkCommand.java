@@ -45,12 +45,13 @@ public class UnmarkCommand extends BatchCommand {
 
     @Override
     protected void executeBatch(List<Person> targetPersons, Model model) {
-        for (Person personToUnmark : targetPersons) {
+        for (Person targetPerson : targetPersons) {
+            boolean isPaid = false;
             Person unmarkedPerson = new Person(
-                    personToUnmark.getName(), personToUnmark.getPhone(), personToUnmark.getEmail(),
-                    personToUnmark.getAddress(), personToUnmark.getDay(), personToUnmark.getStartTime(),
-                    personToUnmark.getEndTime(), personToUnmark.getRate(), false, personToUnmark.getTags());
-            model.setPerson(personToUnmark, unmarkedPerson);
+                    targetPerson.getName(), targetPerson.getPhone(), targetPerson.getEmail(),
+                    targetPerson.getAddress(), targetPerson.getDay(), targetPerson.getStartTime(),
+                    targetPerson.getEndTime(), targetPerson.getRate(), isPaid, targetPerson.getTags());
+            model.setPerson(targetPerson, unmarkedPerson);
         }
     }
 

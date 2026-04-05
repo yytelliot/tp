@@ -45,12 +45,13 @@ public class MarkCommand extends BatchCommand {
 
     @Override
     protected void executeBatch(List<Person> targetPersons, Model model) {
-        for (Person personToMark : targetPersons) {
+        for (Person targetPerson : targetPersons) {
+            boolean isPaid = true;
             Person markedPerson = new Person(
-                    personToMark.getName(), personToMark.getPhone(), personToMark.getEmail(),
-                    personToMark.getAddress(), personToMark.getDay(), personToMark.getStartTime(),
-                    personToMark.getEndTime(), personToMark.getRate(), true, personToMark.getTags());
-            model.setPerson(personToMark, markedPerson);
+                    targetPerson.getName(), targetPerson.getPhone(), targetPerson.getEmail(),
+                    targetPerson.getAddress(), targetPerson.getDay(), targetPerson.getStartTime(),
+                    targetPerson.getEndTime(), targetPerson.getRate(), isPaid, targetPerson.getTags());
+            model.setPerson(targetPerson, markedPerson);
         }
     }
 
