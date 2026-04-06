@@ -90,7 +90,9 @@ public class MarkCommandTest {
 
         MarkCommand markCommand = new MarkCommand(List.of(INDEX_FIRST_PERSON));
 
-        assertCommandFailure(markCommand, model, MarkCommand.MESSAGE_ALREADY_PAID);
+        String expectedMessage = String.format(MarkCommand.MESSAGE_ALREADY_PAID,
+                "(" + INDEX_FIRST_PERSON.getOneBased() + ") " + alreadyPaidPerson.getName());
+        assertCommandFailure(markCommand, model, expectedMessage);
     }
 
     @Test

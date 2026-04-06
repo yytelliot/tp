@@ -29,7 +29,9 @@ public class UnmarkCommand extends Command {
 
     public static final String MESSAGE_UNMARK_PERSON_SUCCESS = "Marked student as unpaid: %1$s";
     public static final String MESSAGE_UNMARK_PERSONS_SUCCESS = "Marked %1$d students as unpaid: %2$s";
-    public static final String MESSAGE_ALREADY_UNPAID = "This student has already been marked as unpaid.";
+    public static final String MESSAGE_ALREADY_UNPAID = "This student has already been marked as unpaid: %1$s";
+    public static final String MESSAGE_ALREADY_UNPAID_PLURAL =
+            "These students have already been marked as unpaid: %1$s";
 
     private final List<Index> targetIndices;
 
@@ -53,12 +55,21 @@ public class UnmarkCommand extends Command {
         }
 
         List<Person> personsToUnmark = new ArrayList<>();
+        List<String> alreadyUnpaidNames = new ArrayList<>();
         for (Index index : targetIndices) {
             Person person = lastShownList.get(index.getZeroBased());
             if (!person.isPaid()) {
-                throw new CommandException(MESSAGE_ALREADY_UNPAID);
+                alreadyUnpaidNames.add("(" + (index.getOneBased()) + ") " + person.getName());
+            } else {
+                personsToUnmark.add(person);
             }
-            personsToUnmark.add(person);
+        }
+        if (!alreadyUnpaidNames.isEmpty()) {
+            String names = String.join(", ", alreadyUnpaidNames);
+            String message = alreadyUnpaidNames.size() == 1
+                    ? String.format(MESSAGE_ALREADY_UNPAID, names)
+                    : String.format(MESSAGE_ALREADY_UNPAID_PLURAL, names);
+            throw new CommandException(message);
         }
 
         List<Person> unmarkedPersons = new ArrayList<>();
