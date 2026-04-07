@@ -51,7 +51,7 @@ public class DeleteCommand extends Command {
         }
 
         List<Person> personsToDelete = new ArrayList<>();
-        for (Index index : targetIndices) {
+        for (Index index : targetIndices.stream().distinct().collect(java.util.stream.Collectors.toList())) {
             personsToDelete.add(lastShownList.get(index.getZeroBased()));
         }
 

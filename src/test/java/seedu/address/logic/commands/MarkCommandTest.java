@@ -115,6 +115,21 @@ public class MarkCommandTest {
     }
 
     @Test
+    public void execute_duplicateIndices_marksPersonOnce() {
+        Person personToMark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        MarkCommand markCommand = new MarkCommand(List.of(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON));
+
+        Person markedPerson = new PersonBuilder(personToMark).withPaid(true).build();
+        String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_PERSON_SUCCESS,
+                Messages.format(markedPerson));
+
+        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.setPerson(personToMark, markedPerson);
+
+        assertCommandSuccess(markCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
     public void equals() {
         MarkCommand markFirstCommand = new MarkCommand(List.of(INDEX_FIRST_PERSON));
         MarkCommand markSecondCommand = new MarkCommand(List.of(INDEX_SECOND_PERSON));
