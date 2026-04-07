@@ -56,7 +56,7 @@ public class UnmarkCommand extends Command {
 
         List<Person> personsToUnmark = new ArrayList<>();
         List<String> alreadyUnpaidNames = new ArrayList<>();
-        for (Index index : targetIndices) {
+        for (Index index : targetIndices.stream().distinct().collect(java.util.stream.Collectors.toList())) {
             Person person = lastShownList.get(index.getZeroBased());
             if (!person.isPaid()) {
                 alreadyUnpaidNames.add("(" + (index.getOneBased()) + ") " + person.getName());

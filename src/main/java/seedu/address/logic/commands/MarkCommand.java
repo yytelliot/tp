@@ -56,7 +56,7 @@ public class MarkCommand extends Command {
 
         List<Person> personsToMark = new ArrayList<>();
         List<String> alreadyPaidNames = new ArrayList<>();
-        for (Index index : targetIndices) {
+        for (Index index : targetIndices.stream().distinct().collect(java.util.stream.Collectors.toList())) {
             Person person = lastShownList.get(index.getZeroBased());
             if (person.isPaid()) {
                 alreadyPaidNames.add("(" + (index.getOneBased()) + ") " + person.getName());
