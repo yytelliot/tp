@@ -39,7 +39,7 @@ public class Person {
         requireAllNonNull(name, phone, email, address, day, startTime, endTime, rate, tags);
 
         if (!endTime.isAfter(startTime)) {
-            throw new IllegalArgumentException(Time.MESSAGE_CONSTRAINTS);
+            throw new IllegalArgumentException(Time.MESSAGE_COMPARISON_CONSTRAINTS);
         }
 
         this.name = name;

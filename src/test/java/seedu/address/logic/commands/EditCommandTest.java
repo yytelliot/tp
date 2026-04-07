@@ -30,6 +30,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.Time;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
 
@@ -149,6 +150,32 @@ public class EditCommandTest {
                 new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB).build());
 
         assertCommandFailure(editCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+    }
+
+    @Test
+    public void execute_startTimeAfterEndTime_failure() {
+        Index indexLastPerson = Index.fromOneBased(model.getFilteredPersonList().size());
+
+        // Start: 18:00, End: 08:00 (Invalid)
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withStartTime("18:00")
+                .withEndTime("08:00").build();
+        EditCommand editCommand = new EditCommand(indexLastPerson, descriptor);
+
+        assertCommandFailure(editCommand, model, Time.MESSAGE_COMPARISON_CONSTRAINTS);
+    }
+
+    @Test
+    public void execute_startTimeEqualsEndTime_failure() {
+        Index indexLastPerson = Index.fromOneBased(model.getFilteredPersonList().size());
+
+        // Start: 10:00, End: 10:00 (Invalid)
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withStartTime("10:00")
+                .withEndTime("10:00").build();
+        EditCommand editCommand = new EditCommand(indexLastPerson, descriptor);
+
+        assertCommandFailure(editCommand, model, Time.MESSAGE_COMPARISON_CONSTRAINTS);
     }
 
     @Test

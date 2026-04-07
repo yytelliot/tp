@@ -95,7 +95,8 @@ public class EditCommand extends Command {
      * Creates and returns a {@code Person} with the details of {@code personToEdit}
      * edited with {@code editPersonDescriptor}.
      */
-    private static Person createEditedPerson(Person personToEdit, EditPersonDescriptor editPersonDescriptor) {
+    private static Person createEditedPerson(Person personToEdit, EditPersonDescriptor editPersonDescriptor)
+            throws CommandException {
         assert personToEdit != null;
 
         Name updatedName = editPersonDescriptor.getName().orElse(personToEdit.getName());
@@ -108,6 +109,10 @@ public class EditCommand extends Command {
         Rate updatedRate = editPersonDescriptor.getRate().orElse(personToEdit.getRate());
         boolean updatedIsPaid = editPersonDescriptor.getIsPaid().orElse(personToEdit.isPaid());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
+
+        if (!updatedEndTime.isAfter(updatedStartTime)) {
+            throw new CommandException(Time.MESSAGE_COMPARISON_CONSTRAINTS);
+        }
 
         return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress,
                 updatedDay, updatedStartTime, updatedEndTime, updatedRate, updatedIsPaid, updatedTags);
