@@ -461,14 +461,13 @@ You can tag multiple students at once by specifying multiple indices. e.g. `tag 
 |---------|-------------|
 | `tag add 1 t/math` | Adds the tag `math` to the 1st student |
 | `tag add 2 t/primary3 t/science` | Adds tags `primary3` and `science` to the 2nd student |
-| `tag add 1 2 3 t/math` | Adds the tag `math` to the 1st, 2nd, and 3rd students |
-| `tag add 1 3 t/friends` | Adds `friends` only to students that do not already have it |
+| `tag add 1 2 3 t/math` | Adds the tag `math` to the 1st, 2nd, and 3rd students if they do not have it |
 
 **Expected output** (on success):
-> `Added tags to student: John Doe`
+> `Added tags math to student: John Doe`
 
-**Expected output** (partial batch success):
-> `Added tags to students: John Doe, Jane Doe`
+**Expected output** (on batch success):
+> `Added tags to students: John Doe (math); Jane Doe (science)`
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -484,7 +483,7 @@ Removes one or more tags from a student.
 * The index **must be a positive integer** (1, 2, 3, …).
 * At least one tag must be provided.
 * The command updates every selected student who has at least one of the specified tags.
-* The command fails only if it would not change any selected student.
+* The command fails if it would not change any selected student.
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 You can remove tags from multiple students at once by specifying multiple indices. e.g. `tag delete 1 2 3 t/math` removes the `math` tag from the 1st, 2nd, and 3rd students.
@@ -496,14 +495,13 @@ You can remove tags from multiple students at once by specifying multiple indice
 |---------|-------------|
 | `tag delete 1 t/math` | Removes the tag `math` from the 1st student |
 | `tag delete 2 t/primary3 t/science` | Removes tags `primary3` and `science` from the 2nd student |
-| `tag delete 1 2 3 t/math` | Removes the `math` tag from the 1st, 2nd, and 3rd students |
-| `tag delete 1 3 t/friends` | Deletes `friends` only from students that currently have it |
+| `tag delete 1 2 3 t/math` | Removes the `math` tag from the 1st, 2nd, and 3rd students if they do not have it|
 
 **Expected output** (on success):
-> `Deleted tags from student: John Doe`
+> `Deleted tags math from student: John Doe`
 
-**Expected output** (partial batch success):
-> `Deleted tags from students: John Doe, Jane Doe`
+**Expected output** (on batch success):
+> `Deleted tags from students: John Doe (math); Jane Doe (science)`
 
 --------------------------------------------------------------------------------------------------------------------
 

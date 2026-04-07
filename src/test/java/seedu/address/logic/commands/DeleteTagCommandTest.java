@@ -39,7 +39,7 @@ public class DeleteTagCommandTest {
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deleteTagsFromPerson(personToUpdate, tagsToDelete);
         Person updatedPerson = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        String expectedMessage = String.format(DeleteTagCommand.MESSAGE_SUCCESS, updatedPerson.getName());
+        String expectedMessage = String.format(DeleteTagCommand.MESSAGE_SUCCESS, "friends", updatedPerson.getName());
 
         assertCommandSuccess(deleteTagCommand, model, expectedMessage, expectedModel);
     }
@@ -54,7 +54,7 @@ public class DeleteTagCommandTest {
         Person firstPerson = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         expectedModel.deleteTagsFromPerson(firstPerson, tagsToDelete);
         Person updatedPerson = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        String expectedMessage = String.format(DeleteTagCommand.MESSAGE_SUCCESS, updatedPerson.getName());
+        String expectedMessage = String.format(DeleteTagCommand.MESSAGE_SUCCESS, "friends", updatedPerson.getName());
 
         assertCommandSuccess(deleteTagCommand, model, expectedMessage, expectedModel);
     }
@@ -68,7 +68,24 @@ public class DeleteTagCommandTest {
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deleteTagsFromPerson(personToUpdate, tagsToDelete);
         Person updatedPerson = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        String expectedMessage = String.format(DeleteTagCommand.MESSAGE_SUCCESS, updatedPerson.getName());
+        String expectedMessage = String.format(DeleteTagCommand.MESSAGE_SUCCESS, "friends", updatedPerson.getName());
+
+        assertCommandSuccess(deleteTagCommand, model, expectedMessage, expectedModel);
+        }
+
+        @Test
+        public void execute_multipleAffectedPersons_showsPreciseBatchMessage() {
+        Set<Tag> tagsToDelete = Set.of(new Tag("friends"));
+        DeleteTagCommand deleteTagCommand = new DeleteTagCommand(List.of(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON),
+            tagsToDelete);
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        Person firstPerson = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person secondPerson = expectedModel.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
+        expectedModel.deleteTagsFromPerson(firstPerson, tagsToDelete);
+        expectedModel.deleteTagsFromPerson(secondPerson, tagsToDelete);
+        String expectedMessage = String.format(DeleteTagCommand.MESSAGE_BATCH_SUCCESS,
+            "Alice Pauline (friends); Benson Meier (friends)");
 
         assertCommandSuccess(deleteTagCommand, model, expectedMessage, expectedModel);
     }

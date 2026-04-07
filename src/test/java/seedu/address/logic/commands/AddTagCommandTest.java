@@ -39,7 +39,7 @@ public class AddTagCommandTest {
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.addTagsToPerson(personToTag, tagsToAdd);
         Person updatedPerson = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        String expectedMessage = String.format(AddTagCommand.MESSAGE_SUCCESS, updatedPerson.getName());
+        String expectedMessage = String.format(AddTagCommand.MESSAGE_SUCCESS, "classmate", updatedPerson.getName());
 
         assertCommandSuccess(addTagCommand, model, expectedMessage, expectedModel);
     }
@@ -53,7 +53,7 @@ public class AddTagCommandTest {
         Person thirdPerson = expectedModel.getFilteredPersonList().get(INDEX_THIRD_PERSON.getZeroBased());
         expectedModel.addTagsToPerson(thirdPerson, tagsToAdd);
         Person updatedPerson = expectedModel.getFilteredPersonList().get(INDEX_THIRD_PERSON.getZeroBased());
-        String expectedMessage = String.format(AddTagCommand.MESSAGE_SUCCESS, updatedPerson.getName());
+        String expectedMessage = String.format(AddTagCommand.MESSAGE_SUCCESS, "friends", updatedPerson.getName());
 
         assertCommandSuccess(addTagCommand, model, expectedMessage, expectedModel);
     }
@@ -67,7 +67,23 @@ public class AddTagCommandTest {
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.addTagsToPerson(personToTag, tagsToAdd);
         Person updatedPerson = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        String expectedMessage = String.format(AddTagCommand.MESSAGE_SUCCESS, updatedPerson.getName());
+        String expectedMessage = String.format(AddTagCommand.MESSAGE_SUCCESS, "classmate", updatedPerson.getName());
+
+        assertCommandSuccess(addTagCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_multipleAffectedPersons_showsPreciseBatchMessage() {
+        Set<Tag> tagsToAdd = Set.of(new Tag("science"));
+        AddTagCommand addTagCommand = new AddTagCommand(List.of(INDEX_SECOND_PERSON, INDEX_THIRD_PERSON), tagsToAdd);
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        Person secondPerson = expectedModel.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
+        Person thirdPerson = expectedModel.getFilteredPersonList().get(INDEX_THIRD_PERSON.getZeroBased());
+        expectedModel.addTagsToPerson(secondPerson, tagsToAdd);
+        expectedModel.addTagsToPerson(thirdPerson, tagsToAdd);
+        String expectedMessage = String.format(AddTagCommand.MESSAGE_BATCH_SUCCESS,
+                "Benson Meier (science); Carl Kurz (science)");
 
         assertCommandSuccess(addTagCommand, model, expectedMessage, expectedModel);
     }

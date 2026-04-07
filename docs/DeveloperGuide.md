@@ -683,32 +683,35 @@ testers are expected to do more *exploratory* testing.
    1. Prerequisites: List all students using the `list` command. At least one student in the list.
 
    1. Test case: `tag add 1 t/Math`<br>
-      Expected: Tag `math` is added to the first student. Success message `Added tags to student: ...` shown.
+      Expected: Tag `Math` is added to the first student. Success message shows the exact added tag and student.
 
    1. Test case: `tag add 1 t/Math` (when student already has `math` tag)<br>
       Expected: No change. Error message shown because the command would be a no-op.
 
-   1. Test case: `tag add 1 2 t/Science`<br>
-      Expected: Tag `science` is added to both students. Batch success message `Added tags to students: ...` shown.
+   1. Test case: `tag add 1 2 t/Science` <br>
+      Expected: Tag `Science` is added to both students. Batch success message shows each affected student with the exact added tags.
 
    1. Test case: `tag add 1 3 t/Friends` (when student 1 already has `friends`, student 3 does not)<br>
-      Expected: Only student 3 is updated. Success message `Added tags to student: ...` shown.
+      Expected: Only student 3 is updated. Success message shows `friends` as the exact added tag for student 3.
 
    1. Test case: `tag add 1 t/Friends t/Science` (when student 1 already has `friends` but not `science`)<br>
-      Expected: `science` is added and `friends` remains. Success message shown.
+      Expected: `science` is added and `friends` remains. Success message shows only `science` as the added tag.
+
+   1. Test case: `tag add 1 2 t/Science t/Math` <br>
+      Expected: Each student is updated only with the tags they were missing. Batch success message shows the exact added tags per student.
 
 1. Deleting a tag from a student
 
    1. Prerequisites: At least one student with a tag in the list.
 
    1. Test case: `tag delete 1 t/Math` (when student 1 has `math` tag)<br>
-      Expected: Tag `math` is removed. Success message `Deleted tags from student: ...` shown.
+      Expected: Tag `math` is removed. Success message shows the exact deleted tag and student.
 
    1. Test case: `tag delete 1 t/Math` (when student 1 does not have `math` tag)<br>
       Expected: No change. Error message shown because the command would be a no-op.
 
    1. Test case: `tag delete 1 3 t/Friends` (when student 1 has `friends`, student 3 does not)<br>
-      Expected: Only student 1 is updated. Success message `Deleted tags from student: ...` shown.
+      Expected: Only student 1 is updated. Success message shown.
 
    1. Test case: `tag delete 1 t/Friends t/Science` (when student 1 has `friends` but not `science`)<br>
       Expected: `friends` is deleted and the missing `science` tag is ignored. Success message shown.
