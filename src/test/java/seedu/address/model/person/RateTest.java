@@ -1,5 +1,6 @@
 package seedu.address.model.person;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
@@ -20,24 +21,39 @@ public class RateTest {
     }
 
     @Test
+    public void constructor_leadingZeros_normalizesValue() {
+        // Verification that internal 'value' is stored without leading zeros
+        assertEquals("40", new Rate("0040").value);
+        assertEquals("0", new Rate("000").value);
+    }
+
+    @Test
     public void isValidRate() {
         // null Rate number
         assertThrows(NullPointerException.class, () -> Rate.isValidRate(null));
 
         // invalid Rate numbers
-        assertFalse(Rate.isValidRate(""), "Error: An empty string should not be allowed."); // empty string
-        assertFalse(Rate.isValidRate(" "), "Error: Spaces only should not be allowed."); // spaces only
-        assertFalse(Rate.isValidRate("45.00"), "Error: Decimal points should not be allowed."); // decimal
-        assertFalse(Rate.isValidRate("Rate"), "Error: Non-numeric only should not be allowed."); // non-numeric
-        assertFalse(Rate.isValidRate("$40"), "Error: Symbols should not be allowed."); // digits and symbols
-        assertFalse(Rate.isValidRate("-40"), "Error: Negative numbers hould not be allowed."); // implied negative
+        assertFalse(Rate.isValidRate(""), "Empty string should be invalid.");
+        assertFalse(Rate.isValidRate(" "), "Spaces should be invalid.");
+        assertFalse(Rate.isValidRate("45.00"), "Decimals should be invalid.");
+        assertFalse(Rate.isValidRate("Rate"), "Non-numeric strings should be invalid.");
+        assertFalse(Rate.isValidRate("$40"), "Symbols should be invalid.");
+        assertFalse(Rate.isValidRate("-40"), "Negative numbers should be invalid.");
+
+        // invalid Rate: boundary checks for max limit (5000)
+        assertFalse(Rate.isValidRate("5001"), "Rate above 5000 should be invalid.");
+        assertFalse(Rate.isValidRate("9999999999"), "Very large numbers should be invalid.");
 
         // valid Rate numbers
-        assertTrue(Rate.isValidRate("0"), "Error: 0 should be allowed."); // free
-        assertTrue(Rate.isValidRate("40"), "Error: 40 should be allowed.");
-        // long tuition rate (may exclude this next time)
-        assertTrue(Rate.isValidRate("99999999999999"),
-                "Error: 99999999999999 should be allowed.");
+        assertTrue(Rate.isValidRate("0"), "Boundary Min (0) should be valid.");
+        assertTrue(Rate.isValidRate("1"), "Small positive rate should be valid.");
+        assertTrue(Rate.isValidRate("40"), "Standard rate should be valid.");
+        assertTrue(Rate.isValidRate("5000"), "Boundary Max (5000) should be valid.");
+        assertTrue(Rate.isValidRate("0040"), "Input with leading zeros should be valid.");
+
+        // long tuition rate is invalid
+        assertFalse(Rate.isValidRate("99999999999999"),
+                "Error: 99999999999999 should not be allowed. Max Rate is 5000.");
     }
 
     @Test
@@ -46,6 +62,9 @@ public class RateTest {
 
         // same values -> returns true
         assertTrue(rate.equals(new Rate("40")));
+
+        // leading zeroes but same value -> returns true
+        assertTrue(rate.equals(new Rate("000040")));
 
         // same object -> returns true
         assertTrue(rate.equals(rate));

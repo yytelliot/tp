@@ -9,8 +9,9 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Rate {
 
+    public static final int MAX_RATE = 5000; // Reasonable cap for hourly tutoring
     public static final String MESSAGE_CONSTRAINTS =
-            "Tuition Rate should only contain numbers (non-negative integers).";
+            "Tuition Rate should be a non-negative integer between 0 and " + MAX_RATE;
 
     public static final String VALIDATION_REGEX = "^\\d+$";
 
@@ -24,14 +25,23 @@ public class Rate {
     public Rate(String tuitionRate) {
         requireNonNull(tuitionRate);
         checkArgument(isValidRate(tuitionRate), MESSAGE_CONSTRAINTS);
-        value = tuitionRate;
+        // Replace all leading zeros, but keep a single "0" if the string is just "000"
+        this.value = tuitionRate.replaceFirst("^0+(?!$)", "");
     }
 
     /**
      * Returns true if a given string is a valid tuition rate.
      */
     public static boolean isValidRate(String test) {
-        return test.matches(VALIDATION_REGEX);
+        if (!test.matches(VALIDATION_REGEX)) {
+            return false;
+        }
+        try {
+            int val = Integer.parseInt(test);
+            return val >= 0 && val <= MAX_RATE;
+        } catch (NumberFormatException e) {
+            return false; // Catches numbers longer than 10 digits
+        }
     }
 
     @Override

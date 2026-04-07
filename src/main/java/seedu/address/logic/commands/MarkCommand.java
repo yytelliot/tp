@@ -29,7 +29,9 @@ public class MarkCommand extends Command {
 
     public static final String MESSAGE_MARK_PERSON_SUCCESS = "Marked student as paid: %1$s";
     public static final String MESSAGE_MARK_PERSONS_SUCCESS = "Marked %1$d students as paid: %2$s";
-    public static final String MESSAGE_ALREADY_PAID = "This student has already been marked as paid.";
+    public static final String MESSAGE_ALREADY_PAID = "This student has already been marked as paid: %1$s";
+    public static final String MESSAGE_ALREADY_PAID_PLURAL =
+            "These students have already been marked as paid: %1$s";
 
     private final List<Index> targetIndices;
 
@@ -53,12 +55,21 @@ public class MarkCommand extends Command {
         }
 
         List<Person> personsToMark = new ArrayList<>();
+        List<String> alreadyPaidNames = new ArrayList<>();
         for (Index index : targetIndices) {
             Person person = lastShownList.get(index.getZeroBased());
             if (person.isPaid()) {
-                throw new CommandException(MESSAGE_ALREADY_PAID);
+                alreadyPaidNames.add("(" + (index.getOneBased()) + ") " + person.getName());
+            } else {
+                personsToMark.add(person);
             }
-            personsToMark.add(person);
+        }
+        if (!alreadyPaidNames.isEmpty()) {
+            String names = String.join(", ", alreadyPaidNames);
+            String message = alreadyPaidNames.size() == 1
+                    ? String.format(MESSAGE_ALREADY_PAID, names)
+                    : String.format(MESSAGE_ALREADY_PAID_PLURAL, names);
+            throw new CommandException(message);
         }
 
         List<Person> markedPersons = new ArrayList<>();

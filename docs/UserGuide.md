@@ -82,17 +82,17 @@ If the output shows `java version "17"` or higher, skip to [Step 2](#step-2-down
 
 1. Go to the [OnlyTutors Releases page](https://github.com/AY2526S2-CS2103T-T17-3/tp/releases).
 2. Find the **latest release** at the top of the list.
-3. Under **Assets**, click `addressbook.jar` to download it.
+3. Under **Assets**, click `onlytutors.jar` to download it.
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-Do not rename the `.jar` file. Keep it as `addressbook.jar` to match the run command.
+Do not rename the `.jar` file. Keep it as `onlytutors.jar` to match the run command.
 </div>
 
 ---
 
 ### Step 3: Set Up a Home Folder
 
-Create a dedicated folder for OnlyTutors (e.g., `OnlyTutors` on your Desktop). Move the downloaded `addressbook.jar` into that folder.
+Create a dedicated folder for OnlyTutors (e.g., `OnlyTutors` on your Desktop). Move the downloaded `onlytutors.jar` into that folder.
 
 This folder will become the **home folder** — OnlyTutors will store all your data here in a `data/` subfolder automatically.
 
@@ -105,26 +105,26 @@ Open a terminal and navigate to your home folder, then run the app:
 **Windows (Command Prompt):**
 ```
 cd C:\Users\YourName\Desktop\OnlyTutors
-java -jar addressbook.jar
+java -jar onlytutors.jar
 ```
 
 **Windows (PowerShell):**
 ```
 cd C:\Users\YourName\Desktop\OnlyTutors
-java -jar addressbook.jar
+java -jar onlytutors.jar
 ```
 
 **macOS / Linux:**
 ```
 cd ~/Desktop/OnlyTutors
-java -jar addressbook.jar
+java -jar onlytutors.jar
 ```
 
 <div markdown="block" class="alert alert-info">
 
 **:information_source: Alternative: Double-click to launch**
 
-On most systems you can double-click `addressbook.jar` to launch OnlyTutors directly. However, using the terminal is recommended so you can see error messages if something goes wrong.
+On most systems you can double-click `onlytutors.jar` to launch OnlyTutors directly. However, using the terminal is recommended so you can see error messages if something goes wrong.
 
 </div>
 
@@ -136,13 +136,13 @@ A GUI similar to the screenshot below should appear within a few seconds. The ap
 
 ### Troubleshooting Installation
 
-| Problem | Likely cause | Fix |
-|---------|-------------|-----|
-| `java: command not found` | Java is not installed or not on PATH | Install Java 17 (see Step 1) |
-| `Error: Unable to access jarfile addressbook.jar` | Terminal is not in the correct folder | Run `cd` to navigate to the folder containing `addressbook.jar` |
-| App launches but GUI looks broken (macOS) | Wrong JDK version | Follow the [macOS-specific guide](https://se-education.org/guides/tutorials/javaInstallationMac.html) |
-| Blank/white screen on launch | JavaFX rendering issue | Try adding `--add-opens java.base/java.lang=ALL-UNNAMED` to the run command |
-| App opens off-screen | Previously used a second monitor | Delete `preferences.json` in the home folder and relaunch |
+| Problem                                          | Likely cause | Fix                                                                                                   |
+|--------------------------------------------------|-------------|-------------------------------------------------------------------------------------------------------|
+| `java: command not found`                        | Java is not installed or not on PATH | Install Java 17 (see Step 1)                                                                          |
+| `Error: Unable to access jarfile onlytutors.jar` | Terminal is not in the correct folder | Run `cd` to navigate to the folder containing `onlytutors.jar`                                        |
+| App launches but GUI looks broken (macOS)        | Wrong JDK version | Follow the [macOS-specific guide](https://se-education.org/guides/tutorials/javaInstallationMac.html) |
+| Blank/white screen on launch                     | JavaFX rendering issue | Try adding `--add-opens java.base/java.lang=ALL-UNNAMED` to the run command                           |
+| App opens off-screen                             | Previously used a second monitor | Delete `preferences.json` in the home folder and relaunch                                             |
 
 ### Understanding the Interface
 
@@ -200,17 +200,17 @@ Refer to the [Features](#features) section below for the full details of each co
 
 ### Parameter Summary
 
-| Parameter | Prefix | Constraints                                                                                          | Example |
-|-----------|--------|------------------------------------------------------------------------------------------------------|---------|
-| **Name** | `n/` | Letters and spaces only; cannot be blank                                                             | `n/John Doe` |
-| **Phone** | `p/` | Exactly 8 digits, starting with 6, 8, or 9 (Singapore format)                                        | `p/91234567` |
-| **Email** | `e/` | Standard email format (`local@domain`)                                                               | `e/john@example.com` |
-| **Address** | `a/` | Any non-blank text                                                                                   | `a/Blk 30, Geylang St 29` |
-| **Day** | `d/` | A day of the week (case-insensitive): Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday | `d/Monday` |
-| **Start Time** | `st/` | 24-hour format `HH:mm` (e.g., `09:00`, `14:30`)                                                      | `st/14:00` |
-| **End Time** | `et/` | 24-hour format `HH:mm`; **must be strictly after** start time                                        | `et/16:00` |
-| **Rate** | `r/` | A non-negative whole number representing dollars per lesson                                          | `r/50` |
-| **Tag** | `t/` | Alphanumeric characters only (no spaces); stored in lowercase                                        | `t/math` |
+| Parameter | Prefix | Constraints                                                                                                         | Example |
+|-----------|--------|---------------------------------------------------------------------------------------------------------------------|---------|
+| **Name** | `n/` | Letters and spaces only; cannot be blank                                                                            | `n/John Doe` |
+| **Phone** | `p/` | Exactly 8 digits, starting with 6, 8, or 9 (Singapore format)                                                       | `p/91234567` |
+| **Email** | `e/` | Standard email format (`local@domain`)                                                                              | `e/john@example.com` |
+| **Address** | `a/` | Any non-blank text                                                                                                  | `a/Blk 30, Geylang St 29` |
+| **Day** | `d/` | A day of the week (case-insensitive): Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday                | `d/Monday` |
+| **Start Time** | `st/` | 24-hour format `HH:mm` (e.g., `09:00`, `14:30`)                                                                     | `st/14:00` |
+| **End Time** | `et/` | 24-hour format `HH:mm`; **must be strictly after** start time                                                       | `et/16:00` |
+| **Rate** | `r/` | A non-negative whole number (max 5000) representing the hourly rate. Leading zeroes will be removed e.g. 0040 -> 40 | `r/50` |
+| **Tag** | `t/` | Alphanumeric characters only (no spaces); stored in lowercase                                                       | `t/math` |
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -261,23 +261,28 @@ This design is chosen because:
 > `New contact added: John Doe; Phone: 98765432; Email: johnd@example.com; Address: 311, Clementi Ave 2, #02-25; Day: MONDAY; Start Time: 15:00; End Time: 17:00; Rate: 50; Tags:`
 
 **Expected output** (on fail):
-> `Names should contain only alphanumeric characters, with words separated by a single space or '/', e.g. 'Tan Ah Kow' or 'Raj S/O Kumar'. Names must not start or end with a space or '/', and must not contain consecutive spaces or '/' characters`
+> `Names should contain only English characters, with words separated by a single space or '/', e.g. 'Tan Ah Kow' or 'Raj S/O Kumar'. Names must not start or end with a space or '/', and must not contain consecutive spaces or '/' characters`
 
 ### ⚠️ Common mistakes when adding a student
 
-| Mistake | Why it fails                                     |
-|--------|--------------------------------------------------|
-| `r/$40` | Symbols are not allowed; rate must be a number   |
-| `r/40.0` | Decimals are not allowed; must be a whole number |
-| `n/John123` | Name cannot contain numbers                      |
-| `n/` | Name cannot be empty                             |
-| `p/12345678` | Must start with 6, 8, or 9                       |
-| `d/Mon` | Must use full day name (e.g. Monday)             |
-| `st/3pm` | Must use 24-hour format (e.g. 15:00)             |
+| Mistake             | Why it fails                                     |
+|---------------------|--------------------------------------------------|
+| `r/$40`             | Symbols are not allowed; rate must be a number   |
+| `r/40.0`            | Decimals are not allowed; must be a whole number |
+| `r/9000`            | Hourly rate exceeds the maximum cap of 5000                                                 |
+| `n/John123`         | Name cannot contain numbers                      |
+| `n/`                | Name cannot be empty                             |
+| `p/12345678`        | Must start with 6, 8, or 9                       |
+| `d/Mon`             | Must use full day name (e.g. Monday)             |
+| `st/3pm`            | Must use 24-hour format (e.g. 15:00)             |
 | `et/14:00 st/15:00` | End time must be after start time                |
 
 <div markdown="block" class="alert alert-info">
-**:information_source: We use whole numbers to streamline the UI, as they reflect the standard pay rates for most tutoring roles.**
+**:information_source: Notes on Tuition Rate
+
+* Hourly Basis: The rate r/ represents the amount charged per hour.
+* Data Normalization: Leading zeros will be automatically removed (e.g., r/0050 will be saved as 50).
+* Validation: To prevent typos, the app caps the rate at 5000.
 </div>
 
 --------------------------------------------------------------------------------------------------------------------
