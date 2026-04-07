@@ -26,10 +26,10 @@ public class TagTest {
     }
 
     @Test
-    public void constructor_mixedCase_normalizesToLowerCase() {
+    public void constructor_mixedCase_preservesOriginalCase() {
         Tag mixedCaseTag = new Tag("FrIeNdS");
 
-        assertEquals("friends", mixedCaseTag.tagName);
+        assertEquals("FrIeNdS", mixedCaseTag.tagName);
     }
 
     @Test
