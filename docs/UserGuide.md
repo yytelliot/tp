@@ -569,7 +569,7 @@ This deletes **all** student data and cannot be undone. Use with caution.
 </div>
 
 **Expected output:**
-> `Address book has been cleared!`
+> `Cleared all contacts.`
 
 --------------------------------------------------------------------------------------------------------------------
 
