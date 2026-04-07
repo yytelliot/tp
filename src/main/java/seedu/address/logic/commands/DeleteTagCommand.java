@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -36,6 +37,8 @@ public class DeleteTagCommand extends TagCommand {
     public static final String MESSAGE_BATCH_SUCCESS = "Tag(s) removed from %1$d persons: %2$s";
     public static final String MESSAGE_TAG_NOT_FOUND = "One or more specified tags do not exist for this person.";
 
+    private final List<Person> updatedPersons = new ArrayList<>();
+
     /**
      * Creates a DeleteTagCommand to remove tags from persons at {@code targetIndices}.
      */
@@ -54,17 +57,18 @@ public class DeleteTagCommand extends TagCommand {
 
     @Override
     protected void executeBatch(List<Person> targetPersons, Model model) {
+        updatedPersons.clear();
         for (Person person : targetPersons) {
             model.deleteTagsFromPerson(person, getTags());
+            updatedPersons.add(model.getFilteredPersonList().get(getDistinctTargetIndices()
+                    .get(updatedPersons.size()).getZeroBased()));
         }
     }
 
     @Override
     protected String formatSuccessMessage(List<Person> processedPersons) {
-        if (personsToUpdate.size() == 1) {
-            Person updatedPerson = model.getFilteredPersonList().get(getTargetIndices().get(0).getZeroBased());
-            return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(updatedPerson)));
-
+        if (updatedPersons.size() == 1) {
+            return String.format(MESSAGE_SUCCESS, Messages.format(updatedPersons.get(0)));
         }
         return String.format(MESSAGE_BATCH_SUCCESS, processedPersons.size(), joinNames(processedPersons));
     }
