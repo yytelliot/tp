@@ -38,10 +38,8 @@ public class DeleteTagCommand extends TagCommand {
     public static final String MESSAGE_TAG_NOT_FOUND =
             "No students were updated because none have the specified tags.";
 
-    private final List<Index> affectedIndices = new ArrayList<>();
     private final List<Person> affectedPersons = new ArrayList<>();
     private final List<Set<Tag>> tagsDeletedByPerson = new ArrayList<>();
-    private final List<Person> updatedPersons = new ArrayList<>();
 
     /**
      * Creates a DeleteTagCommand to remove tags from persons at {@code targetIndices}.
@@ -52,18 +50,15 @@ public class DeleteTagCommand extends TagCommand {
 
     @Override
     protected void checkPreconditions(List<Person> targetPersons) throws CommandException {
-        affectedIndices.clear();
         affectedPersons.clear();
         tagsDeletedByPerson.clear();
 
-        List<Index> distinctTargetIndices = getDistinctTargetIndices();
         for (int i = 0; i < targetPersons.size(); i++) {
             Person person = targetPersons.get(i);
             Set<Tag> tagsToDelete = new HashSet<>(person.getTags());
             tagsToDelete.retainAll(getTags());
 
             if (!tagsToDelete.isEmpty()) {
-                affectedIndices.add(distinctTargetIndices.get(i));
                 affectedPersons.add(person);
                 tagsDeletedByPerson.add(tagsToDelete);
             }
@@ -76,21 +71,18 @@ public class DeleteTagCommand extends TagCommand {
 
     @Override
     protected void executeBatch(List<Person> targetPersons, Model model) {
-        updatedPersons.clear();
         for (int i = 0; i < affectedPersons.size(); i++) {
-            Person person = affectedPersons.get(i);
-            model.deleteTagsFromPerson(person, tagsDeletedByPerson.get(i));
-            updatedPersons.add(model.getFilteredPersonList().get(affectedIndices.get(i).getZeroBased()));
+            model.deleteTagsFromPerson(affectedPersons.get(i), tagsDeletedByPerson.get(i));
         }
     }
 
     @Override
     protected String formatSuccessMessage(List<Person> processedPersons) {
-        if (updatedPersons.size() == 1) {
+        if (affectedPersons.size() == 1) {
             return String.format(MESSAGE_SUCCESS,
-                    formatTags(tagsDeletedByPerson.get(0)), updatedPersons.get(0).getName());
+                    formatTags(tagsDeletedByPerson.get(0)), affectedPersons.get(0).getName());
         }
-        return String.format(MESSAGE_BATCH_SUCCESS, formatPersonTagChanges(updatedPersons, tagsDeletedByPerson));
+        return String.format(MESSAGE_BATCH_SUCCESS, formatPersonTagChanges(affectedPersons, tagsDeletedByPerson));
     }
 
     @Override

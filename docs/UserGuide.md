@@ -495,7 +495,7 @@ You can remove tags from multiple students at once by specifying multiple indice
 |---------|-------------|
 | `tag delete 1 t/math` | Removes the tag `math` from the 1st student |
 | `tag delete 2 t/primary3 t/science` | Removes tags `primary3` and `science` from the 2nd student |
-| `tag delete 1 2 3 t/math` | Removes the `math` tag from the 1st, 2nd, and 3rd students if they do not have it|
+| `tag delete 1 2 3 t/math` | Removes the `math` tag from the 1st, 2nd, and 3rd students if they have it|
 
 **Expected output** (on success):
 > `Deleted tags math from student: John Doe`

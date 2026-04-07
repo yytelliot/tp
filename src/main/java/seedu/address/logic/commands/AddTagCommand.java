@@ -36,10 +36,8 @@ public class AddTagCommand extends TagCommand {
     public static final String MESSAGE_TAG_ALREADY_EXISTS =
             "No students were updated because all specified tags already exist.";
 
-    private final List<Index> affectedIndices = new ArrayList<>();
     private final List<Person> affectedPersons = new ArrayList<>();
     private final List<Set<Tag>> tagsAddedByPerson = new ArrayList<>();
-    private final List<Person> updatedPersons = new ArrayList<>();
 
     /**
      * Creates an AddTagCommand to add tags to persons at {@code targetIndices}.
@@ -50,18 +48,15 @@ public class AddTagCommand extends TagCommand {
 
     @Override
     protected void checkPreconditions(List<Person> targetPersons) throws CommandException {
-        affectedIndices.clear();
         affectedPersons.clear();
         tagsAddedByPerson.clear();
 
-        List<Index> distinctTargetIndices = getDistinctTargetIndices();
         for (int i = 0; i < targetPersons.size(); i++) {
             Person person = targetPersons.get(i);
             Set<Tag> tagsToAdd = new HashSet<>(getTags());
             tagsToAdd.removeAll(person.getTags());
 
             if (!tagsToAdd.isEmpty()) {
-                affectedIndices.add(distinctTargetIndices.get(i));
                 affectedPersons.add(person);
                 tagsAddedByPerson.add(tagsToAdd);
             }
@@ -74,22 +69,19 @@ public class AddTagCommand extends TagCommand {
 
     @Override
     protected void executeBatch(List<Person> targetPersons, Model model) {
-        updatedPersons.clear();
         for (int i = 0; i < affectedPersons.size(); i++) {
-            Person person = affectedPersons.get(i);
-            model.addTagsToPerson(person, tagsAddedByPerson.get(i));
-            updatedPersons.add(model.getFilteredPersonList().get(affectedIndices.get(i).getZeroBased()));
+            model.addTagsToPerson(affectedPersons.get(i), tagsAddedByPerson.get(i));
         }
     }
 
 
     @Override
     protected String formatSuccessMessage(List<Person> processedPersons) {
-        if (updatedPersons.size() == 1) {
+        if (affectedPersons.size() == 1) {
             return String.format(MESSAGE_SUCCESS,
-                    formatTags(tagsAddedByPerson.get(0)), updatedPersons.get(0).getName());
+                    formatTags(tagsAddedByPerson.get(0)), affectedPersons.get(0).getName());
         }
-        return String.format(MESSAGE_BATCH_SUCCESS, formatPersonTagChanges(updatedPersons, tagsAddedByPerson));
+        return String.format(MESSAGE_BATCH_SUCCESS, formatPersonTagChanges(affectedPersons, tagsAddedByPerson));
     }
 
     @Override
