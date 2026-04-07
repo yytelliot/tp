@@ -36,6 +36,29 @@ public class PersonTest {
     }
 
     @Test
+    public void constructor_startTimeAfterEndTime_throwsIllegalArgumentException() {
+        // Overriding a valid builder with an invalid time range
+        assertThrows(IllegalArgumentException.class, () ->
+                new PersonBuilder()
+                        .withStartTime("12:00")
+                        .withEndTime("10:00")
+                        .build());
+    }
+
+    @Test
+    public void constructor_sameStartAndEndTime_throwsIllegalArgumentException() {
+        // Overriding with identical times
+        String time = "14:00";
+        assertThrows(IllegalArgumentException.class, () ->
+                new PersonBuilder()
+                        .withStartTime(time)
+                        .withEndTime(time)
+                        .build());
+    }
+
+
+
+    @Test
     public void isSamePerson() {
         // same object -> returns true
         assertTrue(ALICE.isSamePerson(ALICE));
