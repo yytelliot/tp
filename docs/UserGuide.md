@@ -377,22 +377,27 @@ After using `find`, use [`list`](#listing-all-students-list) to return to the fu
 
 ### Finding students by tag: `tag find`
 
-Finds students who match all of the given tags.
+Finds students who match all of the given tags exactly.
 
 <div markdown="span" class="alert alert-success">
 **Format:** `tag find t/TAG [t/TAG]…​`
 </div>
 
 * The search is **case-insensitive**. e.g. `Math` will match `math`.
+* Tags must match **exactly**. e.g. `ma` will not match `math`.
 * Only students matching **all** tags will be returned (i.e. `AND` search).
-* Tags can contain spaces and special characters.
+* Tags can contain spaces and special characters but must not be empty.
 
 **Examples:**
 
-| Command                          | What it does                                                |
-|----------------------------------|-------------------------------------------------------------|
-| `tag find t/Math`                | Returns students tagged with `Math`                         |
-| `tag find t/Primary 3 t/Science` | Returns students tagged with both `Primary 3` and `Science` |
+| Command                         | What it does                                                |
+|---------------------------------|-------------------------------------------------------------|
+| `tag find t/Math`               | Returns students tagged with `Math`                         |
+| `tag find t/Primary3 t/Science` | Returns students tagged with both `Primary 3` and `Science` |
+| `tag find t/ma`                 | Returns no students unless a student has the exact tag `ma` |
+
+**Invalid input:**
+* `tag find t/` is rejected because tags cannot be empty.
 
 **Expected output:**
 > `2 persons listed!`

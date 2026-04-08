@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.FindTagCommand;
 import seedu.address.model.person.TagsContainKeywordsPredicate;
+import seedu.address.model.tag.Tag;
 
 public class FindTagCommandParserTest {
     private final FindTagCommandParser parser = new FindTagCommandParser();
@@ -39,6 +40,11 @@ public class FindTagCommandParserTest {
     public void parse_noTagPrefix_failure() {
         assertParseFailure(parser, "friends",
             String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindTagCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_emptyTagValue_failure() {
+        assertParseFailure(parser, "t/", Tag.MESSAGE_CONSTRAINTS);
     }
 
     @Test
