@@ -227,7 +227,7 @@ Adds a new student to OnlyTutors.
 * New students are marked as **Unpaid** by default.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-OnlyTutors does not allow duplicate students. Two students are considered duplicates if they have the **same name** 
+OnlyTutors does not allow duplicate students. Two students are considered duplicates if they have the **same name**
 (case-insensitive) **and** the **same phone number**.
 </div>
 
@@ -317,7 +317,7 @@ Edits the details of an existing student in OnlyTutors.
 * Existing values will be updated to the input values.
 
 **Editing Tags:**
-* When editing tags with `t/`, existing tags are **replaced entirely**. 
+* When editing tags with `t/`, existing tags are **replaced entirely**.
 * Remove all tags by typing `t/` without specifying any tags after it (not true for other fields since they must be nonempty).
 * Note the same rules for adding a person apply here, i.e. person name must contain only alphabets, end time must be strictly after start time and so on.
 

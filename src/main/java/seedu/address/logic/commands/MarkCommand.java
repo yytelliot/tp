@@ -1,11 +1,8 @@
 package seedu.address.logic.commands;
 
-import static java.util.Objects.requireNonNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -17,7 +14,7 @@ import seedu.address.model.person.Person;
 /**
  * Marks one or more students' payment status as paid.
  */
-public class MarkCommand extends Command {
+public class MarkCommand extends BatchCommand {
 
     public static final String COMMAND_WORD = "mark";
 
@@ -33,35 +30,22 @@ public class MarkCommand extends Command {
     public static final String MESSAGE_ALREADY_PAID_PLURAL =
             "These students have already been marked as paid: %1$s";
 
-    private final List<Index> targetIndices;
-
     /**
      * Creates a MarkCommand to mark the persons at {@code targetIndices} as paid.
      */
     public MarkCommand(List<Index> targetIndices) {
-        requireNonNull(targetIndices);
-        this.targetIndices = new ArrayList<>(targetIndices);
+        super(targetIndices);
     }
 
     @Override
-    public CommandResult execute(Model model) throws CommandException {
-        requireNonNull(model);
-        List<Person> lastShownList = model.getFilteredPersonList();
-
-        for (Index index : targetIndices) {
-            if (index.getZeroBased() >= lastShownList.size()) {
-                throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-            }
-        }
-
-        List<Person> personsToMark = new ArrayList<>();
+    protected void checkPreconditions(List<Person> targetPersons) throws CommandException {
+        List<Index> distinctTargetIndices = getDistinctTargetIndices();
         List<String> alreadyPaidNames = new ArrayList<>();
-        for (Index index : targetIndices.stream().distinct().collect(java.util.stream.Collectors.toList())) {
-            Person person = lastShownList.get(index.getZeroBased());
+        for (int i = 0; i < targetPersons.size(); i++) {
+            Person person = targetPersons.get(i);
             if (person.isPaid()) {
-                alreadyPaidNames.add("(" + (index.getOneBased()) + ") " + person.getName());
-            } else {
-                personsToMark.add(person);
+                Index index = distinctTargetIndices.get(i);
+                alreadyPaidNames.add("(" + index.getOneBased() + ") " + person.getName());
             }
         }
         if (!alreadyPaidNames.isEmpty()) {
@@ -71,24 +55,26 @@ public class MarkCommand extends Command {
                     : String.format(MESSAGE_ALREADY_PAID_PLURAL, names);
             throw new CommandException(message);
         }
+    }
 
-        List<Person> markedPersons = new ArrayList<>();
-        for (Person personToMark : personsToMark) {
+    @Override
+    protected void executeBatch(List<Person> targetPersons, Model model) {
+        for (Person targetPerson : targetPersons) {
+            boolean isPaid = true;
             Person markedPerson = new Person(
-                    personToMark.getName(), personToMark.getPhone(), personToMark.getEmail(),
-                    personToMark.getAddress(), personToMark.getDay(), personToMark.getStartTime(),
-                    personToMark.getEndTime(), personToMark.getRate(), true, personToMark.getTags());
-            model.setPerson(personToMark, markedPerson);
-            markedPersons.add(markedPerson);
+                    targetPerson.getName(), targetPerson.getPhone(), targetPerson.getEmail(),
+                    targetPerson.getAddress(), targetPerson.getDay(), targetPerson.getStartTime(),
+                    targetPerson.getEndTime(), targetPerson.getRate(), isPaid, targetPerson.getTags());
+            model.setPerson(targetPerson, markedPerson);
         }
+    }
 
-        if (markedPersons.size() == 1) {
-            return new CommandResult(String.format(MESSAGE_MARK_PERSON_SUCCESS,
-                    Messages.format(markedPersons.get(0))));
+    @Override
+    protected String formatSuccessMessage(List<Person> processedPersons) {
+        if (processedPersons.size() == 1) {
+            return String.format(MESSAGE_MARK_PERSON_SUCCESS, Messages.format(processedPersons.get(0)));
         }
-        String names = markedPersons.stream()
-                .map(p -> p.getName().toString()).collect(Collectors.joining(", "));
-        return new CommandResult(String.format(MESSAGE_MARK_PERSONS_SUCCESS, markedPersons.size(), names));
+        return String.format(MESSAGE_MARK_PERSONS_SUCCESS, processedPersons.size(), joinNames(processedPersons));
     }
 
     @Override
@@ -100,18 +86,18 @@ public class MarkCommand extends Command {
             return false;
         }
         MarkCommand otherMarkCommand = (MarkCommand) other;
-        return targetIndices.equals(otherMarkCommand.targetIndices);
+        return getTargetIndices().equals(otherMarkCommand.getTargetIndices());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(targetIndices);
+        return Objects.hash(getTargetIndices());
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("targetIndices", targetIndices)
+                .add("targetIndices", getTargetIndices())
                 .toString();
     }
 }

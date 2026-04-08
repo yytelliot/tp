@@ -1,11 +1,7 @@
 package seedu.address.logic.commands;
 
-import static java.util.Objects.requireNonNull;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -17,7 +13,7 @@ import seedu.address.model.person.Person;
 /**
  * Deletes one or more persons identified using their displayed indices from the address book.
  */
-public class DeleteCommand extends Command {
+public class DeleteCommand extends BatchCommand {
 
     public static final String COMMAND_WORD = "delete";
 
@@ -29,43 +25,26 @@ public class DeleteCommand extends Command {
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
     public static final String MESSAGE_DELETE_PERSONS_SUCCESS = "Deleted %1$d persons: %2$s";
 
-    private final List<Index> targetIndices;
-
     /**
      * Creates a DeleteCommand to delete persons at {@code targetIndices}.
      */
     public DeleteCommand(List<Index> targetIndices) {
-        requireNonNull(targetIndices);
-        this.targetIndices = new ArrayList<>(targetIndices);
+        super(targetIndices);
     }
 
     @Override
-    public CommandResult execute(Model model) throws CommandException {
-        requireNonNull(model);
-        List<Person> lastShownList = model.getFilteredPersonList();
-
-        for (Index index : targetIndices) {
-            if (index.getZeroBased() >= lastShownList.size()) {
-                throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-            }
-        }
-
-        List<Person> personsToDelete = new ArrayList<>();
-        for (Index index : targetIndices.stream().distinct().collect(java.util.stream.Collectors.toList())) {
-            personsToDelete.add(lastShownList.get(index.getZeroBased()));
-        }
-
-        for (Person person : personsToDelete) {
+    protected void executeBatch(List<Person> targetPersons, Model model) throws CommandException {
+        for (Person person : targetPersons) {
             model.deletePerson(person);
         }
+    }
 
-        if (personsToDelete.size() == 1) {
-            return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS,
-                    Messages.format(personsToDelete.get(0))));
+    @Override
+    protected String formatSuccessMessage(List<Person> processedPersons) {
+        if (processedPersons.size() == 1) {
+            return String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(processedPersons.get(0)));
         }
-        String names = personsToDelete.stream()
-                .map(p -> p.getName().toString()).collect(Collectors.joining(", "));
-        return new CommandResult(String.format(MESSAGE_DELETE_PERSONS_SUCCESS, personsToDelete.size(), names));
+        return String.format(MESSAGE_DELETE_PERSONS_SUCCESS, processedPersons.size(), joinNames(processedPersons));
     }
 
     @Override
@@ -77,18 +56,18 @@ public class DeleteCommand extends Command {
             return false;
         }
         DeleteCommand otherDeleteCommand = (DeleteCommand) other;
-        return targetIndices.equals(otherDeleteCommand.targetIndices);
+        return getTargetIndices().equals(otherDeleteCommand.getTargetIndices());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(targetIndices);
+        return Objects.hash(getTargetIndices());
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("targetIndices", targetIndices)
+                .add("targetIndices", getTargetIndices())
                 .toString();
     }
 }

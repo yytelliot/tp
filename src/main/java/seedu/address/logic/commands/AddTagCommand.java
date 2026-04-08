@@ -1,12 +1,11 @@
 package seedu.address.logic.commands;
 
-import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -37,6 +36,8 @@ public class AddTagCommand extends TagCommand {
     public static final String MESSAGE_TAG_ALREADY_EXISTS =
             "One or more specified tags already exist for this person.";
 
+    private final List<Person> updatedPersons = new ArrayList<>();
+
     /**
      * Creates an AddTagCommand to add tags to persons at {@code targetIndices}.
      */
@@ -45,26 +46,31 @@ public class AddTagCommand extends TagCommand {
     }
 
     @Override
-    public CommandResult execute(Model model) throws CommandException {
-        requireNonNull(model);
-        List<Person> personsToTag = getTargetPersons(model);
-
-        for (Person person : personsToTag) {
+    protected void checkPreconditions(List<Person> targetPersons) throws CommandException {
+        for (Person person : targetPersons) {
             if (person.getTags().stream().anyMatch(tag -> getTags().contains(tag))) {
                 throw new CommandException(MESSAGE_TAG_ALREADY_EXISTS);
             }
         }
+    }
 
-        for (Person person : personsToTag) {
+    @Override
+    protected void executeBatch(List<Person> targetPersons, Model model) {
+        updatedPersons.clear();
+        for (Person person : targetPersons) {
             model.addTagsToPerson(person, getTags());
+            updatedPersons.add(model.getFilteredPersonList().get(getDistinctTargetIndices()
+                    .get(updatedPersons.size()).getZeroBased()));
         }
+    }
 
-        if (personsToTag.size() == 1) {
-            return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(personsToTag.get(0))));
+
+    @Override
+    protected String formatSuccessMessage(List<Person> processedPersons) {
+        if (updatedPersons.size() == 1) {
+            return String.format(MESSAGE_SUCCESS, Messages.format(updatedPersons.get(0)));
         }
-        String names = personsToTag.stream()
-                .map(p -> p.getName().toString()).collect(Collectors.joining(", "));
-        return new CommandResult(String.format(MESSAGE_BATCH_SUCCESS, personsToTag.size(), names));
+        return String.format(MESSAGE_BATCH_SUCCESS, processedPersons.size(), joinNames(processedPersons));
     }
 
     @Override

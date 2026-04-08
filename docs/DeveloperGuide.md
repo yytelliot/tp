@@ -335,8 +335,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `*`      | disciplined tutor        | record my student's personality                                | know whether to bring my rattan cane                            |
 | `*`      | prideful tutor           | record my student's performance                                | measure improvement                                             |
 
-*{More to be added}*
-
 ### Use cases
 
 (For all use cases below, the **System** is the `OnlyTutors` and the **Actor** is the `tutor`, unless specified otherwise)
@@ -470,7 +468,76 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     Use case ends.
 
 
-*{More to be added}*
+**Use case 06: Mark a student's payment as paid**
+
+**Guarantees**
+* A student's payment status is set to paid if and only if the `INDEX` parameter is valid and the student is not already marked as paid.
+
+**MSS**
+1. Tutor enters the command to mark one or more students as paid.
+2. OnlyTutors updates the payment status of the specified student(s) to paid.
+3. OnlyTutors shows a confirmation message with the marked student(s).
+
+    Use case ends.
+
+**Extensions**
+* 1a. OnlyTutors detects a missing, invalid or non-integer index
+  * 1a1. OnlyTutors shows an error message.
+
+    Use case ends.
+
+* 2a. OnlyTutors detects that one or more students are already marked as paid
+  * 2a1. OnlyTutors shows an error message identifying the already-paid student(s).
+  * 2a2. No students are marked.
+
+    Use case ends.
+
+
+**Use case 07: Unmark a student's payment as unpaid**
+
+**Guarantees**
+* A student's payment status is set to unpaid if and only if the `INDEX` parameter is valid and the student is not already marked as unpaid.
+
+**MSS**
+1. Tutor enters the command to unmark one or more students as unpaid.
+2. OnlyTutors updates the payment status of the specified student(s) to unpaid.
+3. OnlyTutors shows a confirmation message with the unmarked student(s).
+
+    Use case ends.
+
+**Extensions**
+* 1a. OnlyTutors detects a missing, invalid or non-integer index
+  * 1a1. OnlyTutors shows an error message.
+
+    Use case ends.
+
+* 2a. OnlyTutors detects that one or more students are already marked as unpaid
+  * 2a1. OnlyTutors shows an error message identifying the already-unpaid student(s).
+  * 2a2. No students are unmarked.
+
+    Use case ends.
+
+
+**Use case 08: Clear all contacts with confirmation**
+
+**Guarantees**
+* All contacts are cleared if and only if the tutor confirms the action.
+
+**MSS**
+1. Tutor enters the `clear` command.
+2. OnlyTutors displays a confirmation prompt: `This will delete all contacts. Are you sure? [y/N]:`.
+3. Tutor enters `y`.
+4. OnlyTutors deletes all contacts and shows a success message.
+
+    Use case ends.
+
+**Extensions**
+* 3a. Tutor enters `n` or any input other than `y`
+  * 3a1. OnlyTutors aborts the clear and shows an aborted message.
+  * 3a2. No contacts are deleted.
+
+    Use case ends.
+
 
 ### Non-Functional Requirements
 
@@ -521,32 +588,195 @@ testers are expected to do more *exploratory* testing.
    1. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-1. _{ more test cases …​ }_
+### Adding a student
 
-### Deleting a person
+1. Adding a student with all required fields
 
-1. Deleting a person while all persons are being shown
+   1. Prerequisites: None.
 
-   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+   1. Test case: `add n/John Doe p/91234567 e/johnd@example.com a/311, Clementi Ave 2, #02-25 d/Monday st/10:00 et/12:00 r/50`<br>
+      Expected: Student is added to the list. Details of the added student shown in the status message.
+
+   1. Test case: `add n/John Doe p/91234567 e/johnd@example.com a/311, Clementi Ave 2, #02-25 d/Monday st/12:00 et/10:00 r/50`<br>
+      Expected: No student is added. Error details about invalid time range shown in the status message.
+
+   1. Other incorrect add commands to try: `add`, `add n/John` (missing required fields)<br>
+      Expected: No student is added. Error details shown in the status message.
+
+### Editing a student
+
+1. Editing a student's new fields (day, start time, end time, rate)
+
+   1. Prerequisites: List all students using the `list` command. At least one student in the list.
+
+   1. Test case: `edit 1 d/Tuesday st/14:00 et/16:00 r/60`<br>
+      Expected: First student's day, time, and rate are updated. Success message shown.
+
+   1. Test case: `edit 1 st/18:00` (when student 1's end time is 16:00)<br>
+      Expected: No change. Error message about invalid time range shown (start time must be before end time).
+
+### Deleting a student
+
+1. Deleting a student while all students are being shown
+
+   1. Prerequisites: List all students using the `list` command. Multiple students in the list.
 
    1. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+      Expected: First student is deleted from the list. Details of the deleted student shown in the status message.
+
+   1. Test case: `delete 1 2`<br>
+      Expected: First and second students are deleted. Count and names of deleted students shown in the status message.
 
    1. Test case: `delete 0`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+      Expected: No student is deleted. Error details shown in the status message. Status bar remains the same.
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+   1. Other incorrect delete commands to try: `delete`, `delete x` (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
-1. _{ more test cases …​ }_
+### Marking and unmarking payment status
+
+1. Marking a student as paid
+
+   1. Prerequisites: List all students using the `list` command. At least one student in the list with unpaid status.
+
+   1. Test case: `mark 1`<br>
+      Expected: First student is marked as paid. Success message with student name shown in the status message.
+
+   1. Test case: `mark 1 2` (when both students are unpaid)<br>
+      Expected: First and second students are marked as paid. Success message with count and names shown.
+
+   1. Test case: `mark 1` (when student 1 is already paid)<br>
+      Expected: No change. Error message with the student's index and name shown (e.g., `This student has already been marked as paid: (1) John Doe`).
+
+1. Unmarking a student as unpaid
+
+   1. Prerequisites: At least one student in the list with paid status.
+
+   1. Test case: `unmark 1`<br>
+      Expected: First student is marked as unpaid. Success message with student name shown.
+
+   1. Test case: `unmark 1 2` (when both students are paid)<br>
+      Expected: First and second students are marked as unpaid. Success message with count and names shown.
+
+   1. Test case: `unmark 1` (when student 1 is already unpaid)<br>
+      Expected: No change. Error message with the student's index and name shown (e.g., `This student has already been marked as unpaid: (1) John Doe`).
+
+### Clearing all entries
+
+1. Clearing the address book with confirmation
+
+   1. Prerequisites: At least one student in the list.
+
+   1. Test case: `clear`, then `y`<br>
+      Expected: First command shows confirmation prompt `This will delete all contacts. Are you sure? [y/N]:`. After entering `y`, all contacts are removed. Success message shown.
+
+   1. Test case: `clear`, then `n`<br>
+      Expected: First command shows confirmation prompt. After entering `n`, clear is aborted. No contacts are removed.
+
+   1. Test case: `clear`, then any other input (e.g., `hello`)<br>
+      Expected: First command shows confirmation prompt. Non-`y` input is treated as abort. No contacts are removed.
+
+### Managing tags
+
+1. Adding a tag to a student
+
+   1. Prerequisites: List all students using the `list` command. At least one student in the list.
+
+   1. Test case: `tag add 1 t/Math`<br>
+      Expected: Tag `math` is added to the first student. Success message shown.
+
+   1. Test case: `tag add 1 t/Math` (when student already has `math` tag)<br>
+      Expected: No change. Error message about duplicate tag shown.
+
+   1. Test case: `tag add 1 2 t/Science`<br>
+      Expected: Tag `science` is added to both students. Batch success message shown.
+
+1. Deleting a tag from a student
+
+   1. Prerequisites: At least one student with a tag in the list.
+
+   1. Test case: `tag delete 1 t/Math` (when student 1 has `math` tag)<br>
+      Expected: Tag `math` is removed. Success message shown.
+
+   1. Test case: `tag delete 1 t/Math` (when student 1 does not have `math` tag)<br>
+      Expected: No change. Error message shown.
+
+1. Finding students by tag
+
+   1. Prerequisites: At least one student with a tag in the list.
+
+   1. Test case: `tag find t/Math`<br>
+      Expected: All students with the `math` tag are listed. Count shown in status message.
+
+   1. Test case: `tag find t/NonExistentTag`<br>
+      Expected: No students listed. Message indicating no students found shown.
 
 ### Saving data
 
-1. Dealing with missing/corrupted data files
+1. Dealing with missing data file
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+   1. Delete the `data/onlytutors.json` file if it exists.
 
-1. _{ more test cases …​ }_
+   1. Launch the app.<br>
+      Expected: App starts with a set of sample student data.
+
+1. Dealing with corrupted data file
+
+   1. Open `data/onlytutors.json` and introduce invalid content (e.g., delete a required field or add invalid characters).
+
+   1. Launch the app.<br>
+      Expected: App starts with an empty student list. A warning may be logged.
+
+--------------------------------------------------------------------------------------------------------------------
+
+## **Appendix: Effort**
+
+### Overview
+
+OnlyTutors is a brownfield project adapted from AddressBook Level 3 (AB3). The team invested significant effort to transform a generic contact management app into a purpose-built tutor management tool for private tutors.
+
+### Difficulty Level
+
+The project was of **moderate-to-high** difficulty. The team had to:
+- Understand and navigate the existing AB3 codebase before making changes
+- Maintain backward compatibility with existing AB3 features while adding new ones
+- Ensure all new features were well-integrated with the existing architecture (Logic, Model, Storage, UI)
+
+### Features Implemented
+
+The following features were added beyond AB3:
+
+| Feature | Description |
+|---------|-------------|
+| **New Person Fields** | Added `Day`, `StartTime`, `EndTime`, `Rate`, and `isPaid` fields to the `Person` model, requiring updates to the parser, storage (JSON), UI card, and sample data |
+| **Mark / Unmark** | Commands to toggle a student's payment status, with batch support (multiple indices) |
+| **Tag Commands** | `tag add`, `tag delete`, and `tag find` subcommands for flexible tag management, using a subcommand-based parsing architecture |
+| **Batch Delete** | Extended `delete` to accept multiple indices in a single command |
+| **Clear Confirmation** | Added a two-step confirmation flow for the `clear` command to prevent accidental data loss |
+
+### Effort Relative to AB3
+
+Compared to AB3, the team estimates the effort required was approximately **1.5–2x** that of AB3, due to:
+
+- **Model expansion**: Adding 5 new fields to `Person` required coordinated changes across all four components (UI, Logic, Model, Storage). Each field needed validation, serialization, and display logic.
+- **Subcommand architecture**: The `tag` command family introduced a new subcommand-based parsing pattern (`tag add`, `tag delete`, `tag find`) not present in AB3, requiring a new `TagCommand` base class and corresponding parsers.
+- **Batch operations**: Extending `delete`, `mark`, and `unmark` to handle multiple indices introduced complexity around partial-failure handling and error messaging.
+- **Payment status flow**: The `mark`/`unmark` feature required careful handling of state transitions, duplicate index prevention, and informative error feedback.
+
+### Reuse
+
+A significant portion of effort was saved by building on top of AB3:
+- AB3's four-component architecture (UI, Logic, Model, Storage) was reused as-is, eliminating the need to design the base structure from scratch.
+- AB3's existing command infrastructure (parsers, `Command`, `CommandResult`, `Model` interface) was reused and extended rather than replaced.
+- AB3's test utilities (`TypicalPersons`, `PersonBuilder`, `CommandTestUtil`) were reused and extended to support new fields.
+
+This reuse is estimated to have saved roughly 30–40% of total effort, allowing the team to focus on domain-specific features rather than boilerplate.
+
+### Challenges Faced
+=======
+- **Time validation**: Ensuring `StartTime < EndTime` across both `add` and `edit` flows required cross-field validation that AB3's single-field validation pattern did not accommodate.
+- **Tag casing**: Handling case-insensitive tag matching while preserving display casing required careful design decisions.
+- **Confirmation flow for Clear**: Implementing a stateful confirmation step required changes to the parser to handle a two-step command sequence.
 
 ## **Appendix: Planned Enhancements**
 
@@ -560,4 +790,3 @@ details or be blocked by duplicate detection.
    same.
    * Planned behavior: Duplication-checking logic should allow multiple entries with the same phone number and name, 
    provided that the lesson day or time differs.
-

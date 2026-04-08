@@ -1,12 +1,11 @@
 package seedu.address.logic.commands;
 
-import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -38,6 +37,8 @@ public class DeleteTagCommand extends TagCommand {
     public static final String MESSAGE_BATCH_SUCCESS = "Tag(s) removed from %1$d persons: %2$s";
     public static final String MESSAGE_TAG_NOT_FOUND = "One or more specified tags do not exist for this person.";
 
+    private final List<Person> updatedPersons = new ArrayList<>();
+
     /**
      * Creates a DeleteTagCommand to remove tags from persons at {@code targetIndices}.
      */
@@ -46,26 +47,30 @@ public class DeleteTagCommand extends TagCommand {
     }
 
     @Override
-    public CommandResult execute(Model model) throws CommandException {
-        requireNonNull(model);
-        List<Person> personsToUpdate = getTargetPersons(model);
-
-        for (Person person : personsToUpdate) {
+    protected void checkPreconditions(List<Person> targetPersons) throws CommandException {
+        for (Person person : targetPersons) {
             if (!person.getTags().containsAll(getTags())) {
                 throw new CommandException(MESSAGE_TAG_NOT_FOUND);
             }
         }
+    }
 
-        for (Person person : personsToUpdate) {
+    @Override
+    protected void executeBatch(List<Person> targetPersons, Model model) {
+        updatedPersons.clear();
+        for (Person person : targetPersons) {
             model.deleteTagsFromPerson(person, getTags());
+            updatedPersons.add(model.getFilteredPersonList().get(getDistinctTargetIndices()
+                    .get(updatedPersons.size()).getZeroBased()));
         }
+    }
 
-        if (personsToUpdate.size() == 1) {
-            return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(personsToUpdate.get(0))));
+    @Override
+    protected String formatSuccessMessage(List<Person> processedPersons) {
+        if (updatedPersons.size() == 1) {
+            return String.format(MESSAGE_SUCCESS, Messages.format(updatedPersons.get(0)));
         }
-        String names = personsToUpdate.stream()
-                .map(p -> p.getName().toString()).collect(Collectors.joining(", "));
-        return new CommandResult(String.format(MESSAGE_BATCH_SUCCESS, personsToUpdate.size(), names));
+        return String.format(MESSAGE_BATCH_SUCCESS, processedPersons.size(), joinNames(processedPersons));
     }
 
     @Override

@@ -35,10 +35,10 @@ public class DeleteTagCommandTest {
         Set<Tag> tagsToDelete = Set.of(new Tag("friends"));
         DeleteTagCommand deleteTagCommand = new DeleteTagCommand(List.of(INDEX_FIRST_PERSON), tagsToDelete);
 
-        String expectedMessage = String.format(DeleteTagCommand.MESSAGE_SUCCESS, Messages.format(personToUpdate));
-
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deleteTagsFromPerson(personToUpdate, tagsToDelete);
+        Person updatedPerson = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        String expectedMessage = String.format(DeleteTagCommand.MESSAGE_SUCCESS, Messages.format(updatedPerson));
 
         assertCommandSuccess(deleteTagCommand, model, expectedMessage, expectedModel);
     }

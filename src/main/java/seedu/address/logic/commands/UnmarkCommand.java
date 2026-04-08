@@ -1,11 +1,8 @@
 package seedu.address.logic.commands;
 
-import static java.util.Objects.requireNonNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -17,7 +14,7 @@ import seedu.address.model.person.Person;
 /**
  * Marks one or more students' payment status as unpaid.
  */
-public class UnmarkCommand extends Command {
+public class UnmarkCommand extends BatchCommand {
 
     public static final String COMMAND_WORD = "unmark";
 
@@ -33,35 +30,22 @@ public class UnmarkCommand extends Command {
     public static final String MESSAGE_ALREADY_UNPAID_PLURAL =
             "These students have already been marked as unpaid: %1$s";
 
-    private final List<Index> targetIndices;
-
     /**
      * Creates an UnmarkCommand to mark the persons at {@code targetIndices} as unpaid.
      */
     public UnmarkCommand(List<Index> targetIndices) {
-        requireNonNull(targetIndices);
-        this.targetIndices = new ArrayList<>(targetIndices);
+        super(targetIndices);
     }
 
     @Override
-    public CommandResult execute(Model model) throws CommandException {
-        requireNonNull(model);
-        List<Person> lastShownList = model.getFilteredPersonList();
-
-        for (Index index : targetIndices) {
-            if (index.getZeroBased() >= lastShownList.size()) {
-                throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-            }
-        }
-
-        List<Person> personsToUnmark = new ArrayList<>();
+    protected void checkPreconditions(List<Person> targetPersons) throws CommandException {
+        List<Index> distinctTargetIndices = getDistinctTargetIndices();
         List<String> alreadyUnpaidNames = new ArrayList<>();
-        for (Index index : targetIndices.stream().distinct().collect(java.util.stream.Collectors.toList())) {
-            Person person = lastShownList.get(index.getZeroBased());
+        for (int i = 0; i < targetPersons.size(); i++) {
+            Person person = targetPersons.get(i);
             if (!person.isPaid()) {
-                alreadyUnpaidNames.add("(" + (index.getOneBased()) + ") " + person.getName());
-            } else {
-                personsToUnmark.add(person);
+                Index index = distinctTargetIndices.get(i);
+                alreadyUnpaidNames.add("(" + index.getOneBased() + ") " + person.getName());
             }
         }
         if (!alreadyUnpaidNames.isEmpty()) {
@@ -71,24 +55,26 @@ public class UnmarkCommand extends Command {
                     : String.format(MESSAGE_ALREADY_UNPAID_PLURAL, names);
             throw new CommandException(message);
         }
+    }
 
-        List<Person> unmarkedPersons = new ArrayList<>();
-        for (Person personToUnmark : personsToUnmark) {
+    @Override
+    protected void executeBatch(List<Person> targetPersons, Model model) {
+        for (Person targetPerson : targetPersons) {
+            boolean isPaid = false;
             Person unmarkedPerson = new Person(
-                    personToUnmark.getName(), personToUnmark.getPhone(), personToUnmark.getEmail(),
-                    personToUnmark.getAddress(), personToUnmark.getDay(), personToUnmark.getStartTime(),
-                    personToUnmark.getEndTime(), personToUnmark.getRate(), false, personToUnmark.getTags());
-            model.setPerson(personToUnmark, unmarkedPerson);
-            unmarkedPersons.add(unmarkedPerson);
+                    targetPerson.getName(), targetPerson.getPhone(), targetPerson.getEmail(),
+                    targetPerson.getAddress(), targetPerson.getDay(), targetPerson.getStartTime(),
+                    targetPerson.getEndTime(), targetPerson.getRate(), isPaid, targetPerson.getTags());
+            model.setPerson(targetPerson, unmarkedPerson);
         }
+    }
 
-        if (unmarkedPersons.size() == 1) {
-            return new CommandResult(String.format(MESSAGE_UNMARK_PERSON_SUCCESS,
-                    Messages.format(unmarkedPersons.get(0))));
+    @Override
+    protected String formatSuccessMessage(List<Person> processedPersons) {
+        if (processedPersons.size() == 1) {
+            return String.format(MESSAGE_UNMARK_PERSON_SUCCESS, Messages.format(processedPersons.get(0)));
         }
-        String names = unmarkedPersons.stream()
-                .map(p -> p.getName().toString()).collect(Collectors.joining(", "));
-        return new CommandResult(String.format(MESSAGE_UNMARK_PERSONS_SUCCESS, unmarkedPersons.size(), names));
+        return String.format(MESSAGE_UNMARK_PERSONS_SUCCESS, processedPersons.size(), joinNames(processedPersons));
     }
 
     @Override
@@ -100,18 +86,18 @@ public class UnmarkCommand extends Command {
             return false;
         }
         UnmarkCommand otherUnmarkCommand = (UnmarkCommand) other;
-        return targetIndices.equals(otherUnmarkCommand.targetIndices);
+        return getTargetIndices().equals(otherUnmarkCommand.getTargetIndices());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(targetIndices);
+        return Objects.hash(getTargetIndices());
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("targetIndices", targetIndices)
+                .add("targetIndices", getTargetIndices())
                 .toString();
     }
 }

@@ -35,10 +35,10 @@ public class AddTagCommandTest {
         Set<Tag> tagsToAdd = Set.of(new Tag("classmate"));
         AddTagCommand addTagCommand = new AddTagCommand(List.of(INDEX_FIRST_PERSON), tagsToAdd);
 
-        String expectedMessage = String.format(AddTagCommand.MESSAGE_SUCCESS, Messages.format(personToTag));
-
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.addTagsToPerson(personToTag, tagsToAdd);
+        Person updatedPerson = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        String expectedMessage = String.format(AddTagCommand.MESSAGE_SUCCESS, Messages.format(updatedPerson));
 
         assertCommandSuccess(addTagCommand, model, expectedMessage, expectedModel);
     }
