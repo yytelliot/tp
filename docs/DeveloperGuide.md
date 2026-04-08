@@ -547,3 +547,17 @@ testers are expected to do more *exploratory* testing.
    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
 
 1. _{ more test cases …​ }_
+
+## **Appendix: Planned Enhancements**
+
+Team size: 5
+
+1. **Support multiple lessons per student:** Currently, each student can only have lessons once per week. Each student 
+is represented by a single entry with one lesson day and time. In practice, tutors often teach the same student multiple
+times per week. The current implementation does not support this, forcing users to either overwrite existing lesson 
+details or be blocked by duplicate detection.
+   * Current  behaviour: Duplication-checking logic marks entries as duplicate if the phone number and name are the 
+   same.
+   * Planned behaviour: Duplication-checking logic should allow multiple entries with the same phone number and name, 
+   provided that the lesson day or time differs.
+
