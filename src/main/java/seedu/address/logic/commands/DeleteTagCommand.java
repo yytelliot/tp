@@ -3,13 +3,13 @@ package seedu.address.logic.commands;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
@@ -33,11 +33,13 @@ public class DeleteTagCommand extends TagCommand {
             + PREFIX_TAG + "Primary1 "
             + PREFIX_TAG + "Mathematics";
 
-    public static final String MESSAGE_SUCCESS = "Tag(s) removed from person: %1$s";
-    public static final String MESSAGE_BATCH_SUCCESS = "Tag(s) removed from %1$d persons: %2$s";
-    public static final String MESSAGE_TAG_NOT_FOUND = "One or more specified tags do not exist for this person.";
+    public static final String MESSAGE_SUCCESS = "Deleted tags (%1$s) from student: %2$s";
+    public static final String MESSAGE_BATCH_SUCCESS = "Deleted tags from students: %1$s";
+    public static final String MESSAGE_TAG_NOT_FOUND =
+            "No students were updated because none have the specified tags.";
 
-    private final List<Person> updatedPersons = new ArrayList<>();
+    private final List<Person> affectedPersons = new ArrayList<>();
+    private final List<Set<Tag>> tagsDeletedByPerson = new ArrayList<>();
 
     /**
      * Creates a DeleteTagCommand to remove tags from persons at {@code targetIndices}.
@@ -48,29 +50,40 @@ public class DeleteTagCommand extends TagCommand {
 
     @Override
     protected void checkPreconditions(List<Person> targetPersons) throws CommandException {
-        for (Person person : targetPersons) {
-            if (!person.getTags().containsAll(getTags())) {
-                throw new CommandException(MESSAGE_TAG_NOT_FOUND);
+        affectedPersons.clear();
+        tagsDeletedByPerson.clear();
+        Set<Tag> requestedTags = getTags();
+
+        for (int i = 0; i < targetPersons.size(); i++) {
+            Person person = targetPersons.get(i);
+            Set<Tag> tagsToDelete = new HashSet<>(person.getTags());
+            tagsToDelete.retainAll(requestedTags);
+
+            if (!tagsToDelete.isEmpty()) {
+                affectedPersons.add(person);
+                tagsDeletedByPerson.add(tagsToDelete);
             }
+        }
+
+        if (affectedPersons.isEmpty()) {
+            throw new CommandException(MESSAGE_TAG_NOT_FOUND);
         }
     }
 
     @Override
     protected void executeBatch(List<Person> targetPersons, Model model) {
-        updatedPersons.clear();
-        for (Person person : targetPersons) {
-            model.deleteTagsFromPerson(person, getTags());
-            updatedPersons.add(model.getFilteredPersonList().get(getDistinctTargetIndices()
-                    .get(updatedPersons.size()).getZeroBased()));
+        for (int i = 0; i < affectedPersons.size(); i++) {
+            model.deleteTagsFromPerson(affectedPersons.get(i), tagsDeletedByPerson.get(i));
         }
     }
 
     @Override
     protected String formatSuccessMessage(List<Person> processedPersons) {
-        if (updatedPersons.size() == 1) {
-            return String.format(MESSAGE_SUCCESS, Messages.format(updatedPersons.get(0)));
+        if (affectedPersons.size() == 1) {
+            return String.format(MESSAGE_SUCCESS,
+                    formatTags(tagsDeletedByPerson.get(0)), affectedPersons.get(0).getName());
         }
-        return String.format(MESSAGE_BATCH_SUCCESS, processedPersons.size(), joinNames(processedPersons));
+        return String.format(MESSAGE_BATCH_SUCCESS, formatPersonTagChanges(affectedPersons, tagsDeletedByPerson));
     }
 
     @Override

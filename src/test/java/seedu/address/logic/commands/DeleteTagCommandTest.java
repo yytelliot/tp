@@ -7,6 +7,7 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
+import static seedu.address.testutil.TypicalIndexes.INDEX_THIRD_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.List;
@@ -38,7 +39,53 @@ public class DeleteTagCommandTest {
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deleteTagsFromPerson(personToUpdate, tagsToDelete);
         Person updatedPerson = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        String expectedMessage = String.format(DeleteTagCommand.MESSAGE_SUCCESS, Messages.format(updatedPerson));
+        String expectedMessage = String.format(DeleteTagCommand.MESSAGE_SUCCESS, "friends", updatedPerson.getName());
+
+        assertCommandSuccess(deleteTagCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_someSelectedPersonsDoNotHaveTags_updatesOnlyAffectedPersons() {
+        Set<Tag> tagsToDelete = Set.of(new Tag("friends"));
+        DeleteTagCommand deleteTagCommand = new DeleteTagCommand(List.of(INDEX_FIRST_PERSON, INDEX_THIRD_PERSON),
+                tagsToDelete);
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        Person firstPerson = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        expectedModel.deleteTagsFromPerson(firstPerson, tagsToDelete);
+        Person updatedPerson = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        String expectedMessage = String.format(DeleteTagCommand.MESSAGE_SUCCESS, "friends", updatedPerson.getName());
+
+        assertCommandSuccess(deleteTagCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_someSpecifiedTagsDoNotExist_deletesRemainingTags() {
+        Person personToUpdate = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Set<Tag> tagsToDelete = Set.of(new Tag("friends"), new Tag("classmate"));
+        DeleteTagCommand deleteTagCommand = new DeleteTagCommand(List.of(INDEX_FIRST_PERSON), tagsToDelete);
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.deleteTagsFromPerson(personToUpdate, tagsToDelete);
+        Person updatedPerson = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        String expectedMessage = String.format(DeleteTagCommand.MESSAGE_SUCCESS, "friends", updatedPerson.getName());
+
+        assertCommandSuccess(deleteTagCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_multipleAffectedPersons_showsPreciseBatchMessage() {
+        Set<Tag> tagsToDelete = Set.of(new Tag("friends"));
+        DeleteTagCommand deleteTagCommand = new DeleteTagCommand(List.of(INDEX_FIRST_PERSON, INDEX_SECOND_PERSON),
+                tagsToDelete);
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        Person firstPerson = expectedModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person secondPerson = expectedModel.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
+        expectedModel.deleteTagsFromPerson(firstPerson, tagsToDelete);
+        expectedModel.deleteTagsFromPerson(secondPerson, tagsToDelete);
+        String expectedMessage = String.format(DeleteTagCommand.MESSAGE_BATCH_SUCCESS,
+                "Alice Pauline (friends); Benson Meier (friends)");
 
         assertCommandSuccess(deleteTagCommand, model, expectedMessage, expectedModel);
     }

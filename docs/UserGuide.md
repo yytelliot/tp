@@ -448,7 +448,8 @@ Adds one or more tags to a student **without replacing** existing tags.
 * The index **must be a positive integer** (1, 2, 3, …).
 * At least one tag must be provided.
 * Tags are alphanumeric only (no spaces) and are stored in lowercase.
-* If any of the specified tags already exist on a student, the command will fail and none of the tags will be added.
+* The command updates every selected student who is missing at least one of the specified tags.
+* The command fails only if it would not change any selected student.
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 You can tag multiple students at once by specifying multiple indices. e.g. `tag add 1 2 3 t/math` adds the `math` tag to the 1st, 2nd, and 3rd students.
@@ -460,10 +461,13 @@ You can tag multiple students at once by specifying multiple indices. e.g. `tag 
 |---------|-------------|
 | `tag add 1 t/math` | Adds the tag `math` to the 1st student |
 | `tag add 2 t/primary3 t/science` | Adds tags `primary3` and `science` to the 2nd student |
-| `tag add 1 2 3 t/math` | Adds the tag `math` to the 1st, 2nd, and 3rd students |
+| `tag add 1 2 3 t/math` | Adds the tag `math` to the 1st, 2nd, and 3rd students if they do not have it |
 
 **Expected output** (on success):
-> `Tag(s) added to person: John Doe; Phone: ...`
+> `Added tags math to student: John Doe`
+
+**Expected output** (on batch success):
+> `Added tags to students: John Doe (math); Jane Doe (science)`
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -478,7 +482,8 @@ Removes one or more tags from a student.
 * Removes the specified tag(s) from the student(s) at the specified `INDEX`(es).
 * The index **must be a positive integer** (1, 2, 3, …).
 * At least one tag must be provided.
-* If any of the specified tags do not exist on a student, the command will fail and none of the tags will be deleted.
+* The command updates every selected student who has at least one of the specified tags.
+* The command fails if it would not change any selected student.
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 You can remove tags from multiple students at once by specifying multiple indices. e.g. `tag delete 1 2 3 t/math` removes the `math` tag from the 1st, 2nd, and 3rd students.
@@ -490,10 +495,13 @@ You can remove tags from multiple students at once by specifying multiple indice
 |---------|-------------|
 | `tag delete 1 t/math` | Removes the tag `math` from the 1st student |
 | `tag delete 2 t/primary3 t/science` | Removes tags `primary3` and `science` from the 2nd student |
-| `tag delete 1 2 3 t/math` | Removes the `math` tag from the 1st, 2nd, and 3rd students |
+| `tag delete 1 2 3 t/math` | Removes the `math` tag from the 1st, 2nd, and 3rd students if they have it|
 
 **Expected output** (on success):
-> `Tag(s) removed from person: John Doe; Phone: ...`
+> `Deleted tags math from student: John Doe`
+
+**Expected output** (on batch success):
+> `Deleted tags from students: John Doe (math); Jane Doe (science)`
 
 --------------------------------------------------------------------------------------------------------------------
 

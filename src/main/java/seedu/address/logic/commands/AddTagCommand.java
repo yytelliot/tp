@@ -3,13 +3,13 @@ package seedu.address.logic.commands;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
@@ -31,12 +31,13 @@ public class AddTagCommand extends TagCommand {
             + PREFIX_TAG + "Primary1 "
             + PREFIX_TAG + "Mathematics";
 
-    public static final String MESSAGE_SUCCESS = "Tag(s) added to person: %1$s";
-    public static final String MESSAGE_BATCH_SUCCESS = "Tag(s) added to %1$d persons: %2$s";
+    public static final String MESSAGE_SUCCESS = "Added tags (%1$s) to student: %2$s";
+    public static final String MESSAGE_BATCH_SUCCESS = "Added tags to students: %1$s";
     public static final String MESSAGE_TAG_ALREADY_EXISTS =
-            "One or more specified tags already exist for this person.";
+            "No students were updated because all specified tags already exist.";
 
-    private final List<Person> updatedPersons = new ArrayList<>();
+    private final List<Person> affectedPersons = new ArrayList<>();
+    private final List<Set<Tag>> tagsAddedByPerson = new ArrayList<>();
 
     /**
      * Creates an AddTagCommand to add tags to persons at {@code targetIndices}.
@@ -47,30 +48,41 @@ public class AddTagCommand extends TagCommand {
 
     @Override
     protected void checkPreconditions(List<Person> targetPersons) throws CommandException {
-        for (Person person : targetPersons) {
-            if (person.getTags().stream().anyMatch(tag -> getTags().contains(tag))) {
-                throw new CommandException(MESSAGE_TAG_ALREADY_EXISTS);
+        affectedPersons.clear();
+        tagsAddedByPerson.clear();
+        Set<Tag> requestedTags = getTags();
+
+        for (int i = 0; i < targetPersons.size(); i++) {
+            Person person = targetPersons.get(i);
+            Set<Tag> tagsToAdd = new HashSet<>(requestedTags);
+            tagsToAdd.removeAll(person.getTags());
+
+            if (!tagsToAdd.isEmpty()) {
+                affectedPersons.add(person);
+                tagsAddedByPerson.add(tagsToAdd);
             }
+        }
+
+        if (affectedPersons.isEmpty()) {
+            throw new CommandException(MESSAGE_TAG_ALREADY_EXISTS);
         }
     }
 
     @Override
     protected void executeBatch(List<Person> targetPersons, Model model) {
-        updatedPersons.clear();
-        for (Person person : targetPersons) {
-            model.addTagsToPerson(person, getTags());
-            updatedPersons.add(model.getFilteredPersonList().get(getDistinctTargetIndices()
-                    .get(updatedPersons.size()).getZeroBased()));
+        for (int i = 0; i < affectedPersons.size(); i++) {
+            model.addTagsToPerson(affectedPersons.get(i), tagsAddedByPerson.get(i));
         }
     }
 
 
     @Override
     protected String formatSuccessMessage(List<Person> processedPersons) {
-        if (updatedPersons.size() == 1) {
-            return String.format(MESSAGE_SUCCESS, Messages.format(updatedPersons.get(0)));
+        if (affectedPersons.size() == 1) {
+            return String.format(MESSAGE_SUCCESS,
+                    formatTags(tagsAddedByPerson.get(0)), affectedPersons.get(0).getName());
         }
-        return String.format(MESSAGE_BATCH_SUCCESS, processedPersons.size(), joinNames(processedPersons));
+        return String.format(MESSAGE_BATCH_SUCCESS, formatPersonTagChanges(affectedPersons, tagsAddedByPerson));
     }
 
     @Override
