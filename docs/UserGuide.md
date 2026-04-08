@@ -569,7 +569,9 @@ This deletes **all** student data and cannot be undone. Use with caution.
 </div>
 
 **Expected output:**
-> `Address book has been cleared!`
+> This will delete all contacts. Are you sure? [y/N]: (after entering clear)
+>
+> Cleared all contacts. (after entering y or Y)
 
 --------------------------------------------------------------------------------------------------------------------
 
