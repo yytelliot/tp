@@ -788,7 +788,20 @@ A significant portion of effort was saved by building on top of AB3:
 This reuse is estimated to have saved roughly 30–40% of total effort, allowing the team to focus on domain-specific features rather than boilerplate.
 
 ### Challenges Faced
-
+=======
 - **Time validation**: Ensuring `StartTime < EndTime` across both `add` and `edit` flows required cross-field validation that AB3's single-field validation pattern did not accommodate.
 - **Tag casing**: Handling case-insensitive tag matching while preserving display casing required careful design decisions.
 - **Confirmation flow for Clear**: Implementing a stateful confirmation step required changes to the parser to handle a two-step command sequence.
+
+## **Appendix: Planned Enhancements**
+
+Team size: 5
+
+1. **Support multiple lessons per student:** Currently, each student can only have lessons once per week. Each student 
+is represented by a single entry with one lesson day and time. In practice, tutors often teach the same student multiple
+times per week. The current implementation does not support this, forcing users to either overwrite existing lesson 
+details or be blocked by duplicate detection.
+   * Current behavior: Duplication-checking logic marks entries as duplicate if the phone number and name are the 
+   same.
+   * Planned behavior: Duplication-checking logic should allow multiple entries with the same phone number and name, 
+   provided that the lesson day or time differs.
