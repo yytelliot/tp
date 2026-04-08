@@ -75,7 +75,7 @@ public class CommandTestUtil {
     public static final String INVALID_EMAIL_DESC = " " + PREFIX_EMAIL + "bob!yahoo"; // missing '@' symbol
     public static final String INVALID_ADDRESS_DESC = " " + PREFIX_ADDRESS; // empty string not allowed for addresses
     public static final String INVALID_TAG_DESC =
-            " " + PREFIX_TAG + "sandronecolumbinagenshinimpact"; // 20 characters max
+            " " + PREFIX_TAG + "sandronecolumbinagenshinimpact"; // exceeds 20 characters
     public static final String INVALID_DAY_DESC = " " + PREFIX_DAY + "Funday"; // not a valid day of the week
     public static final String INVALID_START_TIME_DESC = " " + PREFIX_START + "3 pm"; // not in HH:mm format
     public static final String INVALID_END_TIME_DESC = " " + PREFIX_END + "25:00"; // not a valid time
