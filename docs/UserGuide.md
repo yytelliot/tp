@@ -447,7 +447,7 @@ Adds one or more tags to a student **without replacing** existing tags.
 * Adds the specified tag(s) to the student(s) at the specified `INDEX`(es).
 * The index **must be a positive integer** (1, 2, 3, …).
 * At least one tag must be provided.
-* Tags are alphanumeric only (no spaces) and are stored in lowercase.
+* Tags can contain any characters but must not be empty and cannot have more than 20 characters.
 * The command updates every selected student who is missing at least one of the specified tags.
 * The command fails only if it would not change any selected student.
 
@@ -457,11 +457,11 @@ You can tag multiple students at once by specifying multiple indices. e.g. `tag 
 
 **Examples:**
 
-| Command                           | What it does                                                                 |
-|-----------------------------------|------------------------------------------------------------------------------|
-| `tag add 1 t/Math`                | Adds the tag `Math` to the 1st student                                       |
-| `tag add 2 t/Primary 3 t/Science` | Adds tags `Primary 3` and `Science` to the 2nd student                       |
-| `tag add 1 2 3 t/Math`            | Adds the tag `Math` to the 1st, 2nd, and 3rd students if they do not have it |
+| Command                           | What it does                                                                  |
+|-----------------------------------|-------------------------------------------------------------------------------|
+| `tag add 1 t/Math`                | Adds the tag `Math` to the 1st student                                        |
+| `tag add 2 t/Primary 3 t/Science` | Adds tags `Primary 3` and `Science` to the 2nd student                        |
+| `tag add 1 2 3 t/Econ$`           | Adds the tag `Econ$` to the 1st, 2nd, and 3rd students if they do not have it |
 
 **Expected output** (on success):
 > `Added tags (Math) to student: John Doe`
@@ -491,11 +491,11 @@ You can remove tags from multiple students at once by specifying multiple indice
 
 **Examples:**
 
-| Command                              | What it does                                                               |
-|--------------------------------------|----------------------------------------------------------------------------|
-| `tag delete 1 t/Math`                | Removes the tag `Math` from the 1st student                                |
-| `tag delete 2 t/Primary 3 t/Science` | Removes tags `Primary 3` and `Science` from the 2nd student                |
-| `tag delete 1 2 3 t/Math`            | Removes the `Math` tag from the 1st, 2nd, and 3rd students if they have it |
+| Command                              | What it does                                                                |
+|--------------------------------------|-----------------------------------------------------------------------------|
+| `tag delete 1 t/Math`                | Removes the tag `Math` from the 1st student                                 |
+| `tag delete 2 t/Primary 3 t/Science` | Removes tags `Primary 3` and `Science` from the 2nd student                 |
+| `tag delete 1 2 3 t/Econ$`           | Removes the `Econ$` tag from the 1st, 2nd, and 3rd students if they have it |
 
 **Expected output** (on success):
 > `Deleted tags (Math) from student: John Doe`

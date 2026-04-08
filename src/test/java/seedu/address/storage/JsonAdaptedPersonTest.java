@@ -25,7 +25,7 @@ public class JsonAdaptedPersonTest {
     private static final String INVALID_PHONE = "+651234";
     private static final String INVALID_ADDRESS = " ";
     private static final String INVALID_EMAIL = "example.com";
-    private static final String INVALID_TAG = "#friend";
+    private static final String INVALID_TAG = "";
     private static final String INVALID_DAY = "Weekends";
     private static final String INVALID_START_TIME = "6pm";
     private static final String INVALID_END_TIME = "24:00";
