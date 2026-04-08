@@ -36,11 +36,18 @@ class TagsContainKeywordsPredicateTest {
     }
 
     @Test
-    void test_singleKeywordPartialMatch() {
-        // "math" should match tag "mathematics"
+    void test_singleKeywordPartialMatch_noMatch() {
         TagsContainKeywordsPredicate predicate =
             new TagsContainKeywordsPredicate(Collections.singletonList("math"));
         Person person = new PersonBuilder().withTags("mathematics").build();
+        assertFalse(predicate.test(person));
+    }
+
+    @Test
+    void test_singleKeywordCaseInsensitiveExactMatch() {
+        TagsContainKeywordsPredicate predicate =
+            new TagsContainKeywordsPredicate(Collections.singletonList("FrIeNdS"));
+        Person person = new PersonBuilder().withTags("friends").build();
         assertTrue(predicate.test(person));
     }
 

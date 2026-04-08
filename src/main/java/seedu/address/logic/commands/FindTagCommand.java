@@ -10,8 +10,8 @@ import seedu.address.model.Model;
 import seedu.address.model.person.TagsContainKeywordsPredicate;
 
 /**
- * Finds and lists all tags in address book that match the argument keyword.
- * Keyword matching is case insensitive.
+ * Finds and lists all persons in the address book whose tags exactly match the supplied tag keywords.
+ * Tag matching is case insensitive.
  */
 public class FindTagCommand extends Command {
     public static final String MESSAGE_TAG_NOT_FOUND = "No persons found with the specified tag(s).";
@@ -19,8 +19,8 @@ public class FindTagCommand extends Command {
     public static final String SUBCOMMAND_WORD = "find";
     public static final String COMMAND_PHRASE = TagCommand.COMMAND_WORD + " " + SUBCOMMAND_WORD;
 
-    public static final String MESSAGE_USAGE = COMMAND_PHRASE + ": Finds all tags that match the specified keyword "
-            + "(case-insensitive) and displays them as a list with index numbers.\n"
+    public static final String MESSAGE_USAGE = COMMAND_PHRASE + ": Finds all persons whose tags exactly match the "
+            + "specified tag keyword(s) (case-insensitive) and displays them as a list with index numbers.\n"
             + "Parameters: "
             + PREFIX_TAG + "TAG (must be a non-empty string)\n"
             + "Example: " + COMMAND_PHRASE + " " + PREFIX_TAG + "important";
