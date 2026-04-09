@@ -10,7 +10,15 @@ title: Developer Guide
 
 ## **Acknowledgements**
 
-* {list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
+* This project is based on the [AddressBook-Level3 (AB3)](https://github.com/se-edu/addressbook-level3) project developed by the [SE-EDU initiative](https://se-education.org).
+
+* The UI is built using JavaFX.
+
+* Diagrams in this document are created using PlantUML.
+
+* Testing is supported using JUnit.
+
+* Data is stored in JSON format using Jackson.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -709,3 +717,40 @@ This reuse is estimated to have saved roughly 30–40% of total effort, allowing
 - **Time validation**: Ensuring `StartTime < EndTime` across both `add` and `edit` flows required cross-field validation that AB3's single-field validation pattern did not accommodate.
 - **Tag casing**: Handling case-insensitive tag matching while preserving display casing required careful design decisions.
 - **Confirmation flow for Clear**: Implementing a stateful confirmation step required changes to the parser to handle a two-step command sequence.
+
+## **Appendix: Planned Enhancements**
+
+Team size: 5
+
+1. **Support multiple lessons per student:** Currently, each student can only have lessons once per week. Each student
+   is represented by a single entry with one lesson day and time. In practice, tutors often teach the same student multiple
+   times per week. The current implementation does not support this, forcing users to either overwrite existing lesson
+   details or be blocked by duplicate detection.
+    * Current behavior: Duplication-checking logic marks entries as duplicate if the phone number and name are the
+      same.
+    * Planned behavior: Duplication-checking logic should allow multiple entries with the same phone number and name,
+      provided that the lesson day or time differs.
+2. **Specify feedback for tags:** Currently, upon adding a tag for a negative index, generic feedback is given that calls out invalid command format and gives the requirements for the correct format,
+but does not tell the user exactly what is wrong with the format. This could leave the user confused and having to read through the large block
+of text to figure out exactly what is wrong.
+    * Current behavior: Error message displayed:
+    `Invalid command format!
+      tag: Executes a tag subcommand
+      Subcommands:
+      tag add: Adds tag(s) to person(s) in the address book. Parameters: INDEX [INDEX]... (must be positive integers) t/TAG (must be alphanumeric characters only and up to 20 characters long)
+      Example: tag add 1 2 t/Primary1 t/Mathematics
+      tag delete: Deletes tag(s) from person(s) in the address book. Parameters: INDEX [INDEX]... (must be positive integers) t/TAG (must be a non-empty string)
+      Example: tag delete 1 2 t/Primary1 t/Mathematics
+      tag find: Finds all persons whose tags exactly match the specified tag keyword(s) (case-insensitive) and displays them as a list with index numbers.
+      Parameters: t/TAG (must be a non-empty string)
+      Example: tag find t/important`
+    * Planned behavior: Specific error message displayed for negative indices, for example:
+        `The person index provided is invalid: -1`
+3.  **List indexes alongside names for batch tag add and batch tag delete:** Currently, batch tag add and batch tag delete
+   return the list of names of people who have successfully been tagged or had their tags removed. However, list indexes are not
+   shown beside the names. Thus, users cannot easily map the affected students to their positions in the displayed list.
+   This is also inconsistent with other batch commands such as mark/unmark and delete which already include indices.
+    * Current behavior: Success message displayed without list indexes beside the names:
+    `Added tags to students: Alex Yeoh (math); Bernice Yu (math); Charlotte Oliveiro (math)`
+    * Planned behavior: Success message displayed with list indexes beside the names:
+      `Added tags to students: (1) Alex Yeoh (math); (2) Bernice Yu (math); (3) Charlotte Oliveiro (math)`
