@@ -29,6 +29,7 @@ public class AddressTest {
         assertFalse(Address.isValidAddress(" ")); // spaces only
         assertFalse(Address.isValidAddress("-")); // one character
         assertFalse(Address.isValidAddress("ab")); // two characters
+        assertFalse(Address.isValidAddress("a  ")); // trailing spaces
 
         // valid addresses
         assertTrue(Address.isValidAddress("abc")); // exactly three characters

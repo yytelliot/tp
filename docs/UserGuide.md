@@ -205,7 +205,7 @@ Refer to the [Features](#features) section below for the full details of each co
 | **Name** | `n/` | Letters and spaces only; cannot be blank                                                                            | `n/John Doe` |
 | **Phone** | `p/` | Exactly 8 digits, starting with 6, 8, or 9 (Singapore format)                                                       | `p/91234567` |
 | **Email** | `e/` | Standard email format (`local@domain`)                                                                              | `e/john@example.com` |
-| **Address** | `a/` | Any non-blank text                                                                                                  | `a/Blk 30, Geylang St 29` |
+| **Address** | `a/` | At least 3 characters long, must not be blank                                                                       | `a/Blk 30, Geylang St 29` |
 | **Day** | `d/` | A day of the week (case-insensitive): Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday                | `d/Monday` |
 | **Start Time** | `st/` | 24-hour format `HH:mm` (e.g., `09:00`, `14:30`)                                                                     | `st/14:00` |
 | **End Time** | `et/` | 24-hour format `HH:mm`; **must be strictly after** start time                                                       | `et/16:00` |

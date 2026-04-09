@@ -10,14 +10,13 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Address {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Addresses should be at least 3 characters long, and it should not be blank";
+            "Addresses should be at least 3 characters long, and should not be blank";
 
     /*
-     * The first character of the address must not be a whitespace,
-     * otherwise " " (a blank string) becomes a valid input.
-     * Address must be at least 3 characters long.
+     * The first and last characters of the address must not be whitespace,
+     * and the address must be at least 3 characters long.
      */
-    public static final String VALIDATION_REGEX = "[^\\s].{2,}";
+    public static final String VALIDATION_REGEX = "[^\\s].+[^\\s]";
 
     public final String value;
 
@@ -28,8 +27,9 @@ public class Address {
      */
     public Address(String address) {
         requireNonNull(address);
-        checkArgument(isValidAddress(address), MESSAGE_CONSTRAINTS);
-        value = address;
+        String trimmed = address.trim();
+        checkArgument(isValidAddress(trimmed), MESSAGE_CONSTRAINTS);
+        value = trimmed;
     }
 
     /**
