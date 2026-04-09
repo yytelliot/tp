@@ -12,12 +12,33 @@ import seedu.address.model.UserPrefs;
 public class ClearCommandTest {
 
     @Test
-    public void execute_prompt_showsConfirmMessage() {
+    public void execute_promptNonEmpty_showsConfirmMessage() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+
+        assertCommandSuccess(new ClearCommand(ClearCommand.ClearState.PROMPT),
+                model, ClearCommand.MESSAGE_CONFIRM_PROMPT, expectedModel);
+    }
+
+    @Test
+    public void execute_promptNonEmptyFilteredEmpty_showsConfirmMessage() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+
+        model.updateFilteredPersonList(p -> false);
+        expectedModel.updateFilteredPersonList(p -> false);
+
+        assertCommandSuccess(new ClearCommand(ClearCommand.ClearState.PROMPT),
+                model, ClearCommand.MESSAGE_CONFIRM_PROMPT, expectedModel);
+    }
+
+    @Test
+    public void execute_promptEmpty_showsEmptyMessage() {
         Model model = new ModelManager();
         Model expectedModel = new ModelManager();
 
         assertCommandSuccess(new ClearCommand(ClearCommand.ClearState.PROMPT),
-                model, ClearCommand.MESSAGE_CONFIRM_PROMPT, expectedModel);
+                model, ClearCommand.MESSAGE_EMPTY, expectedModel);
     }
 
     @Test
