@@ -49,7 +49,8 @@ public class MarkCommandTest {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
         MarkCommand markCommand = new MarkCommand(List.of(outOfBoundIndex));
 
-        assertCommandFailure(markCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(markCommand, model,
+                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX + ": " + outOfBoundIndex.getOneBased());
     }
 
     @Test
@@ -79,7 +80,8 @@ public class MarkCommandTest {
 
         MarkCommand markCommand = new MarkCommand(List.of(outOfBoundIndex));
 
-        assertCommandFailure(markCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(markCommand, model,
+                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX + ": " + outOfBoundIndex.getOneBased());
     }
 
     @Test
@@ -108,8 +110,9 @@ public class MarkCommandTest {
         expectedModel.setPerson(firstPerson, markedFirst);
         expectedModel.setPerson(secondPerson, markedSecond);
 
-        String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_SUCCESS,
-                2, markedFirst.getName() + ", " + markedSecond.getName());
+        String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_PERSONS_SUCCESS,
+                2, "(" + INDEX_FIRST_PERSON.getOneBased() + ") " + markedFirst.getName()
+                + ", (" + INDEX_SECOND_PERSON.getOneBased() + ") " + markedSecond.getName());
 
         assertCommandSuccess(markCommand, model, expectedMessage, expectedModel);
     }

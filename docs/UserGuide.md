@@ -205,7 +205,7 @@ Refer to the [Features](#features) section below for the full details of each co
 | **Name** | `n/` | Letters and spaces only; cannot be blank                                                                            | `n/John Doe` |
 | **Phone** | `p/` | Exactly 8 digits, starting with 6, 8, or 9 (Singapore format)                                                       | `p/91234567` |
 | **Email** | `e/` | Standard email format (`local@domain`)                                                                              | `e/john@example.com` |
-| **Address** | `a/` | Any non-blank text                                                                                                  | `a/Blk 30, Geylang St 29` |
+| **Address** | `a/` | At least 3 characters long, must not be blank                                                                       | `a/Blk 30, Geylang St 29` |
 | **Day** | `d/` | A day of the week (case-insensitive): Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday                | `d/Monday` |
 | **Start Time** | `st/` | 24-hour format `HH:mm` (e.g., `09:00`, `14:30`)                                                                     | `st/14:00` |
 | **End Time** | `et/` | 24-hour format `HH:mm`; **must be strictly after** start time                                                       | `et/16:00` |
@@ -377,15 +377,16 @@ After using `find`, use [`list`](#listing-all-students-list) to return to the fu
 
 ### Finding students by tag: `tag find`
 
-Finds students who match all of the given tags.
+Finds students who match all of the given tags exactly.
 
 <div markdown="span" class="alert alert-success">
 **Format:** `tag find t/TAG [t/TAG]…​`
 </div>
 
 * The search is **case-insensitive**. e.g. `Math` will match `math`.
+* Tags must match **exactly**. e.g. `ma` will not match `math`.
 * Only students matching **all** tags will be returned (i.e. `AND` search).
-* Tags are alphanumeric only (no spaces).
+* Tags are alphanumeric and non-empty (no spaces).
 
 **Examples:**
 
@@ -393,6 +394,10 @@ Finds students who match all of the given tags.
 |---------|-------------|
 | `tag find t/math` | Returns students tagged with `math` |
 | `tag find t/primary3 t/science` | Returns students tagged with both `primary3` and `science` |
+| `tag find t/ma` | Returns no students unless a student has the exact tag `ma` |
+
+**Invalid input:**
+* `tag find t/` is rejected because tags cannot be empty.
 
 **Expected output:**
 > `2 persons listed!`

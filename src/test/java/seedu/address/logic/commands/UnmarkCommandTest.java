@@ -53,7 +53,8 @@ public class UnmarkCommandTest {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
         UnmarkCommand unmarkCommand = new UnmarkCommand(List.of(outOfBoundIndex));
 
-        assertCommandFailure(unmarkCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(unmarkCommand, model,
+                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX + ": " + outOfBoundIndex.getOneBased());
     }
 
     @Test
@@ -88,7 +89,8 @@ public class UnmarkCommandTest {
 
         UnmarkCommand unmarkCommand = new UnmarkCommand(List.of(outOfBoundIndex));
 
-        assertCommandFailure(unmarkCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(unmarkCommand, model,
+                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX + ": " + outOfBoundIndex.getOneBased());
     }
 
     @Test
@@ -120,8 +122,9 @@ public class UnmarkCommandTest {
         expectedModel.setPerson(paidFirst, unmarkedFirst);
         expectedModel.setPerson(paidSecond, unmarkedSecond);
 
-        String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_SUCCESS,
-                2, unmarkedFirst.getName() + ", " + unmarkedSecond.getName());
+        String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_PERSONS_SUCCESS,
+                2, "(" + INDEX_FIRST_PERSON.getOneBased() + ") " + unmarkedFirst.getName()
+                + ", (" + INDEX_SECOND_PERSON.getOneBased() + ") " + unmarkedSecond.getName());
 
         assertCommandSuccess(unmarkCommand, model, expectedMessage, expectedModel);
     }

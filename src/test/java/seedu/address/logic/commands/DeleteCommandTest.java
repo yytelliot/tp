@@ -48,7 +48,8 @@ public class DeleteCommandTest {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
         DeleteCommand deleteCommand = new DeleteCommand(List.of(outOfBoundIndex));
 
-        assertCommandFailure(deleteCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(deleteCommand, model,
+                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX + ": " + outOfBoundIndex.getOneBased());
     }
 
     @Test
@@ -78,7 +79,8 @@ public class DeleteCommandTest {
 
         DeleteCommand deleteCommand = new DeleteCommand(List.of(outOfBoundIndex));
 
-        assertCommandFailure(deleteCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(deleteCommand, model,
+                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX + ": " + outOfBoundIndex.getOneBased());
     }
 
     @Test
@@ -92,7 +94,8 @@ public class DeleteCommandTest {
         expectedModel.deletePerson(secondPerson);
 
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSONS_SUCCESS,
-                2, firstPerson.getName() + ", " + secondPerson.getName());
+                2, "(" + INDEX_FIRST_PERSON.getOneBased() + ") " + firstPerson.getName()
+                + ", (" + INDEX_SECOND_PERSON.getOneBased() + ") " + secondPerson.getName());
 
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }

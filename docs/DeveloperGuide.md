@@ -721,10 +721,16 @@ testers are expected to do more *exploratory* testing.
    1. Prerequisites: At least one student with a tag in the list.
 
    1. Test case: `tag find t/Math`<br>
-      Expected: All students with the `math` tag are listed. Count shown in status message.
+      Expected: All students with the exact `math` tag are listed. Count shown in status message.
+
+   1. Test case: `tag find t/ma`<br>
+      Expected: No students listed unless a student has the exact tag `ma`. Partial matches such as `math` are not returned.
 
    1. Test case: `tag find t/NonExistentTag`<br>
       Expected: No students listed. Message indicating no students found shown.
+
+   1. Test case: `tag find t/`<br>
+      Expected: Command is rejected with a validation error because tag values cannot be empty.
 
 ### Saving data
 

@@ -20,7 +20,7 @@ public class TagsContainKeywordsPredicate implements Predicate<Person> {
     public boolean test(Person person) {
         for (String keyword : keywords) {
             if (person.getTags().stream()
-                    .noneMatch(tag -> tag.tagName.toLowerCase().contains(keyword.toLowerCase()))) {
+                    .noneMatch(tag -> tag.tagName.equalsIgnoreCase(keyword))) {
                 return false;
             }
         }

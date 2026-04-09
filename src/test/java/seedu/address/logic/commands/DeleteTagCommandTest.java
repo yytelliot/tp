@@ -104,7 +104,8 @@ public class DeleteTagCommandTest {
         Set<Tag> tagsToDelete = Set.of(new Tag("friends"));
         DeleteTagCommand deleteTagCommand = new DeleteTagCommand(List.of(outOfBoundIndex), tagsToDelete);
 
-        assertCommandFailure(deleteTagCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(deleteTagCommand, model,
+                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX + ": " + outOfBoundIndex.getOneBased());
     }
 
     @Test

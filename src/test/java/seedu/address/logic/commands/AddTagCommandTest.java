@@ -102,7 +102,8 @@ public class AddTagCommandTest {
         Set<Tag> tagsToAdd = Set.of(new Tag("classmate"));
         AddTagCommand addTagCommand = new AddTagCommand(List.of(outOfBoundIndex), tagsToAdd);
 
-        assertCommandFailure(addTagCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(addTagCommand, model,
+                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX + ": " + outOfBoundIndex.getOneBased());
     }
 
     @Test
