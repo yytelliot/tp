@@ -730,10 +730,10 @@ Team size: 5
       same.
     * Planned behavior: Duplication-checking logic should allow multiple entries with the same phone number and name,
       provided that the lesson day or time differs.
-2.  **Specify feedback for tags:** Currently, upon adding a tag for a negative index, generic feedback is given that 
-    calls out invalid command format and gives the requirements for the correct format, but does not tell the user 
-    exactly what is wrong with the format. This could leave the user confused and having to read through the large block 
-    of text to figure out exactly what is wrong.
+2. **Specify feedback for tags:** Currently, upon adding a tag for a negative index, generic feedback is given that 
+   calls out invalid command format and gives the requirements for the correct format, but does not tell the user 
+   exactly what is wrong with the format. This could leave the user confused and having to read through the large block 
+   of text to figure out exactly what is wrong.
     * Current behavior: Error message displayed:
     `Invalid command format!
       tag: Executes a tag subcommand
@@ -748,13 +748,14 @@ Team size: 5
     * Planned behavior: Specific error message displayed for negative indices, for example:
         `The person index provided is invalid: -1`
 3.  **List indexes alongside names for batch tag add and batch tag delete:** Currently, batch tag add and batch tag delete
-    return the list of names of people who have successfully been tagged or had their tags removed. However, list indexes are not
-    shown beside the names. Thus, users cannot easily map the affected students to their positions in the displayed list.
-    This is also inconsistent with other batch commands such as mark/unmark and delete which already include indices.
+   return the list of names of people who have successfully been tagged or had their tags removed. However, list indexes are not
+   shown beside the names. Thus, users cannot easily map the affected students to their positions in the displayed list.
+   This is also inconsistent with other batch commands such as mark/unmark and delete which already include indices.
     * Current behavior: Success message displayed without list indexes beside the names:
     `Added tags to students: Alex Yeoh (math); Bernice Yu (math); Charlotte Oliveiro (math)`
     * Planned behavior: Success message displayed with list indexes beside the names:
       `Added tags to students: (1) Alex Yeoh (math); (2) Bernice Yu (math); (3) Charlotte Oliveiro (math)`
     
+
     
     
