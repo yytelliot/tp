@@ -94,7 +94,8 @@ public class DeleteCommandTest {
         expectedModel.deletePerson(secondPerson);
 
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSONS_SUCCESS,
-                2, firstPerson.getName() + ", " + secondPerson.getName());
+                2, "(" + INDEX_FIRST_PERSON.getOneBased() + ") " + firstPerson.getName()
+                + ", (" + INDEX_SECOND_PERSON.getOneBased() + ") " + secondPerson.getName());
 
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }

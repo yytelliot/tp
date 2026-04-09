@@ -111,7 +111,8 @@ public class MarkCommandTest {
         expectedModel.setPerson(secondPerson, markedSecond);
 
         String expectedMessage = String.format(MarkCommand.MESSAGE_MARK_PERSONS_SUCCESS,
-                2, markedFirst.getName() + ", " + markedSecond.getName());
+                2, "(" + INDEX_FIRST_PERSON.getOneBased() + ") " + markedFirst.getName()
+                + ", (" + INDEX_SECOND_PERSON.getOneBased() + ") " + markedSecond.getName());
 
         assertCommandSuccess(markCommand, model, expectedMessage, expectedModel);
     }

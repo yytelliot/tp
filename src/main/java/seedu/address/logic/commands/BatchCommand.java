@@ -99,11 +99,14 @@ public abstract class BatchCommand extends Command {
     }
 
     /**
-     * Utility: joins person names with comma separation.
+     * Utility: joins person names with their indices in the format "(index) name", comma separated.
      */
-    protected static String joinNames(List<Person> persons) {
-        return persons.stream()
-                .map(p -> p.getName().toString())
-                .collect(Collectors.joining(", "));
+    protected String joinNamesWithIndices(List<Person> persons) {
+        List<Index> indices = getDistinctTargetIndices();
+        List<String> parts = new ArrayList<>();
+        for (int i = 0; i < persons.size(); i++) {
+            parts.add("(" + indices.get(i).getOneBased() + ") " + persons.get(i).getName());
+        }
+        return String.join(", ", parts);
     }
 }
