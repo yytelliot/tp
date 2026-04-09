@@ -121,7 +121,8 @@ public class UnmarkCommandTest {
         expectedModel.setPerson(paidSecond, unmarkedSecond);
 
         String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_PERSONS_SUCCESS,
-                2, unmarkedFirst.getName() + ", " + unmarkedSecond.getName());
+                2, "(" + INDEX_FIRST_PERSON.getOneBased() + ") " + unmarkedFirst.getName()
+                + ", (" + INDEX_SECOND_PERSON.getOneBased() + ") " + unmarkedSecond.getName());
 
         assertCommandSuccess(unmarkCommand, model, expectedMessage, expectedModel);
     }

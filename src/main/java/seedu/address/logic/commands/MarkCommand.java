@@ -74,7 +74,8 @@ public class MarkCommand extends BatchCommand {
         if (processedPersons.size() == 1) {
             return String.format(MESSAGE_MARK_PERSON_SUCCESS, Messages.format(processedPersons.get(0)));
         }
-        return String.format(MESSAGE_MARK_PERSONS_SUCCESS, processedPersons.size(), joinNames(processedPersons));
+        return String.format(MESSAGE_MARK_PERSONS_SUCCESS, processedPersons.size(),
+                joinNamesWithIndices(processedPersons));
     }
 
     @Override
