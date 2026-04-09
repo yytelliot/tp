@@ -729,7 +729,7 @@ Team size: 5
     * Current behavior: Error message displayed:
     
     `Invalid command format!
-      tag: Executes a tag subcommand.git 
+      tag: Executes a tag subcommand
       Subcommands:
       tag add: Adds tag(s) to person(s) in the address book. Parameters: INDEX [INDEX]... (must be positive integers) t/TAG (must be alphanumeric characters only and up to 20 characters long)
       Example: tag add 1 2 t/Primary1 t/Mathematics
