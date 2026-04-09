@@ -730,10 +730,9 @@ Team size: 5
       same.
     * Planned behavior: Duplication-checking logic should allow multiple entries with the same phone number and name,
       provided that the lesson day or time differs.
-2. **Specify feedback for tags:** Currently, upon adding a tag for a negative index, generic feedback is given that 
-   calls out invalid command format and gives the requirements for the correct format, but does not tell the user 
-   exactly what is wrong with the format. This could leave the user confused and having to read through the large block 
-   of text to figure out exactly what is wrong.
+2. **Specify feedback for tags:** Currently, upon adding a tag for a negative index, generic feedback is given that calls out invalid command format and gives the requirements for the correct format,
+but does not tell the user exactly what is wrong with the format. This could leave the user confused and having to read through the large block
+of text to figure out exactly what is wrong.
     * Current behavior: Error message displayed:
     `Invalid command format!
       tag: Executes a tag subcommand
@@ -755,7 +754,3 @@ Team size: 5
     `Added tags to students: Alex Yeoh (math); Bernice Yu (math); Charlotte Oliveiro (math)`
     * Planned behavior: Success message displayed with list indexes beside the names:
       `Added tags to students: (1) Alex Yeoh (math); (2) Bernice Yu (math); (3) Charlotte Oliveiro (math)`
-    
-
-    
-    
