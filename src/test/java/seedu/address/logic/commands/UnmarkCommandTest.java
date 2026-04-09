@@ -39,8 +39,9 @@ public class UnmarkCommandTest {
         UnmarkCommand unmarkCommand = new UnmarkCommand(List.of(INDEX_FIRST_PERSON));
 
         Person unmarkedPerson = new PersonBuilder(paidPerson).withPaid(false).build();
-        String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_SUCCESS, 1,
-                unmarkedPerson.getName());
+
+        String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_SUCCESS,
+                1, "(" + INDEX_FIRST_PERSON.getOneBased() + ") " + unmarkedPerson.getName());
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.setPerson(paidPerson, unmarkedPerson);
@@ -70,8 +71,8 @@ public class UnmarkCommandTest {
         UnmarkCommand unmarkCommand = new UnmarkCommand(List.of(INDEX_FIRST_PERSON));
 
         Person unmarkedPerson = new PersonBuilder(personInFilteredList).withPaid(false).build();
-        String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_SUCCESS, 1,
-                unmarkedPerson.getName());
+        String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_SUCCESS,
+                1, "(" + INDEX_FIRST_PERSON.getOneBased() + ") " + unmarkedPerson.getName());
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.setPerson(personInFilteredList, unmarkedPerson);
@@ -122,7 +123,7 @@ public class UnmarkCommandTest {
         expectedModel.setPerson(paidFirst, unmarkedFirst);
         expectedModel.setPerson(paidSecond, unmarkedSecond);
 
-        String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_PERSONS_SUCCESS,
+        String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_SUCCESS,
                 2, "(" + INDEX_FIRST_PERSON.getOneBased() + ") " + unmarkedFirst.getName()
                 + ", (" + INDEX_SECOND_PERSON.getOneBased() + ") " + unmarkedSecond.getName());
 
@@ -138,8 +139,8 @@ public class UnmarkCommandTest {
         UnmarkCommand unmarkCommand = new UnmarkCommand(List.of(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON));
 
         Person unmarkedPerson = new PersonBuilder(paidPerson).withPaid(false).build();
-        String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_SUCCESS, 1,
-                unmarkedPerson.getName());
+        String expectedMessage = String.format(UnmarkCommand.MESSAGE_UNMARK_SUCCESS,
+                1, "(" + INDEX_FIRST_PERSON.getOneBased() + ") " + unmarkedPerson.getName());
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.setPerson(paidPerson, unmarkedPerson);
