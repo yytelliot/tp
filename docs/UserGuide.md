@@ -278,7 +278,8 @@ This design is chosen because:
 | `et/14:00 st/15:00` | End time must be after start time                |
 
 <div markdown="block" class="alert alert-info">
-**:information_source: Notes on Tuition Rate
+
+**:information_source: Notes on Tuition Rate:**
 
 * Hourly Basis: The rate r/ represents the amount charged per hour.
 * Data Normalization: Leading zeros will be automatically removed (e.g., r/0050 will be saved as 50).
