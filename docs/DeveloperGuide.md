@@ -10,7 +10,15 @@ title: Developer Guide
 
 ## **Acknowledgements**
 
-* {list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
+* This project is based on the [AddressBook-Level3 (AB3)](https://github.com/se-edu/addressbook-level3) project developed by the [SE-EDU initiative](https://se-education.org).
+
+* The UI is built using JavaFX.
+
+* Diagrams in this document are created using PlantUML.
+
+* Testing is supported using JUnit.
+
+* Data is stored in JSON format using Jackson.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -727,7 +735,6 @@ Team size: 5
     exactly what is wrong with the format. This could leave the user confused and having to read through the large block 
     of text to figure out exactly what is wrong.
     * Current behavior: Error message displayed:
-    
     `Invalid command format!
       tag: Executes a tag subcommand
       Subcommands:
@@ -738,7 +745,6 @@ Team size: 5
       tag find: Finds all persons whose tags exactly match the specified tag keyword(s) (case-insensitive) and displays them as a list with index numbers.
       Parameters: t/TAG (must be a non-empty string)
       Example: tag find t/important`
-
     * Planned behavior: Specific error message displayed for negative indices, for example:
         `The person index provided is invalid: -1`
 3.  **List indexes alongside names for batch tag add and batch tag delete:** Currently, batch tag add and batch tag delete
