@@ -41,7 +41,7 @@ public class ClearCommand extends Command {
         requireNonNull(model);
         switch (state) {
         case PROMPT:
-            if (model.getFilteredPersonList().isEmpty()) {
+            if (model.getAddressBook().getPersonList().isEmpty()) {
                 return new CommandResult(MESSAGE_EMPTY);
             }
             return new CommandResult(MESSAGE_CONFIRM_PROMPT);

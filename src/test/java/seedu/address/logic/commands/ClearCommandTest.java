@@ -21,6 +21,18 @@ public class ClearCommandTest {
     }
 
     @Test
+    public void execute_promptNonEmptyFilteredEmpty_showsConfirmMessage() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+
+        model.updateFilteredPersonList(p -> false);
+        expectedModel.updateFilteredPersonList(p -> false);
+
+        assertCommandSuccess(new ClearCommand(ClearCommand.ClearState.PROMPT),
+                model, ClearCommand.MESSAGE_CONFIRM_PROMPT, expectedModel);
+    }
+
+    @Test
     public void execute_promptEmpty_showsEmptyMessage() {
         Model model = new ModelManager();
         Model expectedModel = new ModelManager();
