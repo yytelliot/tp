@@ -21,7 +21,7 @@ public class Name {
      * 1. Must start with a letter: [a-zA-Z]
      * 2. Letters may be followed by apostrophes, hyphens, or periods: [a-zA-Z'.\\-]
      * 3. Words can be separated by a single space or slash: [ /]
-     * 4. This ensures no consecutive symbols and no trailing symbols.
+     * 4. This ensures no consecutive spaces or slashes and no trailing spaces or slashes.
      */
     public static final String VALIDATION_REGEX = "^[a-zA-Z][a-zA-Z'.\\-]*(([ /][a-zA-Z])[a-zA-Z'.\\-]*)*$";
 
