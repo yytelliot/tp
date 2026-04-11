@@ -32,7 +32,7 @@ Refer to the guide [_Setting up and getting started_](SettingUp.md).
 
 <div markdown="span" class="alert alert-primary">
 
-:bulb: **Tip:** The `.puml` files used to create diagrams are in this document `docs/diagrams` folder. Refer to the [_PlantUML Tutorial_ at se-edu/guides](https://se-education.org/guides/tutorials/plantUml.html) to learn how to create and edit diagrams.
+:bulb: **Tip:** The `.puml` files used to create diagrams are in the `docs/diagrams` folder.
 </div>
 
 ### Architecture
@@ -246,6 +246,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | miserly tutor            | record tuition rates and payment status                        | track my income properly                                        |
 | `* *`    | careless tutor           | undo my actions                                                | rectify my mistakes                                             |
 | `* *`    | humble tutor             | edit my student's information easily                           | correct any wrong or outdated contact info without hassle       |
+| `* *`    | tutor with many students | search for a student by name                                   | quickly locate a student without scrolling through the list     |
 | `* *`    | tutor with many students | filter students by tags                                        | quickly find a specific group of students                       |
 | `* *`    | tutor                    | export and import my data                                      | backup or switch devices                                        |
 | `*`      | analytical tutor         | view a summary of my monthly teaching hours and income         | evaluate my profile and workload                                |
@@ -478,7 +479,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 ### Glossary
 
 * **Mainstream OS**: Windows, Linux, Unix, macOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others
+* **Parsing**: The process of analysing a user's text input and breaking it into structured components (e.g. command word, prefixes, arguments) that the application can understand and execute
+* **Subcommand**: A secondary keyword that follows a main command word to specify a particular action (e.g. `tag add`, `tag delete`, `tag find` are subcommands of `tag`)
 * **Tag**: A label attached to a student to help tutors categorize or filter students, such as `Math`, `Sec4`, or `ExamPrep`
 
 --------------------------------------------------------------------------------------------------------------------
