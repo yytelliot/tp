@@ -77,7 +77,7 @@ public class EditCommandParserTest {
     private static final String MESSAGE_INVALID_FORMAT =
             String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE);
 
-    private EditCommandParser parser = new EditCommandParser();
+        private final EditCommandParser parser = new EditCommandParser();
 
     @Test
     public void parse_missingParts_failure() {
@@ -104,6 +104,10 @@ public class EditCommandParserTest {
 
         // invalid prefix being parsed as preamble
         assertParseFailure(parser, "1 i/ string", MESSAGE_INVALID_FORMAT);
+
+        // unknown prefix in edited fields
+        assertParseFailure(parser, "1" + NAME_DESC_AMY + " z/unexpected", MESSAGE_INVALID_FORMAT);
+        assertParseFailure(parser, "1" + NAME_DESC_AMY + " Z/unexpected", MESSAGE_INVALID_FORMAT);
     }
 
     @Test
@@ -218,6 +222,12 @@ public class EditCommandParserTest {
         descriptor = new EditPersonDescriptorBuilder().withRate(VALID_RATE_AMY).build();
         expectedCommand = new EditCommand(targetIndex, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
+
+                // uppercase prefix
+                userInput = targetIndex.getOneBased() + " N/" + VALID_NAME_AMY;
+                descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_AMY).build();
+                expectedCommand = new EditCommand(targetIndex, descriptor);
+                assertParseSuccess(parser, userInput, expectedCommand);
     }
 
     @Test

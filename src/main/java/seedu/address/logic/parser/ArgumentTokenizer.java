@@ -3,6 +3,7 @@ package seedu.address.logic.parser;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 /**
@@ -24,7 +25,8 @@ public class ArgumentTokenizer {
      * @return           ArgumentMultimap object that maps prefixes to their arguments
      */
     public static ArgumentMultimap tokenize(String argsString, Prefix... prefixes) {
-        List<PrefixPosition> positions = findAllPrefixPositions(argsString, prefixes);
+        String normalizedArgsString = argsString.toLowerCase(Locale.ROOT);
+        List<PrefixPosition> positions = findAllPrefixPositions(normalizedArgsString, prefixes);
         return extractArguments(argsString, positions);
     }
 

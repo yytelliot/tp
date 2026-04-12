@@ -26,6 +26,12 @@ public class AddTagCommandParserTest {
     }
 
     @Test
+    public void parse_uppercaseTagPrefix_success() {
+        AddTagCommand expectedCommand = new AddTagCommand(List.of(INDEX_FIRST_PERSON), Set.of(new Tag("friend")));
+        assertParseSuccess(parser, "1 T/friend", expectedCommand);
+    }
+
+    @Test
     public void parse_missingIndex_failure() {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddTagCommand.MESSAGE_USAGE);
         assertParseFailure(parser, TAG_DESC_FRIEND, expectedMessage);
@@ -41,5 +47,12 @@ public class AddTagCommandParserTest {
     public void parse_invalidTag_failure() {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddTagCommand.MESSAGE_USAGE);
         assertParseFailure(parser, "1 t/tag*", expectedMessage);
+    }
+
+    @Test
+    public void parse_unknownPrefix_failure() {
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddTagCommand.MESSAGE_USAGE);
+        assertParseFailure(parser, "1 t/friend z/unexpected", expectedMessage);
+        assertParseFailure(parser, "1 t/friend Z/unexpected", expectedMessage);
     }
 }

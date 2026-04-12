@@ -18,6 +18,8 @@ public class AddTagCommandParser implements Parser<AddTagCommand> {
 
     @Override
     public AddTagCommand parse(String args) throws ParseException {
+        ParserUtil.validateNoUnexpectedPrefixes(args, AddTagCommand.MESSAGE_USAGE, PREFIX_TAG);
+
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
 
         if (argMultimap.getPreamble().isEmpty() || argMultimap.getAllValues(PREFIX_TAG).isEmpty()) {

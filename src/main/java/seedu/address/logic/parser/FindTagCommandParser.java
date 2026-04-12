@@ -21,6 +21,7 @@ public class FindTagCommandParser implements Parser<FindTagCommand> {
      */
     @Override
     public FindTagCommand parse(String args) throws ParseException {
+        ParserUtil.validateNoUnexpectedPrefixes(args, FindTagCommand.MESSAGE_USAGE, PREFIX_TAG);
 
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
 

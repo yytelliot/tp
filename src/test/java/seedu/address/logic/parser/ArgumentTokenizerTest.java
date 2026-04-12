@@ -137,6 +137,17 @@ public class ArgumentTokenizerTest {
     }
 
     @Test
+    public void tokenize_prefixesCaseInsensitive_success() {
+        String argsString = "SomePreambleString -T dashT-Value P/pSlash value ^q111";
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(argsString, pSlash, dashT, hatQ);
+
+        assertPreamblePresent(argMultimap, "SomePreambleString");
+        assertArgumentPresent(argMultimap, pSlash, "pSlash value");
+        assertArgumentPresent(argMultimap, dashT, "dashT-Value");
+        assertArgumentPresent(argMultimap, hatQ, "111");
+    }
+
+    @Test
     public void equalsMethod() {
         Prefix aaa = new Prefix("aaa");
 

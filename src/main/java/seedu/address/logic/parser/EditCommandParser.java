@@ -33,8 +33,13 @@ public class EditCommandParser implements Parser<EditCommand> {
      * and returns an EditCommand object for execution.
      * @throws ParseException if the user input does not conform the expected format
      */
+    @Override
     public EditCommand parse(String args) throws ParseException {
         requireNonNull(args);
+        ParserUtil.validateNoUnexpectedPrefixes(args, EditCommand.MESSAGE_USAGE,
+                PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_DAY, PREFIX_START, PREFIX_END,
+                PREFIX_RATE, PREFIX_TAG);
+
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS,
                         PREFIX_DAY, PREFIX_START, PREFIX_END, PREFIX_RATE, PREFIX_TAG);

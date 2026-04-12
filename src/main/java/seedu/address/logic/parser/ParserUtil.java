@@ -1,13 +1,19 @@
 package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
@@ -27,6 +33,7 @@ import seedu.address.model.tag.Tag;
 public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
+    private static final Pattern PREFIX_TOKEN_PATTERN = Pattern.compile("(?:^|\\s)([A-Za-z]+/)");
 
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
@@ -62,6 +69,43 @@ public class ParserUtil {
             seen.add(Index.fromOneBased(Integer.parseInt(part)));
         }
         return new ArrayList<>(seen);
+    }
+
+    /**
+     * Returns true if {@code input} contains a prefix token that is not in {@code allowedPrefixes},
+     * ignoring prefix casing.
+     *
+     * This is intended for commands whose free-form values do not legitimately contain slash-delimited tokens.
+     */
+    public static boolean containsUnexpectedPrefixes(String input, Prefix... allowedPrefixes) {
+        requireNonNull(input);
+        requireNonNull(allowedPrefixes);
+
+        Set<String> allowedPrefixStrings = Arrays.stream(allowedPrefixes)
+                .map(Prefix::getPrefix)
+                .map(prefix -> prefix.toLowerCase(Locale.ROOT))
+                .collect(Collectors.toSet());
+
+        Matcher matcher = PREFIX_TOKEN_PATTERN.matcher(input);
+        while (matcher.find()) {
+            String detectedPrefix = matcher.group(1).toLowerCase(Locale.ROOT);
+            if (!allowedPrefixStrings.contains(detectedPrefix)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Throws a {@code ParseException} if {@code input} contains a prefix token that is not in
+     * {@code allowedPrefixes}, ignoring prefix casing.
+     */
+    public static void validateNoUnexpectedPrefixes(String input, String message, Prefix... allowedPrefixes)
+            throws ParseException {
+        if (containsUnexpectedPrefixes(input, allowedPrefixes)) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, message));
+        }
     }
 
     /**

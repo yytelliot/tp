@@ -67,7 +67,7 @@ import seedu.address.model.person.Time;
 import seedu.address.testutil.PersonBuilder;
 
 public class AddCommandParserTest {
-    private AddCommandParser parser = new AddCommandParser();
+        private final AddCommandParser parser = new AddCommandParser();
 
     @Test
     public void parse_allFieldsPresent_success() {
@@ -98,6 +98,16 @@ public class AddCommandParserTest {
                         + DAY_DESC_BOB + START_TIME_DESC_BOB + END_TIME_DESC_BOB
                         + RATE_DESC_BOB,
                 new AddCommand(expectedPersonMultipleTags));
+
+        String uppercaseInput = " N/" + VALID_NAME_BOB
+                + " P/" + VALID_PHONE_BOB
+                + " E/" + VALID_EMAIL_BOB
+                + " A/" + VALID_ADDRESS_BOB
+                + " D/" + VALID_DAY_BOB
+                + " ST/" + VALID_START_TIME_BOB
+                + " ET/" + VALID_END_TIME_BOB
+                + " R/" + VALID_RATE_BOB;
+        assertParseSuccess(parser, uppercaseInput, new AddCommand(expectedPersonMultipleTags));
     }
 
     @Test
@@ -330,6 +340,14 @@ public class AddCommandParserTest {
         // non-empty preamble
         assertParseFailure(parser, PREAMBLE_NON_EMPTY + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
                 + ADDRESS_DESC_BOB + DAY_DESC_BOB + START_TIME_DESC_BOB + END_TIME_DESC_BOB + RATE_DESC_BOB,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+
+        // unknown prefix
+        assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
+                + DAY_DESC_BOB + START_TIME_DESC_BOB + END_TIME_DESC_BOB + RATE_DESC_BOB + " z/unexpected",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
+                + DAY_DESC_BOB + START_TIME_DESC_BOB + END_TIME_DESC_BOB + RATE_DESC_BOB + " Z/unexpected",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
     }
 

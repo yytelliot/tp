@@ -30,6 +30,13 @@ public class FindTagCommandParserTest {
     }
 
     @Test
+    public void parse_uppercaseTagPrefix_success() {
+        FindTagCommand expected = new FindTagCommand(
+            new TagsContainKeywordsPredicate(Collections.singletonList("friends")));
+        assertParseSuccess(parser, "T/friends", expected);
+    }
+
+    @Test
     public void parse_emptyInput_failure() {
         assertParseFailure(parser, " ",
             String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindTagCommand.MESSAGE_USAGE));
@@ -53,5 +60,13 @@ public class FindTagCommandParserTest {
         FindTagCommand expected = new FindTagCommand(
             new TagsContainKeywordsPredicate(Arrays.asList("friends", "friends")));
         assertParseSuccess(parser, "t/friends t/friends", expected);
+    }
+
+    @Test
+    public void parse_unknownPrefix_failure() {
+        assertParseFailure(parser, "t/friends z/unexpected",
+            String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindTagCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "t/friends Z/unexpected",
+            String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindTagCommand.MESSAGE_USAGE));
     }
 }
