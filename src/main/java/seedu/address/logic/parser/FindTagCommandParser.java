@@ -3,11 +3,13 @@ package seedu.address.logic.parser;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import seedu.address.logic.commands.FindTagCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.TagsContainKeywordsPredicate;
+import seedu.address.model.tag.Tag;
 
 /**
  * Parses input arguments and creates a new FindTagCommand object.
@@ -29,6 +31,12 @@ public class FindTagCommandParser implements Parser<FindTagCommand> {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindTagCommand.MESSAGE_USAGE));
         }
 
-        return new FindTagCommand(new TagsContainKeywordsPredicate(tagKeywords));
+        List<String> validatedTagKeywords = new ArrayList<>();
+        for (String tagKeyword : tagKeywords) {
+            Tag parsedTag = ParserUtil.parseTag(tagKeyword);
+            validatedTagKeywords.add(parsedTag.tagName);
+        }
+
+        return new FindTagCommand(new TagsContainKeywordsPredicate(validatedTagKeywords));
     }
 }

@@ -11,8 +11,9 @@ import java.util.Locale;
  */
 public class Tag {
 
-    public static final String MESSAGE_CONSTRAINTS = "Tag names should be alphanumeric and up to 20 characters long";
-    public static final String VALIDATION_REGEX = "\\p{Alnum}{1,20}";
+    public static final String MESSAGE_CONSTRAINTS =
+            "Tag names can contain any characters, should not be blank, and must be 20 characters or less";
+    public static final String VALIDATION_REGEX = "^(?!\\s*$).{1,20}";
 
     public final String tagName;
 
@@ -23,15 +24,16 @@ public class Tag {
      */
     public Tag(String tagName) {
         requireNonNull(tagName);
-        checkArgument(isValidTagName(tagName), MESSAGE_CONSTRAINTS);
-        this.tagName = tagName;
+        String trimmedTagName = tagName.trim();
+        checkArgument(isValidTagName(trimmedTagName), MESSAGE_CONSTRAINTS);
+        this.tagName = trimmedTagName;
     }
 
     /**
      * Returns true if a given string is a valid tag name.
      */
     public static boolean isValidTagName(String test) {
-        return test.matches(VALIDATION_REGEX);
+        return test.trim().matches(VALIDATION_REGEX);
     }
 
     @Override

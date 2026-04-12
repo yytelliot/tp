@@ -6,7 +6,6 @@ import java.util.Objects;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
@@ -24,8 +23,7 @@ public class MarkCommand extends BatchCommand {
             + "Parameters: INDEX [INDEX]... (must be positive integers)\n"
             + "Example: " + COMMAND_WORD + " 1 2 3";
 
-    public static final String MESSAGE_MARK_PERSON_SUCCESS = "Marked student as paid: %1$s";
-    public static final String MESSAGE_MARK_PERSONS_SUCCESS = "Marked %1$d students as paid: %2$s";
+    public static final String MESSAGE_MARK_SUCCESS = "Marked %1$d student(s) as paid: %2$s";
     public static final String MESSAGE_ALREADY_PAID = "This student has already been marked as paid: %1$s";
     public static final String MESSAGE_ALREADY_PAID_PLURAL =
             "These students have already been marked as paid: %1$s";
@@ -70,11 +68,8 @@ public class MarkCommand extends BatchCommand {
     }
 
     @Override
-    protected String formatSuccessMessage(List<Person> processedPersons) {
-        if (processedPersons.size() == 1) {
-            return String.format(MESSAGE_MARK_PERSON_SUCCESS, Messages.format(processedPersons.get(0)));
-        }
-        return String.format(MESSAGE_MARK_PERSONS_SUCCESS, processedPersons.size(), joinNames(processedPersons));
+    protected String formatSuccessMessage(List<Person> targetPersons) {
+        return String.format(MESSAGE_MARK_SUCCESS, targetPersons.size(), joinNamesWithIndices(targetPersons));
     }
 
     @Override

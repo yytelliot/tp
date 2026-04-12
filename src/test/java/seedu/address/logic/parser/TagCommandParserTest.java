@@ -22,14 +22,14 @@ public class TagCommandParserTest {
     @Test
     public void parse_addSubcommand_success() {
         AddTagCommand expectedCommand =
-                new AddTagCommand(List.of(INDEX_FIRST_PERSON), Set.of(new Tag("friend")));
+                new AddTagCommand(List.of(INDEX_FIRST_PERSON), Set.of(new Tag("friend!!!")));
         assertParseSuccess(parser, "add 1" + TAG_DESC_FRIEND, expectedCommand);
     }
 
     @Test
     public void parse_deleteSubcommand_success() {
         DeleteTagCommand expectedCommand =
-                new DeleteTagCommand(List.of(INDEX_FIRST_PERSON), Set.of(new Tag("friend")));
+                new DeleteTagCommand(List.of(INDEX_FIRST_PERSON), Set.of(new Tag("friend!!!")));
         assertParseSuccess(parser, "delete 1" + TAG_DESC_FRIEND, expectedCommand);
     }
 

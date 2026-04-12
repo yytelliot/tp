@@ -43,6 +43,16 @@ public class Messages {
                 .append(person.getEmail())
                 .append("; Address: ")
                 .append(person.getAddress())
+                .append("; Day: ")
+                .append(person.getDay())
+                .append("; Time: ")
+                .append(person.getStartTime())
+                .append(" - ")
+                .append(person.getEndTime())
+                .append("; Rate: ")
+                .append(person.getRate())
+                .append("; Paid: ")
+                .append(person.isPaid() ? "Yes" : "No")
                 .append("; Tags: ");
         person.getTags().forEach(builder::append);
         return builder.toString();

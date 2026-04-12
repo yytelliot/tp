@@ -20,9 +20,23 @@ public class AddTagCommandParserTest {
 
     @Test
     public void parse_allFieldsPresent_success() {
-        Set<Tag> tags = Set.of(new Tag("classmate"), new Tag("friend"));
+        Set<Tag> tags = Set.of(new Tag("classmate"), new Tag("friend!!!"));
         AddTagCommand expectedCommand = new AddTagCommand(List.of(INDEX_FIRST_PERSON), tags);
         assertParseSuccess(parser, "1" + TAG_DESC_FRIEND + " t/classmate", expectedCommand);
+    }
+
+    @Test
+    public void parse_tagWithSpaces_success() {
+        Set<Tag> tags = Set.of(new Tag("Primary 3"), new Tag("Math"));
+        AddTagCommand expectedCommand = new AddTagCommand(List.of(INDEX_FIRST_PERSON), tags);
+        assertParseSuccess(parser, "1 t/Primary 3 t/Math", expectedCommand);
+    }
+
+    @Test
+    public void parse_tagWithSpecialCharacter_success() {
+        Set<Tag> tags = Set.of(new Tag("Econ$"), new Tag("JC1"));
+        AddTagCommand expectedCommand = new AddTagCommand(List.of(INDEX_FIRST_PERSON), tags);
+        assertParseSuccess(parser, "1 t/Econ$ t/JC1", expectedCommand);
     }
 
     @Test
