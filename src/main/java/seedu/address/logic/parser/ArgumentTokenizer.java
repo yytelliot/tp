@@ -20,6 +20,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
  */
 public class ArgumentTokenizer {
     private static final Pattern PREFIX_TOKEN_PATTERN = Pattern.compile("(^| )([A-Za-z]+/)");
+    private static final String UNKNOWN_PREFIX_ERROR = "Unknown prefix: ";
 
     /**
      * Tokenizes an arguments string and returns an {@code ArgumentMultimap} object that maps prefixes to their
@@ -46,7 +47,7 @@ public class ArgumentTokenizer {
         Matcher matcher = PREFIX_TOKEN_PATTERN.matcher(argsString);
         while (matcher.find()) {
             if (!knownPrefixPositions.contains(matcher.start(2))) {
-                throw new ParseException("Unknown prefix: " + matcher.group(2));
+                throw new ParseException(UNKNOWN_PREFIX_ERROR + matcher.group(2));
             }
         }
     }
