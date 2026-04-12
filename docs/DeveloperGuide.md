@@ -10,7 +10,15 @@ title: Developer Guide
 
 ## **Acknowledgements**
 
-* {list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
+* This project is based on the [AddressBook-Level3 (AB3)](https://github.com/se-edu/addressbook-level3) project developed by the [SE-EDU initiative](https://se-education.org).
+
+* The UI is built using JavaFX.
+
+* Diagrams in this document are created using PlantUML.
+
+* Testing is supported using JUnit.
+
+* Data is stored in JSON format using Jackson.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -24,7 +32,7 @@ Refer to the guide [_Setting up and getting started_](SettingUp.md).
 
 <div markdown="span" class="alert alert-primary">
 
-:bulb: **Tip:** The `.puml` files used to create diagrams are in this document `docs/diagrams` folder. Refer to the [_PlantUML Tutorial_ at se-edu/guides](https://se-education.org/guides/tutorials/plantUml.html) to learn how to create and edit diagrams.
+:bulb: **Tip:** The `.puml` files used to create diagrams are in the `docs/diagrams` folder.
 </div>
 
 ### Architecture
@@ -75,7 +83,7 @@ The **API** of this component is specified in [`Ui.java`](https://github.com/se-
 
 The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
 
-The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml)
+The `UI` component uses the JavaFX UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml)
 
 The `UI` component,
 
@@ -92,9 +100,9 @@ Here's a (partial) class diagram of the `Logic` component:
 
 <img src="images/LogicClassDiagram.png" width="550"/>
 
-The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1")` API call as an example.
+The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1 2")` API call as an example.
 
-![Interactions Inside the Logic Component for the `delete 1` Command](images/DeleteSequenceDiagram.png)
+![Interactions Inside the Logic Component for the `delete 1 2` Command](images/DeleteSequenceDiagram.png)
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
 </div>
@@ -194,95 +202,6 @@ The following activity diagram summarizes the workflow when a user executes the 
     * Pros: Keeps commands atomic and follows the Command Pattern more strictly.
     * Cons: Requires more boilerplate code to pass the intended action to the confirmation handler.
 
-### \[Proposed\] Undo/redo feature
-
-#### Proposed Implementation
-
-The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
-
-* `VersionedAddressBook#commit()` — Saves the current address book state in its history.
-* `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
-* `VersionedAddressBook#redo()` — Restores a previously undone address book state from its history.
-
-These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
-
-Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
-
-Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
-
-![UndoRedoState0](images/UndoRedoState0.png)
-
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
-
-![UndoRedoState1](images/UndoRedoState1.png)
-
-Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
-
-![UndoRedoState2](images/UndoRedoState2.png)
-
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
-
-</div>
-
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
-
-![UndoRedoState3](images/UndoRedoState3.png)
-
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
-than attempting to perform the undo.
-
-</div>
-
-The following sequence diagram shows how an undo operation goes through the `Logic` component:
-
-![UndoSequenceDiagram](images/UndoSequenceDiagram-Logic.png)
-
-<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
-
-</div>
-
-Similarly, how an undo operation goes through the `Model` component is shown below:
-
-![UndoSequenceDiagram](images/UndoSequenceDiagram-Model.png)
-
-The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
-
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
-
-</div>
-
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
-
-![UndoRedoState4](images/UndoRedoState4.png)
-
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
-
-![UndoRedoState5](images/UndoRedoState5.png)
-
-The following activity diagram summarizes what happens when a user executes a new command:
-
-<img src="images/CommitActivityDiagram.png" width="250" />
-
-#### Design considerations:
-
-**Aspect: How undo & redo executes:**
-
-* **Alternative 1 (current choice):** Saves the entire address book.
-  * Pros: Easy to implement.
-  * Cons: May have performance issues in terms of memory usage.
-
-* **Alternative 2:** Individual command knows how to undo/redo by
-  itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
-  * Cons: We must ensure that the implementation of each individual command are correct.
-
-_{more aspects and alternatives to be added}_
-
-### \[Proposed\] Data archiving
-
-_{Explain here how the data archiving feature will be implemented}_
-
-
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Documentation, logging, testing, configuration, dev-ops**
@@ -327,6 +246,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | miserly tutor            | record tuition rates and payment status                        | track my income properly                                        |
 | `* *`    | careless tutor           | undo my actions                                                | rectify my mistakes                                             |
 | `* *`    | humble tutor             | edit my student's information easily                           | correct any wrong or outdated contact info without hassle       |
+| `* *`    | tutor with many students | search for a student by name                                   | quickly locate a student without scrolling through the list     |
 | `* *`    | tutor with many students | filter students by tags                                        | quickly find a specific group of students                       |
 | `* *`    | tutor                    | export and import my data                                      | backup or switch devices                                        |
 | `*`      | analytical tutor         | view a summary of my monthly teaching hours and income         | evaluate my profile and workload                                |
@@ -347,18 +267,18 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 
 1. Tutor enters the command to add a student.
-2. OnlyTutors saves the changes and shows confirmation.
+2. OnlyTutors saves the student and informs the tutor of the successful addition.
 
     Use case ends.
 
 **Extensions**
 * 1a. OnlyTutors detects missing or invalid parameter
-  * 1a1. OnlyTutors shows an error message.
+  * 1a1. OnlyTutors informs the tutor of the error.
 
     Use case ends.
 
 * 1b. OnlyTutors detects a duplicate student (based on name and phone number)
-  * 1b1. OnlyTutors rejects the add and gives a warning.
+  * 1b1. OnlyTutors informs the tutor that the student already exists.
 
     Use case ends
 
@@ -371,13 +291,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 1. Tutor enters the command to delete a student.
 2. OnlyTutors deletes the student at the specified index.
-3. OnlyTutors shows a confirmation message with the deleted student's information.
+3. OnlyTutors informs the tutor of the successful deletion.
 
     Use case ends.
 
 **Extensions**
 * 1a. OnlyTutors detects a missing, invalid or non-integer index
-  *  1a1. OnlyTutors shows an error message.
+  *  1a1. OnlyTutors informs the tutor of the error.
 
         Use case ends
 
@@ -385,25 +305,25 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Use case 03: List all students**
 
 **Guarantees**
-* Displays all students currently stored in the system, including all their details
+* All students currently stored in the system are shown, including all their details
 (name, phone, address, lesson day/time, tuition rate, payment status, tags).
-* If no students exist, displays an empty list message.
+* If no students exist, the tutor is informed that the list is empty.
 
 **MSS**
 1. Tutor enters the command to list all students.
 2. OnlyTutors retrieves all student contacts from the system.
-3. OnlyTutors displays the list of students with all relevant details.
+3. OnlyTutors presents the list of students with all relevant details.
 
     Use case ends.
 
 **Extensions**
 * 1a. OnlyTutors detects an unknown command or typo
-    * 1a1. OnlyTutors displays an error message.
+    * 1a1. OnlyTutors informs the tutor of the error.
 
         Use case ends.
 
 * 2a. OnlyTutors detects no existing student contacts in the system
-    * 2a1. OnlyTutors displays a notification message.
+    * 2a1. OnlyTutors informs the tutor that there are no students.
 
         Use case ends.
 
@@ -411,29 +331,28 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Use case 04: Tag a student**
 
 **Guarantees**
-* Tags are added to a student if and only if the `INDEX` parameter is valid, all `TAG` parameters are valid, and none of the specified tags already exist on that student.
+* Tags are added to a student if and only if the `INDEX` parameter is valid, all `TAG` parameters are valid, and at least one of the specified tags does not already exist on that student.
 
 **MSS**
 1. Tutor enters the command to tag a student.
-2. OnlyTutors adds the specified tag(s) to the student at the given index.
-3. OnlyTutors shows a confirmation message with the updated student's information.
+2. OnlyTutors adds the specified tag(s) to the student at the given index. Tags that already exist on the student are ignored.
+3. OnlyTutors informs the tutor of the successfully added tags.
 
     Use case ends.
 
 **Extensions**
 * 1a. OnlyTutors detects a missing, invalid or non-integer index
-  * 1a1. OnlyTutors shows an error message.
+  * 1a1. OnlyTutors informs the tutor of the error.
 
     Use case ends.
 
 * 1b. OnlyTutors detects a missing or invalid tag
-  * 1b1. OnlyTutors shows an error message.
+  * 1b1. OnlyTutors informs the tutor of the error.
 
     Use case ends.
 
-* 2a. OnlyTutors detects that one or more tags already exist on the student
-  * 2a1. OnlyTutors shows an error message.
-  * 2a2. No tags are added to the student.
+* 2a. OnlyTutors detects that all specified tags already exist on the student
+  * 2a1. OnlyTutors informs the tutor that no changes were made.
 
     Use case ends.
 
@@ -441,29 +360,23 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Use case 05: Delete tags from a student**
 
 **Guarantees**
-* Tags are removed from a student if and only if the `INDEX` parameter is valid and all specified `TAG` parameters exist for that student.
+* Tags are removed from a student if and only if the `INDEX` parameter is valid and at least one of the specified `TAG` parameters exists for that student.
 
 **MSS**
 1. Tutor enters the command to delete tags from a student.
-2. OnlyTutors removes the specified tag(s) from the student at the given index.
-3. OnlyTutors shows a confirmation message with the updated student's information.
+2. OnlyTutors removes the specified tag(s) that exist on the student. Tags that do not exist on the student are ignored.
+3. OnlyTutors informs the tutor of the successfully removed tags.
 
     Use case ends.
 
 **Extensions**
 * 1a. OnlyTutors detects a missing, invalid or non-integer index
-  * 1a1. OnlyTutors shows an error message.
+  * 1a1. OnlyTutors informs the tutor of the error.
 
     Use case ends.
 
-* 1b. OnlyTutors detects a missing or invalid tag
-  * 1b1. OnlyTutors shows an error message.
-
-    Use case ends.
-
-* 2a. OnlyTutors detects that one or more specified tags do not exist on the student
-  * 2a1. OnlyTutors shows an error message.
-  * 2a2. No tags are deleted from the student.
+* 2a. OnlyTutors detects that none of the specified tags exist on the student
+  * 2a1. OnlyTutors informs the tutor that no changes were made.
 
     Use case ends.
 
@@ -476,18 +389,18 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 1. Tutor enters the command to mark one or more students as paid.
 2. OnlyTutors updates the payment status of the specified student(s) to paid.
-3. OnlyTutors shows a confirmation message with the marked student(s).
+3. OnlyTutors informs the tutor of the successfully marked student(s).
 
     Use case ends.
 
 **Extensions**
 * 1a. OnlyTutors detects a missing, invalid or non-integer index
-  * 1a1. OnlyTutors shows an error message.
+  * 1a1. OnlyTutors informs the tutor of the error.
 
     Use case ends.
 
 * 2a. OnlyTutors detects that one or more students are already marked as paid
-  * 2a1. OnlyTutors shows an error message identifying the already-paid student(s).
+  * 2a1. OnlyTutors informs the tutor which student(s) are already paid.
   * 2a2. No students are marked.
 
     Use case ends.
@@ -501,18 +414,18 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 1. Tutor enters the command to unmark one or more students as unpaid.
 2. OnlyTutors updates the payment status of the specified student(s) to unpaid.
-3. OnlyTutors shows a confirmation message with the unmarked student(s).
+3. OnlyTutors informs the tutor of the successfully unmarked student(s).
 
     Use case ends.
 
 **Extensions**
 * 1a. OnlyTutors detects a missing, invalid or non-integer index
-  * 1a1. OnlyTutors shows an error message.
+  * 1a1. OnlyTutors informs the tutor of the error.
 
     Use case ends.
 
 * 2a. OnlyTutors detects that one or more students are already marked as unpaid
-  * 2a1. OnlyTutors shows an error message identifying the already-unpaid student(s).
+  * 2a1. OnlyTutors informs the tutor which student(s) are already unpaid.
   * 2a2. No students are unmarked.
 
     Use case ends.
@@ -525,16 +438,16 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 1. Tutor enters the `clear` command.
-2. OnlyTutors displays a confirmation prompt: `This will delete all contacts. Are you sure? [y/N]:`.
-3. Tutor enters `y`.
-4. OnlyTutors deletes all contacts and shows a success message.
+2. OnlyTutors asks the tutor to confirm the action.
+3. Tutor confirms.
+4. OnlyTutors deletes all students and informs the tutor of the successful clear.
 
     Use case ends.
 
 **Extensions**
-* 3a. Tutor enters `n` or any input other than `y`
-  * 3a1. OnlyTutors aborts the clear and shows an aborted message.
-  * 3a2. No contacts are deleted.
+* 3a. Tutor does not confirm (enters `n` or any input other than `y`)
+  * 3a1. OnlyTutors aborts the clear and informs the tutor.
+  * 3a2. No students are deleted.
 
     Use case ends.
 
@@ -558,8 +471,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Glossary
 
-* **Mainstream OS**: Windows, Linux, Unix, MacOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others
+* **Mainstream OS**: Windows, Linux, Unix, macOS
+* **Parsing**: The process of analysing a user's text input and breaking it into structured components (e.g. command word, prefixes, arguments) that the application can understand and execute
+* **Subcommand**: A secondary keyword that follows a main command word to specify a particular action (e.g. `tag add`, `tag delete`, `tag find` are subcommands of `tag`)
 * **Tag**: A label attached to a student to help tutors categorize or filter students, such as `Math`, `Sec4`, or `ExamPrep`
 
 --------------------------------------------------------------------------------------------------------------------
@@ -573,7 +487,7 @@ testers are expected to do more *exploratory* testing.
 
 </div>
 
-### Launch and shutdown
+### Launch and shut down
 
 1. Initial launch
 
@@ -721,10 +635,16 @@ testers are expected to do more *exploratory* testing.
    1. Prerequisites: At least one student with a tag in the list.
 
    1. Test case: `tag find t/Math`<br>
-      Expected: All students with the `math` tag are listed. Count shown in status message.
+      Expected: All students with the exact `math` tag are listed. Count shown in status message.
+
+   1. Test case: `tag find t/ma`<br>
+      Expected: No students listed unless a student has the exact tag `ma`. Partial matches such as `math` are not returned.
 
    1. Test case: `tag find t/NonExistentTag`<br>
       Expected: No students listed. Message indicating no students found shown.
+
+   1. Test case: `tag find t/`<br>
+      Expected: Command is rejected with a validation error because tag values cannot be empty.
 
 ### Saving data
 
@@ -792,3 +712,40 @@ This reuse is estimated to have saved roughly 30–40% of total effort, allowing
 - **Time validation**: Ensuring `StartTime < EndTime` across both `add` and `edit` flows required cross-field validation that AB3's single-field validation pattern did not accommodate.
 - **Tag casing**: Handling case-insensitive tag matching while preserving display casing required careful design decisions.
 - **Confirmation flow for Clear**: Implementing a stateful confirmation step required changes to the parser to handle a two-step command sequence.
+
+## **Appendix: Planned Enhancements**
+
+Team size: 5
+
+1. **Support multiple lessons per student:** Currently, each student can only have lessons once per week. Each student
+   is represented by a single entry with one lesson day and time. In practice, tutors often teach the same student multiple
+   times per week. The current implementation does not support this, forcing users to either overwrite existing lesson
+   details or be blocked by duplicate detection.
+    * Current behavior: Duplication-checking logic marks entries as duplicate if the phone number and name are the
+      same.
+    * Planned behavior: Duplication-checking logic should allow multiple entries with the same phone number and name,
+      provided that the lesson day or time differs.
+2. **Specify feedback for tags:** Currently, upon adding a tag for a negative index, generic feedback is given that calls out invalid command format and gives the requirements for the correct format,
+but does not tell the user exactly what is wrong with the format. This could leave the user confused and having to read through the large block
+of text to figure out exactly what is wrong.
+    * Current behavior: Error message displayed:
+    `Invalid command format!
+      tag: Executes a tag subcommand
+      Subcommands:
+      tag add: Adds tag(s) to person(s) in the address book. Parameters: INDEX [INDEX]... (must be positive integers) t/TAG (must be alphanumeric characters only and up to 20 characters long)
+      Example: tag add 1 2 t/Primary1 t/Mathematics
+      tag delete: Deletes tag(s) from person(s) in the address book. Parameters: INDEX [INDEX]... (must be positive integers) t/TAG (must be a non-empty string)
+      Example: tag delete 1 2 t/Primary1 t/Mathematics
+      tag find: Finds all persons whose tags exactly match the specified tag keyword(s) (case-insensitive) and displays them as a list with index numbers.
+      Parameters: t/TAG (must be a non-empty string)
+      Example: tag find t/important`
+    * Planned behavior: Specific error message displayed for negative indices, for example:
+        `The person index provided is invalid: -1`
+3.  **List indexes alongside names for batch tag add and batch tag delete:** Currently, batch tag add and batch tag delete
+   return the list of names of people who have successfully been tagged or had their tags removed. However, list indexes are not
+   shown beside the names. Thus, users cannot easily map the affected students to their positions in the displayed list.
+   This is also inconsistent with other batch commands such as mark/unmark and delete which already include indices.
+    * Current behavior: Success message displayed without list indexes beside the names:
+    `Added tags to students: Alex Yeoh (math); Bernice Yu (math); Charlotte Oliveiro (math)`
+    * Planned behavior: Success message displayed with list indexes beside the names:
+      `Added tags to students: (1) Alex Yeoh (math); (2) Bernice Yu (math); (3) Charlotte Oliveiro (math)`

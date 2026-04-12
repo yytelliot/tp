@@ -202,15 +202,15 @@ Refer to the [Features](#features) section below for the full details of each co
 
 | Parameter | Prefix | Constraints                                                                                                         | Example |
 |-----------|--------|---------------------------------------------------------------------------------------------------------------------|---------|
-| **Name** | `n/` | Letters and spaces only; cannot be blank                                                                            | `n/John Doe` |
+| **Name** | `n/` | English alphabets, spaces, and `/` only (e.g. `S/O`); cannot be blank                                              | `n/Raj S/O Kumar` |
 | **Phone** | `p/` | Exactly 8 digits, starting with 6, 8, or 9 (Singapore format)                                                       | `p/91234567` |
 | **Email** | `e/` | Standard email format (`local@domain`)                                                                              | `e/john@example.com` |
-| **Address** | `a/` | Any non-blank text                                                                                                  | `a/Blk 30, Geylang St 29` |
+| **Address** | `a/` | At least 3 characters long, must not be blank                                                                       | `a/Blk 30, Geylang St 29` |
 | **Day** | `d/` | A day of the week (case-insensitive): Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday                | `d/Monday` |
 | **Start Time** | `st/` | 24-hour format `HH:mm` (e.g., `09:00`, `14:30`)                                                                     | `st/14:00` |
 | **End Time** | `et/` | 24-hour format `HH:mm`; **must be strictly after** start time                                                       | `et/16:00` |
 | **Rate** | `r/` | A non-negative whole number (max 5000) representing the hourly rate. Leading zeroes will be removed e.g. 0040 -> 40 | `r/50` |
-| **Tag** | `t/` | Alphanumeric characters only (no spaces); stored in lowercase                                                       | `t/math` |
+| **Tag** | `t/` | Any character allowed; must not be blank; leading/trailing spaces are trimmed; max 20 characters                    | `t/math` |
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -223,6 +223,8 @@ Adds a new student to OnlyTutors.
 </div>
 
 * All fields are required.
+* Day names are case-insensitive (e.g. `monday`, `Monday`, `MONDAY` are all accepted).
+* Each student can only have **one lesson schedule** (one day and time). Support for multiple lessons is planned for a future version.
 * Tags cannot be added during the `add` command. Use [`tag add`](#adding-tags-to-a-student-tag-add) after adding the student.
 * New students are marked as **Unpaid** by default.
 
@@ -278,7 +280,8 @@ This design is chosen because:
 | `et/14:00 st/15:00` | End time must be after start time                |
 
 <div markdown="block" class="alert alert-info">
-**:information_source: Notes on Tuition Rate
+
+**:information_source: Notes on Tuition Rate:**
 
 * Hourly Basis: The rate r/ represents the amount charged per hour.
 * Data Normalization: Leading zeros will be automatically removed (e.g., r/0050 will be saved as 50).
@@ -298,6 +301,8 @@ Shows a list of all students in OnlyTutors.
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 Use `list` after a [`find`](#finding-students-by-name-find) command to return to the full student list.
 </div>
+
+* Any extra text after `list` is ignored (e.g. `list abc` is treated as `list`).
 
 **Expected output:**
 > `Listed all persons`
@@ -327,9 +332,6 @@ Editing tags with the `edit` command **replaces all existing tags**. If a studen
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 To add tags without replacing, use [`tag add`](#adding-tags-to-a-student-tag-add) instead.
-</div>
-
-<div markdown="block" class="alert alert-info">
 </div>
 
 **Examples:**
@@ -377,22 +379,27 @@ After using `find`, use [`list`](#listing-all-students-list) to return to the fu
 
 ### Finding students by tag: `tag find`
 
-Finds students who match all of the given tags.
+Finds students who match all of the given tags exactly.
 
 <div markdown="span" class="alert alert-success">
 **Format:** `tag find t/TAG [t/TAG]…​`
 </div>
 
 * The search is **case-insensitive**. e.g. `Math` will match `math`.
+* Tags must match **exactly**. e.g. `ma` will not match `math`.
 * Only students matching **all** tags will be returned (i.e. `AND` search).
-* Tags are alphanumeric only (no spaces).
+* Tags can contain spaces and special characters but must not be empty.
 
 **Examples:**
 
-| Command | What it does |
-|---------|-------------|
-| `tag find t/math` | Returns students tagged with `math` |
-| `tag find t/primary3 t/science` | Returns students tagged with both `primary3` and `science` |
+| Command                         | What it does                                                |
+|---------------------------------|-------------------------------------------------------------|
+| `tag find t/Math`               | Returns students tagged with `Math`                         |
+| `tag find t/Primary3 t/Science` | Returns students tagged with both `Primary3` and `Science` |
+| `tag find t/ma`                 | Returns no students unless a student has the exact tag `ma` |
+
+**Invalid input:**
+* `tag find t/` is rejected because tags cannot be empty.
 
 **Expected output:**
 > `2 persons listed!`
@@ -447,7 +454,8 @@ Adds one or more tags to a student **without replacing** existing tags.
 * Adds the specified tag(s) to the student(s) at the specified `INDEX`(es).
 * The index **must be a positive integer** (1, 2, 3, …).
 * At least one tag must be provided.
-* Tags are alphanumeric only (no spaces) and are stored in lowercase.
+* Tags can contain any characters but must not be empty and cannot have more than 20 characters.
+* Tags are **case-insensitive** — `Math`, `math`, and `MATH` are treated as the same tag. The display preserves the casing of the first version added.
 * The command updates every selected student who is missing at least one of the specified tags.
 * The command fails only if it would not change any selected student.
 
@@ -457,17 +465,17 @@ You can tag multiple students at once by specifying multiple indices. e.g. `tag 
 
 **Examples:**
 
-| Command | What it does |
-|---------|-------------|
-| `tag add 1 t/math` | Adds the tag `math` to the 1st student |
-| `tag add 2 t/primary3 t/science` | Adds tags `primary3` and `science` to the 2nd student |
-| `tag add 1 2 3 t/math` | Adds the tag `math` to the 1st, 2nd, and 3rd students if they do not have it |
+| Command                           | What it does                                                                  |
+|-----------------------------------|-------------------------------------------------------------------------------|
+| `tag add 1 t/Math`                | Adds the tag `Math` to the 1st student                                        |
+| `tag add 2 t/Primary 3 t/Science` | Adds tags `Primary 3` and `Science` to the 2nd student                        |
+| `tag add 1 2 3 t/Econ$`           | Adds the tag `Econ$` to the 1st, 2nd, and 3rd students if they do not have it |
 
 **Expected output** (on success):
-> `Added tags math to student: John Doe`
+> `Added tags (Math) to student: John Doe`
 
-**Expected output** (on batch success):
-> `Added tags to students: John Doe (math); Jane Doe (science)`
+**Expected output** (on success):
+> `Added tags (Primary 3, Science) to student: John Doe`
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -491,17 +499,14 @@ You can remove tags from multiple students at once by specifying multiple indice
 
 **Examples:**
 
-| Command | What it does |
-|---------|-------------|
-| `tag delete 1 t/math` | Removes the tag `math` from the 1st student |
-| `tag delete 2 t/primary3 t/science` | Removes tags `primary3` and `science` from the 2nd student |
-| `tag delete 1 2 3 t/math` | Removes the `math` tag from the 1st, 2nd, and 3rd students if they have it|
+| Command                              | What it does                                                                |
+|--------------------------------------|-----------------------------------------------------------------------------|
+| `tag delete 1 t/Math`                | Removes the tag `Math` from the 1st student                                 |
+| `tag delete 2 t/Primary 3 t/Science` | Removes tags `Primary 3` and `Science` from the 2nd student                 |
+| `tag delete 1 2 3 t/Econ$`           | Removes the `Econ$` tag from the 1st, 2nd, and 3rd students if they have it |
 
 **Expected output** (on success):
-> `Deleted tags math from student: John Doe`
-
-**Expected output** (on batch success):
-> `Deleted tags from students: John Doe (math); Jane Doe (science)`
+> `Deleted tags (Math) from student: John Doe`
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -515,7 +520,7 @@ Marks a student's payment status as **Paid**.
 
 * Marks the student(s) at the specified `INDEX`(es) as paid.
 * The index **must be a positive integer** (1, 2, 3, …).
-* If any student is already marked as paid, the command will fail with: `This student has already been marked as paid.`
+* If **any** student in the batch is already marked as paid, the **entire command will fail** and no students will be marked. Ensure all specified students are currently unpaid before running the command.
 
 The payment status is displayed on each student's card as a **Paid** or **Unpaid** label next to the rate.
 
@@ -532,7 +537,7 @@ You can mark multiple students as paid at once by specifying multiple indices. e
 | `find John` then `mark 1` | Marks the 1st student in the `find` results as paid |
 
 **Expected output** (on success):
-> `Marked student as paid: John Doe; Phone: ...`
+> `Marked 1 student(s) as paid: (1) John Doe`
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -546,7 +551,7 @@ Marks a student's payment status as **Unpaid**.
 
 * Marks the student(s) at the specified `INDEX`(es) as unpaid.
 * The index **must be a positive integer** (1, 2, 3, …).
-* If any student is already marked as unpaid, the command will fail with: `This student has already been marked as unpaid.`
+* If **any** student in the batch is already marked as unpaid, the **entire command will fail** and no students will be unmarked. Ensure all specified students are currently paid before running the command.
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 You can unmark multiple students at once by specifying multiple indices. e.g. `unmark 1 2 3` marks the 1st, 2nd, and 3rd students as unpaid. Use this at the start of a new payment cycle to reset payment statuses. See also: [`mark`](#marking-a-student-as-paid-mark).
@@ -560,7 +565,7 @@ You can unmark multiple students at once by specifying multiple indices. e.g. `u
 | `unmark 1 2 3` | Marks the 1st, 2nd, and 3rd students as unpaid |
 
 **Expected output** (on success):
-> `Marked student as unpaid: John Doe; Phone: ...`
+> `Marked 3 student(s) as unpaid: (1) John Doe, (2) Jane Smith, (3) Vincent`
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -591,6 +596,8 @@ Shows a message with a link to this User Guide.
 **Format:** `help`
 </div>
 
+* Any extra text after `help` is ignored (e.g. `help abc` is treated as `help`).
+
 ![help message](images/helpMessage.png)
 
 --------------------------------------------------------------------------------------------------------------------
@@ -602,6 +609,8 @@ Exits the program.
 <div markdown="span" class="alert alert-success">
 **Format:** `exit`
 </div>
+
+* Any extra text after `exit` is ignored (e.g. `exit abc` is treated as `exit`).
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -653,7 +662,10 @@ If your changes to the data file make its format invalid, OnlyTutors may discard
 |------|---------|
 | **CLI** | Command Line Interface — a text-based way to interact with the app by typing commands |
 | **GUI** | Graphical User Interface — the visual window you see when running the app |
-| **Index** | The number shown beside each student in the displayed list (e.g., 1, 2, 3) |
-| **Tag** | A label you can attach to a student for categorisation (e.g., `math`, `primary3`) |
-| **JSON** | A data file format used by OnlyTutors to store your student data |
 | **Home folder** | The folder where you placed the OnlyTutors `.jar` file; data is saved here |
+| **Index** | The number shown beside each student in the displayed list (e.g., 1, 2, 3) |
+| **JavaFX** | A Java library used to build the graphical interface of OnlyTutors |
+| **JDK** | Java Development Kit — the software needed to run Java applications like OnlyTutors |
+| **JSON** | A data file format used by OnlyTutors to store your student data |
+| **PATH** | An environment variable that tells your operating system where to find programs (e.g., `java`) |
+| **Tag** | A label you can attach to a student for categorisation (e.g., `math`, `primary3`) |

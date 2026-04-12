@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
@@ -26,6 +27,7 @@ public class ClearCommand extends Command {
     // Updated prompt to suggest that non-y input defaults to 'No'
     public static final String MESSAGE_CONFIRM_PROMPT =
             "This will delete all contacts. Are you sure? [y/N]:";
+    public static final String MESSAGE_EMPTY = "There are no contacts to clear.";
     public static final String MESSAGE_ABORTED = "Clear aborted (invalid or 'n' input).";
     public static final String MESSAGE_SUCCESS = "Cleared all contacts.";
 
@@ -40,11 +42,15 @@ public class ClearCommand extends Command {
         requireNonNull(model);
         switch (state) {
         case PROMPT:
+            if (model.getAddressBook().getPersonList().isEmpty()) {
+                return new CommandResult(MESSAGE_EMPTY);
+            }
             return new CommandResult(MESSAGE_CONFIRM_PROMPT);
         case ABORTED:
             return new CommandResult(MESSAGE_ABORTED);
         case CONFIRMED:
             model.setAddressBook(new AddressBook());
+            model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
             return new CommandResult(MESSAGE_SUCCESS);
         default:
             throw new AssertionError("Unknown ClearState: " + state);

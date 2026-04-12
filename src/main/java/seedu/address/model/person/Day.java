@@ -13,7 +13,7 @@ import java.util.Arrays;
 public class Day {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Lesson Day should only be a day of the week.";
+            "Lesson Day should be a valid day of the week (e.g., Monday, Tuesday).";
 
     public final String value;
 
@@ -26,7 +26,15 @@ public class Day {
     public Day(String day) {
         requireNonNull(day);
         checkArgument(isValidDay(day), MESSAGE_CONSTRAINTS);
-        value = day.toUpperCase();
+        this.value = toSentenceCase(day);
+    }
+
+    private static String toSentenceCase(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+        // Uppercase first letter + lowercase the rest
+        return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
     }
 
     /**
