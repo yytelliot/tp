@@ -32,7 +32,7 @@ Refer to the guide [_Setting up and getting started_](SettingUp.md).
 
 <div markdown="span" class="alert alert-primary">
 
-:bulb: **Tip:** The `.puml` files used to create diagrams are in this document `docs/diagrams` folder. Refer to the [_PlantUML Tutorial_ at se-edu/guides](https://se-education.org/guides/tutorials/plantUml.html) to learn how to create and edit diagrams.
+:bulb: **Tip:** The `.puml` files used to create diagrams are in the `docs/diagrams` folder.
 </div>
 
 ### Architecture
@@ -83,7 +83,7 @@ The **API** of this component is specified in [`Ui.java`](https://github.com/se-
 
 The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
 
-The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml)
+The `UI` component uses the JavaFX UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml)
 
 The `UI` component,
 
@@ -246,6 +246,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | miserly tutor            | record tuition rates and payment status                        | track my income properly                                        |
 | `* *`    | careless tutor           | undo my actions                                                | rectify my mistakes                                             |
 | `* *`    | humble tutor             | edit my student's information easily                           | correct any wrong or outdated contact info without hassle       |
+| `* *`    | tutor with many students | search for a student by name                                   | quickly locate a student without scrolling through the list     |
 | `* *`    | tutor with many students | filter students by tags                                        | quickly find a specific group of students                       |
 | `* *`    | tutor                    | export and import my data                                      | backup or switch devices                                        |
 | `*`      | analytical tutor         | view a summary of my monthly teaching hours and income         | evaluate my profile and workload                                |
@@ -266,18 +267,18 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 
 1. Tutor enters the command to add a student.
-2. OnlyTutors saves the changes and shows confirmation.
+2. OnlyTutors saves the student and informs the tutor of the successful addition.
 
     Use case ends.
 
 **Extensions**
 * 1a. OnlyTutors detects missing or invalid parameter
-  * 1a1. OnlyTutors shows an error message.
+  * 1a1. OnlyTutors informs the tutor of the error.
 
     Use case ends.
 
 * 1b. OnlyTutors detects a duplicate student (based on name and phone number)
-  * 1b1. OnlyTutors rejects the add and gives a warning.
+  * 1b1. OnlyTutors informs the tutor that the student already exists.
 
     Use case ends
 
@@ -290,13 +291,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 1. Tutor enters the command to delete a student.
 2. OnlyTutors deletes the student at the specified index.
-3. OnlyTutors shows a confirmation message with the deleted student's information.
+3. OnlyTutors informs the tutor of the successful deletion.
 
     Use case ends.
 
 **Extensions**
 * 1a. OnlyTutors detects a missing, invalid or non-integer index
-  *  1a1. OnlyTutors shows an error message.
+  *  1a1. OnlyTutors informs the tutor of the error.
 
         Use case ends
 
@@ -304,25 +305,25 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Use case 03: List all students**
 
 **Guarantees**
-* Displays all students currently stored in the system, including all their details
+* All students currently stored in the system are shown, including all their details
 (name, phone, address, lesson day/time, tuition rate, payment status, tags).
-* If no students exist, displays an empty list message.
+* If no students exist, the tutor is informed that the list is empty.
 
 **MSS**
 1. Tutor enters the command to list all students.
 2. OnlyTutors retrieves all student contacts from the system.
-3. OnlyTutors displays the list of students with all relevant details.
+3. OnlyTutors presents the list of students with all relevant details.
 
     Use case ends.
 
 **Extensions**
 * 1a. OnlyTutors detects an unknown command or typo
-    * 1a1. OnlyTutors displays an error message.
+    * 1a1. OnlyTutors informs the tutor of the error.
 
         Use case ends.
 
 * 2a. OnlyTutors detects no existing student contacts in the system
-    * 2a1. OnlyTutors displays a notification message.
+    * 2a1. OnlyTutors informs the tutor that there are no students.
 
         Use case ends.
 
@@ -330,29 +331,28 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Use case 04: Tag a student**
 
 **Guarantees**
-* Tags are added to a student if and only if the `INDEX` parameter is valid, all `TAG` parameters are valid, and none of the specified tags already exist on that student.
+* Tags are added to a student if and only if the `INDEX` parameter is valid, all `TAG` parameters are valid, and at least one of the specified tags does not already exist on that student.
 
 **MSS**
 1. Tutor enters the command to tag a student.
-2. OnlyTutors adds the specified tag(s) to the student at the given index.
-3. OnlyTutors shows a confirmation message with the updated student's information.
+2. OnlyTutors adds the specified tag(s) to the student at the given index. Tags that already exist on the student are ignored.
+3. OnlyTutors informs the tutor of the successfully added tags.
 
     Use case ends.
 
 **Extensions**
 * 1a. OnlyTutors detects a missing, invalid or non-integer index
-  * 1a1. OnlyTutors shows an error message.
+  * 1a1. OnlyTutors informs the tutor of the error.
 
     Use case ends.
 
 * 1b. OnlyTutors detects a missing or invalid tag
-  * 1b1. OnlyTutors shows an error message.
+  * 1b1. OnlyTutors informs the tutor of the error.
 
     Use case ends.
 
-* 2a. OnlyTutors detects that one or more tags already exist on the student
-  * 2a1. OnlyTutors shows an error message.
-  * 2a2. No tags are added to the student.
+* 2a. OnlyTutors detects that all specified tags already exist on the student
+  * 2a1. OnlyTutors informs the tutor that no changes were made.
 
     Use case ends.
 
@@ -360,29 +360,23 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Use case 05: Delete tags from a student**
 
 **Guarantees**
-* Tags are removed from a student if and only if the `INDEX` parameter is valid and all specified `TAG` parameters exist for that student.
+* Tags are removed from a student if and only if the `INDEX` parameter is valid and at least one of the specified `TAG` parameters exists for that student.
 
 **MSS**
 1. Tutor enters the command to delete tags from a student.
-2. OnlyTutors removes the specified tag(s) from the student at the given index.
-3. OnlyTutors shows a confirmation message with the updated student's information.
+2. OnlyTutors removes the specified tag(s) that exist on the student. Tags that do not exist on the student are ignored.
+3. OnlyTutors informs the tutor of the successfully removed tags.
 
     Use case ends.
 
 **Extensions**
 * 1a. OnlyTutors detects a missing, invalid or non-integer index
-  * 1a1. OnlyTutors shows an error message.
+  * 1a1. OnlyTutors informs the tutor of the error.
 
     Use case ends.
 
-* 1b. OnlyTutors detects a missing or invalid tag
-  * 1b1. OnlyTutors shows an error message.
-
-    Use case ends.
-
-* 2a. OnlyTutors detects that one or more specified tags do not exist on the student
-  * 2a1. OnlyTutors shows an error message.
-  * 2a2. No tags are deleted from the student.
+* 2a. OnlyTutors detects that none of the specified tags exist on the student
+  * 2a1. OnlyTutors informs the tutor that no changes were made.
 
     Use case ends.
 
@@ -395,18 +389,18 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 1. Tutor enters the command to mark one or more students as paid.
 2. OnlyTutors updates the payment status of the specified student(s) to paid.
-3. OnlyTutors shows a confirmation message with the marked student(s).
+3. OnlyTutors informs the tutor of the successfully marked student(s).
 
     Use case ends.
 
 **Extensions**
 * 1a. OnlyTutors detects a missing, invalid or non-integer index
-  * 1a1. OnlyTutors shows an error message.
+  * 1a1. OnlyTutors informs the tutor of the error.
 
     Use case ends.
 
 * 2a. OnlyTutors detects that one or more students are already marked as paid
-  * 2a1. OnlyTutors shows an error message identifying the already-paid student(s).
+  * 2a1. OnlyTutors informs the tutor which student(s) are already paid.
   * 2a2. No students are marked.
 
     Use case ends.
@@ -420,18 +414,18 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 1. Tutor enters the command to unmark one or more students as unpaid.
 2. OnlyTutors updates the payment status of the specified student(s) to unpaid.
-3. OnlyTutors shows a confirmation message with the unmarked student(s).
+3. OnlyTutors informs the tutor of the successfully unmarked student(s).
 
     Use case ends.
 
 **Extensions**
 * 1a. OnlyTutors detects a missing, invalid or non-integer index
-  * 1a1. OnlyTutors shows an error message.
+  * 1a1. OnlyTutors informs the tutor of the error.
 
     Use case ends.
 
 * 2a. OnlyTutors detects that one or more students are already marked as unpaid
-  * 2a1. OnlyTutors shows an error message identifying the already-unpaid student(s).
+  * 2a1. OnlyTutors informs the tutor which student(s) are already unpaid.
   * 2a2. No students are unmarked.
 
     Use case ends.
@@ -444,16 +438,16 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 1. Tutor enters the `clear` command.
-2. OnlyTutors displays a confirmation prompt: `This will delete all contacts. Are you sure? [y/N]:`.
-3. Tutor enters `y`.
-4. OnlyTutors deletes all contacts and shows a success message.
+2. OnlyTutors asks the tutor to confirm the action.
+3. Tutor confirms.
+4. OnlyTutors deletes all students and informs the tutor of the successful clear.
 
     Use case ends.
 
 **Extensions**
-* 3a. Tutor enters `n` or any input other than `y`
-  * 3a1. OnlyTutors aborts the clear and shows an aborted message.
-  * 3a2. No contacts are deleted.
+* 3a. Tutor does not confirm (enters `n` or any input other than `y`)
+  * 3a1. OnlyTutors aborts the clear and informs the tutor.
+  * 3a2. No students are deleted.
 
     Use case ends.
 
@@ -477,8 +471,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Glossary
 
-* **Mainstream OS**: Windows, Linux, Unix, MacOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others
+* **Mainstream OS**: Windows, Linux, Unix, macOS
+* **Parsing**: The process of analysing a user's text input and breaking it into structured components (e.g. command word, prefixes, arguments) that the application can understand and execute
+* **Subcommand**: A secondary keyword that follows a main command word to specify a particular action (e.g. `tag add`, `tag delete`, `tag find` are subcommands of `tag`)
 * **Tag**: A label attached to a student to help tutors categorize or filter students, such as `Math`, `Sec4`, or `ExamPrep`
 
 --------------------------------------------------------------------------------------------------------------------
@@ -492,7 +487,7 @@ testers are expected to do more *exploratory* testing.
 
 </div>
 
-### Launch and shutdown
+### Launch and shut down
 
 1. Initial launch
 
