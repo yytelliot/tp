@@ -21,7 +21,6 @@ public class FindTagCommandParser implements Parser<FindTagCommand> {
      */
     @Override
     public FindTagCommand parse(String args) throws ParseException {
-
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
 
         List<String> tagKeywords = argMultimap.getAllValues(PREFIX_TAG);

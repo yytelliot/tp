@@ -3,7 +3,12 @@ package seedu.address.logic.parser;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import seedu.address.logic.parser.exceptions.ParseException;
 
 /**
  * Tokenizes arguments string of the form: {@code preamble <prefix>value <prefix>value ...}<br>
@@ -14,6 +19,7 @@ import java.util.stream.Collectors;
  *    in the above example.<br>
  */
 public class ArgumentTokenizer {
+    private static final Pattern PREFIX_TOKEN_PATTERN = Pattern.compile("(^|\\s)([A-Za-z]+/)");
 
     /**
      * Tokenizes an arguments string and returns an {@code ArgumentMultimap} object that maps prefixes to their
@@ -23,9 +29,26 @@ public class ArgumentTokenizer {
      * @param prefixes   Prefixes to tokenize the arguments string with
      * @return           ArgumentMultimap object that maps prefixes to their arguments
      */
-    public static ArgumentMultimap tokenize(String argsString, Prefix... prefixes) {
+    public static ArgumentMultimap tokenize(String argsString, Prefix... prefixes) throws ParseException {
         List<PrefixPosition> positions = findAllPrefixPositions(argsString, prefixes);
+        validateNoUnknownPrefixes(argsString, positions);
         return extractArguments(argsString, positions);
+    }
+
+    /**
+     * Rejects tokens that look like prefixes but are not part of the allowed prefix set.
+     */
+    private static void validateNoUnknownPrefixes(String argsString, List<PrefixPosition> prefixPositions)
+            throws ParseException {
+        Set<Integer> knownPrefixPositions = prefixPositions.stream()
+                .map(PrefixPosition::getStartPosition)
+                .collect(Collectors.toSet());
+        Matcher matcher = PREFIX_TOKEN_PATTERN.matcher(argsString);
+        while (matcher.find()) {
+            if (!knownPrefixPositions.contains(matcher.start(2))) {
+                throw new ParseException("Unknown prefix: " + matcher.group(2));
+            }
+        }
     }
 
     /**
@@ -135,7 +158,7 @@ public class ArgumentTokenizer {
      * Represents a prefix's position in an arguments string.
      */
     private static class PrefixPosition {
-        private int startPosition;
+        private final int startPosition;
         private final Prefix prefix;
 
         PrefixPosition(Prefix prefix, int startPosition) {
