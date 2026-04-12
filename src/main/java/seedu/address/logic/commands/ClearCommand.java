@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
@@ -49,6 +50,7 @@ public class ClearCommand extends Command {
             return new CommandResult(MESSAGE_ABORTED);
         case CONFIRMED:
             model.setAddressBook(new AddressBook());
+            model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
             return new CommandResult(MESSAGE_SUCCESS);
         default:
             throw new AssertionError("Unknown ClearState: " + state);

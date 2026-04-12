@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +38,7 @@ public abstract class BatchCommand extends Command {
         List<Person> targetPersons = collectPersons(lastShownList);
         checkPreconditions(targetPersons);
         executeBatch(targetPersons, model);
+        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(formatSuccessMessage(targetPersons));
     }
 

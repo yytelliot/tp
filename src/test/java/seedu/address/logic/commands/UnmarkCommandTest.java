@@ -76,7 +76,6 @@ public class UnmarkCommandTest {
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.setPerson(personInFilteredList, unmarkedPerson);
-        showPersonAtIndex(expectedModel, INDEX_FIRST_PERSON);
 
         assertCommandSuccess(unmarkCommand, model, expectedMessage, expectedModel);
     }
