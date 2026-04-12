@@ -114,8 +114,9 @@ public class ArgumentTokenizerTest {
         // Prefixes not previously given to the tokenizer should not return any values
         argsString = unknownPrefix + "some value";
         final String argsStringWithUnknownPrefix = argsString;
-        assertThrows(ParseException.class, "Unknown prefix: " + unknownPrefix,
-            () -> ArgumentTokenizer.tokenize(argsStringWithUnknownPrefix, pSlash, dashT, hatQ));
+        final String expectedMessage = "Unknown prefix: " + unknownPrefix;
+        assertThrows(ParseException.class, expectedMessage, () ->
+            ArgumentTokenizer.tokenize(argsStringWithUnknownPrefix, pSlash, dashT, hatQ));
     }
 
     @Test

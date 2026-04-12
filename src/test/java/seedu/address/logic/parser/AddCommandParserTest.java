@@ -67,7 +67,7 @@ import seedu.address.model.person.Time;
 import seedu.address.testutil.PersonBuilder;
 
 public class AddCommandParserTest {
-        private final AddCommandParser parser = new AddCommandParser();
+    private final AddCommandParser parser = new AddCommandParser();
 
     @Test
     public void parse_allFieldsPresent_success() {
